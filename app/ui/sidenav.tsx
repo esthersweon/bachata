@@ -1,9 +1,9 @@
 import {
+  ArrowLeftStartOnRectangleIcon,
   BookOpenIcon,
-  CogIcon,
   HomeIcon,
   InboxIcon,
-  ListBulletIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
@@ -17,24 +17,20 @@ const navigation: {
     href: "/",
     icon: HomeIcon,
   },
+  { name: "Profile", href: "/profile", icon: UserIcon },
   {
     name: "Glossary",
     href: "/glossary",
     icon: BookOpenIcon,
   },
-  {
-    name: "My Lists",
-    href: "/myLists",
-    icon: ListBulletIcon,
-  },
   { name: "Inbox", href: "/inbox", icon: InboxIcon },
-  { name: "Settings", href: "/settings", icon: CogIcon },
+  { name: "Logout", href: "/logout", icon: ArrowLeftStartOnRectangleIcon },
 ];
 
 export default function Sidenav() {
   return (
-    <div className="w-64 h-full bg-gray-800 p-4 flex flex-col">
-      <ul>
+    <div className="w-40 h-full bg-gray-800 p-4 flex flex-col">
+      <ul className="flex flex-col gap-4">
         {navigation.map(({ name, href, icon: Icon }) => (
           <li key={name} className="flex items-center gap-2">
             <Icon className="size-4" />

@@ -31,6 +31,8 @@ export default function Home() {
           </Link>
         </div>
 
+        <p>Search for a movement to get started! 💃</p>
+
         <div>
           <CategoryTabs
             tabIndex={tabIndex}

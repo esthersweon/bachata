@@ -26,7 +26,7 @@ const SearchResults = ({
 
   return (
     <ul className="flex flex-wrap gap-2 space-y-1">
-      {results.map(({ id, name, description, level, color, category }) => (
+      {results.map(({ id, name, description, color, category }) => (
         <li
           key={id}
           className="flex-1 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-75 max-w-full"
