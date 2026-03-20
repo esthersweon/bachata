@@ -9,11 +9,17 @@ const navigation: { name: string; href: string }[] = [
     name: "Glossary",
     href: "/glossary",
   },
+  {
+    name: "My Lists",
+    href: "/myLists",
+  },
+  { name: "Inbox", href: "/inbox" },
+  { name: "Settings", href: "/settings" },
 ];
 
 export default function Sidenav() {
   return (
-    <div className="w-64 h-full bg-gray-900 p-4 flex flex-col">
+    <div className="w-64 h-full bg-gray-800 p-4 flex flex-col">
       <ul>
         {navigation.map(({ name, href }) => (
           <li key={name}>
