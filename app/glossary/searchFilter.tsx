@@ -4,8 +4,8 @@ export default function SearchFilter({
   filter,
   setFilter,
 }: {
-  filter: string;
-  setFilter: (filter: string) => void;
+  filter: { level: string };
+  setFilter: (filter: { level: string }) => void;
 }) {
   return (
     <div className="flex gap-2">
@@ -15,9 +15,9 @@ export default function SearchFilter({
           className="text-xs"
           style={{
             backgroundColor: color,
-            border: filter === id ? `2px solid white` : "none",
+            border: filter.level === id ? "2px solid white" : "none",
           }}
-          onClick={() => setFilter(id)}
+          onClick={() => setFilter({ level: id })}
         >
           {name}
         </button>
