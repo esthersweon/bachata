@@ -8,7 +8,6 @@ export default function SearchInput({
   return (
     <div className="w-full">
       <input
-        className="border-2 border-gray-300 rounded-xl p-2 w-full"
         type="text"
         placeholder="Search"
         value={searchTerm}

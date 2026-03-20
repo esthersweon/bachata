@@ -17,7 +17,7 @@ export default function Home() {
           <div className="flex justify-between items-center">
             <h1>Glossary</h1>
             <Link href="/glossary/new">
-              <button>Add Item</button>
+              <button>Add Movement</button>
             </Link>
           </div>
 

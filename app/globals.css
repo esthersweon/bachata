@@ -52,3 +52,8 @@ h6 {
 button {
   @apply rounded-lg p-2 font-bold bg-blue-500 text-white;
 }
+
+input,
+select {
+  @apply border-2 border-gray-300 rounded-xl p-2 w-full;
+}
