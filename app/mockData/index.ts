@@ -1,22 +1,39 @@
+import {
+  ArrowPathIcon,
+  CheckCircleIcon,
+  FireIcon,
+  MapIcon,
+} from "@heroicons/react/24/outline";
+
 export const categoryFilters: {
   id: number;
   name: string;
   description: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }[] = [
   {
     id: 0,
     name: "All",
     description: "All categories",
+    icon: CheckCircleIcon,
   },
   {
     id: 1,
     name: "Footwork",
     description: "Footwork movements",
+    icon: MapIcon,
   },
   {
     id: 2,
     name: "Turns and spins",
     description: "Turns and spins movements",
+    icon: ArrowPathIcon,
+  },
+  {
+    id: 3,
+    name: "Body isolations",
+    description: "Body isolations movements",
+    icon: FireIcon,
   },
 ];
 
@@ -113,5 +130,21 @@ export default [
     level: levelFilters[1],
     color: levelFilters[1].color,
     category: categoryFilters[2],
+  },
+  {
+    id: 8,
+    name: "Left turn",
+    description: "Turn to left",
+    level: levelFilters[1],
+    color: levelFilters[1].color,
+    category: categoryFilters[2],
+  },
+  {
+    id: 9,
+    name: "Hip isolations",
+    description: "Isolate those hips",
+    level: levelFilters[1],
+    color: levelFilters[1].color,
+    category: categoryFilters[3],
   },
 ];

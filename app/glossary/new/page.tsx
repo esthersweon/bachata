@@ -1,5 +1,6 @@
+import { ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { levelFilters } from "../../mockData";
+import { categoryFilters, levelFilters } from "../../mockData";
 
 export default function Home() {
   return (
@@ -7,7 +8,10 @@ export default function Home() {
       <main>
         <div className="flex flex-col space-y-4">
           <Link href="/glossary">
-            <button>Back to Glossary</button>
+            <button className="text-xs flex items-center gap-1">
+              <ChevronLeftIcon className="size-4" />
+              <div>Back to Glossary</div>
+            </button>
           </Link>
           <div className="w-[50%] mx-auto flex flex-col space-y-2">
             <h1>Add Movement</h1>
@@ -23,7 +27,17 @@ export default function Home() {
               <div>
                 <label htmlFor="level">Level</label>
                 <select id="level" name="level">
-                  {levelFilters.map(({ id, name }) => (
+                  {levelFilters.slice(1).map(({ id, name }) => (
+                    <option key={id} value={id}>
+                      {name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label htmlFor="category">Category</label>
+                <select id="category" name="category">
+                  {categoryFilters.slice(1).map(({ id, name }) => (
                     <option key={id} value={id}>
                       {name}
                     </option>

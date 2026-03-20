@@ -1,8 +1,9 @@
 "use client";
 
+import { PlusIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 import { useState } from "react";
 import CategoryTabs from "./categoryTabs";
-import MovementDetails from "./movementDetails";
 import SearchFilter from "./searchFilter";
 import SearchInput from "./searchInput";
 import SearchResults from "./searchResults";
@@ -20,10 +21,24 @@ export default function Home() {
   return (
     <main>
       <div className="space-y-4">
-        <h1>Glossary</h1>
+        <div className="flex justify-between items-center gap-2">
+          <h1>Glossary</h1>
+          <Link href="/glossary/new">
+            <button className="text-xs flex items-center gap-1">
+              <PlusIcon className="size-4" />
+              <div>Add Movement</div>
+            </button>
+          </Link>
+        </div>
 
         <div>
-          <CategoryTabs tabIndex={tabIndex} setTabIndex={setTabIndex} />
+          <CategoryTabs
+            tabIndex={tabIndex}
+            setTabIndex={(index) => {
+              setTabIndex(index);
+              setSelectedMovementId(null);
+            }}
+          />
           <div className="p-2 border-2 border-gray-800 flex flex-col gap-2">
             <div className="flex justify-between items-center gap-2">
               <div className="flex-1">
@@ -36,23 +51,14 @@ export default function Home() {
                 <SearchFilter filter={filter} setFilter={setFilter} />
               </div>
             </div>
-            <div className="flex gap-4">
-              <div className="flex-1">
-                <SearchResults
-                  selectedMovementId={selectedMovementId}
-                  setSelectedMovementId={setSelectedMovementId}
-                  filter={filter}
-                  searchTerm={searchTerm}
-                  tabIndex={tabIndex}
-                />
-              </div>
-              <div className="flex-2 bg-gray-800 p-2 rounded-lg flex flex-col gap-2">
-                <button className="text-xs self-end">Add Movement</button>
-                {selectedMovementId && (
-                  <MovementDetails movementId={selectedMovementId} />
-                )}
-              </div>
-            </div>
+            <SearchResults
+              selectedMovementId={selectedMovementId}
+              setSelectedMovementId={setSelectedMovementId}
+              filter={filter}
+              searchTerm={searchTerm}
+              setTabIndex={setTabIndex}
+              tabIndex={tabIndex}
+            />
           </div>
         </div>
       </div>
