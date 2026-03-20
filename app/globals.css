@@ -50,7 +50,7 @@ h6 {
 }
 
 button {
-  @apply rounded-lg p-2 font-bold bg-blue-500 text-white;
+  @apply rounded-lg p-2 bg-blue-500 text-white;
 }
 
 input,

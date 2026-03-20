@@ -1,4 +1,4 @@
-import { glossaryCategories } from "../mockData";
+import { levelFilters } from "../mockData";
 
 export default function SearchFilter({
   filter,
@@ -9,7 +9,7 @@ export default function SearchFilter({
 }) {
   return (
     <div className="flex gap-2">
-      {glossaryCategories.map(({ color, id, name }) => (
+      {levelFilters.map(({ color, id, abbreviation }) => (
         <button
           key={id}
           className="text-xs"
@@ -19,7 +19,7 @@ export default function SearchFilter({
           }}
           onClick={() => setFilter({ level: id })}
         >
-          {name}
+          {abbreviation}
         </button>
       ))}
     </div>

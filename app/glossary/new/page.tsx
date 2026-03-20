@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { glossaryCategories } from "../../mockData";
+import { levelFilters } from "../../mockData";
 
 export default function Home() {
   return (
@@ -21,11 +21,11 @@ export default function Home() {
                 <input type="text" id="description" name="description" />
               </div>
               <div>
-                <label htmlFor="category">Category</label>
-                <select id="category" name="category">
-                  {glossaryCategories.map((category) => (
-                    <option key={category.id} value={category.id}>
-                      {category.name}
+                <label htmlFor="level">Level</label>
+                <select id="level" name="level">
+                  {levelFilters.map(({ id, name }) => (
+                    <option key={id} value={id}>
+                      {name}
                     </option>
                   ))}
                 </select>
