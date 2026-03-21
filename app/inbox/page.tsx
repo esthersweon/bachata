@@ -1,6 +1,4 @@
-"use client";
-
-export default function Home() {
+export default function Inbox() {
   return (
     <main>
       <div className="space-y-4">
