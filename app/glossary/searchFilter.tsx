@@ -12,7 +12,7 @@ export default function SearchFilter({
   return (
     <Modal
       title="Filters"
-      buttonContent={
+      triggerNode={
         <button>
           <FunnelIcon aria-hidden="true" className="size-6 text-white" />
         </button>

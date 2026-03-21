@@ -41,7 +41,7 @@ export default function Home() {
               setSelectedMovementId(null);
             }}
           />
-          <div className="p-2 border-2 border-gray-800 flex flex-col gap-2">
+          <div className="p-2 flex flex-col gap-2">
             <div className="flex justify-between items-center gap-2">
               <div className="flex-1">
                 <SearchInput

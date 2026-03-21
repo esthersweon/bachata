@@ -1,7 +1,16 @@
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import {
+  Field,
+  Input,
+  Label,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+  Textarea,
+} from "@headlessui/react";
+import { ChevronDownIcon, ChevronLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { categoryFilters, levelFilters } from "../../mockData";
-
 export default function Home() {
   return (
     <>
@@ -16,33 +25,46 @@ export default function Home() {
           <div className="w-[50%] mx-auto flex flex-col space-y-2">
             <h1>Add Movement</h1>
             <form className="space-y-2">
-              <div>
-                <label htmlFor="name">Name</label>
-                <input type="text" id="name" name="name" />
-              </div>
-              <div>
-                <label htmlFor="description">Description</label>
-                <input type="text" id="description" name="description" />
-              </div>
-              <div>
-                <label htmlFor="level">Level</label>
-                <select id="level" name="level">
-                  {levelFilters.slice(1).map(({ id, name }) => (
-                    <option key={id} value={id}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label htmlFor="category">Category</label>
-                <select id="category" name="category">
-                  {categoryFilters.slice(1).map(({ id, name }) => (
-                    <option key={id} value={id}>
-                      {name}
-                    </option>
-                  ))}
-                </select>
+              <Field>
+                <Label htmlFor="name">Name</Label>
+                <Input
+                  type="text"
+                  id="name"
+                  name="name"
+                  placeholder="e.g. Basic Step"
+                />
+              </Field>
+              <Field>
+                <Label htmlFor="description">Description</Label>
+                <Textarea
+                  rows={3}
+                  className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
+                  id="description"
+                  name="description"
+                  placeholder="e.g. The foundation of bachata"
+                />
+              </Field>
+              <div className="flex gap-2">
+                <Menu>
+                  <MenuButton className="flex items-center gap-1 bg-gray-800!">
+                    Level <ChevronDownIcon className="size-4" />
+                  </MenuButton>
+                  <MenuItems transition anchor="bottom end">
+                    {levelFilters.slice(1).map(({ id, name }) => (
+                      <MenuItem key={id}>{name}</MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
+                <Menu>
+                  <MenuButton className="flex items-center gap-1 bg-gray-800!">
+                    Category <ChevronDownIcon className="size-4" />
+                  </MenuButton>
+                  <MenuItems>
+                    {categoryFilters.slice(1).map(({ id, name }) => (
+                      <MenuItem key={id}>{name}</MenuItem>
+                    ))}
+                  </MenuItems>
+                </Menu>
               </div>
               <button type="submit">Submit</button>
             </form>

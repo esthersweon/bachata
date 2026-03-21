@@ -12,12 +12,12 @@ import { useState } from "react";
 export default function Example({
   title,
   children,
-  buttonContent,
+  triggerNode,
   className,
 }: {
   title: string;
   children: React.ReactNode;
-  buttonContent: React.ReactNode;
+  triggerNode: React.ReactNode;
   className?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function Example({
           setOpen(true);
         }}
       >
-        {buttonContent}
+        {triggerNode}
       </div>
       <Dialog open={open} onClose={setOpen} className="relative z-10">
         <DialogBackdrop

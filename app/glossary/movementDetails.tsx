@@ -13,7 +13,7 @@ export default function MovementDetails({
   return (
     <Modal
       title={movement.name}
-      buttonContent={<InformationCircleIcon className="size-4" />}
+      triggerNode={<InformationCircleIcon className="size-4" />}
     >
       <div className="flex flex-col gap-2">
         <p>{movement?.description}</p>
