@@ -1,8 +1,8 @@
 "use client";
 
 import { PlusIcon } from "@heroicons/react/24/outline";
-import Link from "next/link";
 import { useState } from "react";
+import AddToGlossaryModal from "./addToGlossaryModal";
 import CategoryTabs from "./categoryTabs";
 import SearchFilter from "./searchFilter";
 import SearchInput from "./searchInput";
@@ -23,12 +23,10 @@ export default function Home() {
       <div className="space-y-4">
         <div className="flex justify-between items-center gap-2">
           <h1>Glossary</h1>
-          <Link href="/glossary/new">
-            <button className="text-xs flex items-center gap-1">
-              <PlusIcon className="size-4" />
-              <div>Add Movement</div>
-            </button>
-          </Link>
+          <button className="text-xs flex items-center gap-1">
+            <PlusIcon className="size-4" />
+            <AddToGlossaryModal />
+          </button>
         </div>
 
         <p>Search for a movement to get started! 💃</p>
