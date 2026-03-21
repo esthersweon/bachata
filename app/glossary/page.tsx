@@ -9,10 +9,10 @@ import SearchInput from "./searchInput";
 import SearchResults from "./searchResults";
 
 export default function Home() {
-  const [tabIndex, setTabIndex] = useState(0);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filter, setFilter] = useState<{ level: string }>({
-    level: "all",
+  const [controls, setControls] = useState({
+    tabIndex: 0,
+    searchTerm: "",
+    filter: { level: "" },
   });
   const [selectedMovementId, setSelectedMovementId] = useState<number | null>(
     null,
@@ -33,9 +33,9 @@ export default function Home() {
 
         <div>
           <CategoryTabs
-            tabIndex={tabIndex}
+            tabIndex={controls.tabIndex}
             setTabIndex={(index) => {
-              setTabIndex(index);
+              setControls({ ...controls, tabIndex: index });
               setSelectedMovementId(null);
             }}
           />
@@ -43,21 +43,31 @@ export default function Home() {
             <div className="flex justify-between items-center gap-2">
               <div className="flex-1">
                 <SearchInput
-                  searchTerm={searchTerm}
-                  setSearchTerm={setSearchTerm}
+                  searchTerm={controls.searchTerm}
+                  setSearchTerm={(searchTerm) => {
+                    setControls({ ...controls, searchTerm });
+                    setSelectedMovementId(null);
+                  }}
                 />
               </div>
               <div>
-                <SearchFilter filter={filter} setFilter={setFilter} />
+                <SearchFilter
+                  filter={controls.filter}
+                  setFilter={(filter) => {
+                    setControls({ ...controls, filter });
+                    setSelectedMovementId(null);
+                  }}
+                />
               </div>
             </div>
             <SearchResults
+              controls={controls}
               selectedMovementId={selectedMovementId}
               setSelectedMovementId={setSelectedMovementId}
-              filter={filter}
-              searchTerm={searchTerm}
-              setTabIndex={setTabIndex}
-              tabIndex={tabIndex}
+              setTabIndex={(idx) => {
+                setControls({ ...controls, tabIndex: idx });
+                setSelectedMovementId(null);
+              }}
             />
           </div>
         </div>

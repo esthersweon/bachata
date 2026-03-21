@@ -45,7 +45,7 @@ export const levelFilters: {
   color: string;
 }[] = [
   {
-    id: "all",
+    id: "",
     name: "All",
     abbreviation: "All",
     description: "All categories",
