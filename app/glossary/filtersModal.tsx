@@ -2,7 +2,7 @@ import { FunnelIcon } from "@heroicons/react/24/outline";
 import { categoryFilters, levelFilters } from "../mockData";
 import Modal from "../ui/modal";
 
-export default function SearchFilter({
+export default function FiltersModal({
   filter,
   setFilter,
 }: {
@@ -18,6 +18,7 @@ export default function SearchFilter({
         </button>
       }
       className="flex flex-col gap-2"
+      icon={<FunnelIcon className="size-4" />}
     >
       <h3>Levels</h3>
       <div className="flex gap-2">
