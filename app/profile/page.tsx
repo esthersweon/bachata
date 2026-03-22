@@ -3,6 +3,7 @@ export default function Profile() {
     <main>
       <div className="flex flex-col gap-4">
         <h1>Esther Weon</h1>
+        <div className="bg-gray-800 p-4 rounded-full">Follow</div>
         <p>Dance anniversary: 3/25</p>
         <ul>
           <li>Followers: 100</li>
@@ -22,6 +23,19 @@ export default function Profile() {
             <ul>
               <li>Basic</li>
               <li>Sensual</li>
+              <li>To Learn / Practice</li>
+            </ul>
+            <button>Create new list</button>
+          </div>
+
+          <div className="bg-gray-800 p-4 rounded-lg flex-1">
+            <h2>My combos:</h2>
+            <ul>
+              <li>Basic Combo = Basic + Right turn + Basic</li>
+              <li>
+                Sensual Combo to Practice = Basic + Right turn + Contra turn +
+                Sensual Basic
+              </li>
             </ul>
             <button>Create new list</button>
           </div>
@@ -29,7 +43,7 @@ export default function Profile() {
 
         <div className="flex gap-4">
           <div className="bg-gray-800 p-4 rounded-lg flex-1">
-            <h2>Partner requests:</h2>
+            <h2>Recommended partners:</h2>
             <ul>
               <li>John Doe</li>
               <li>Jane Doe</li>
