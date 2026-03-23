@@ -29,14 +29,6 @@ async function SearchResults({
           <li
             key={id}
             className="flex-1 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full"
-            style={
-              {
-                // outline: selectedMovementId === id ? "1px solid white" : "none",
-              }
-            }
-            // onClick={() =>
-            //   setSelectedMovementId(id !== selectedMovementId ? id : null)
-            // }
           >
             <div className="flex justify-between items-center gap-4">
               <h4 className="text-nowrap">{name}</h4>
