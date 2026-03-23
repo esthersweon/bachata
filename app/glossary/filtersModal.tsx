@@ -13,12 +13,19 @@ export default function FiltersModal() {
   const level = searchParams.get("level") ?? "";
   const category = searchParams.get("category") ?? "";
 
+  const numFilters = [level, category].filter(Boolean).length;
+
   return (
     <Modal
       title="Filters"
       triggerNode={
-        <button>
+        <button className="flex">
           <FunnelIcon aria-hidden="true" className="size-6 text-white" />
+          {numFilters > 0 && (
+            <div className="text-xs rounded-full bg-white text-blue-500 w-4 h-4 -ml-2 -mt-1">
+              {numFilters}
+            </div>
+          )}
         </button>
       }
       className="flex flex-col gap-2"
