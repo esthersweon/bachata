@@ -1,11 +1,16 @@
+"use client";
+
 import {
   ArrowLeftStartOnRectangleIcon,
   BookOpenIcon,
+  ChevronDoubleLeftIcon,
+  ChevronDoubleRightIcon,
   HomeIcon,
   InboxIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useState } from "react";
 
 const navigation: {
   name: string;
@@ -28,9 +33,11 @@ const navigation: {
 ];
 
 export default function Sidenav() {
-  return (
-    <div className="w-40 h-full bg-gray-800 p-4 flex flex-col">
-      <ul className="flex flex-col gap-4">
+  const [isOpen, setIsOpen] = useState(false);
+
+  return isOpen ? (
+    <div className="w-40 h-full bg-gray-800 flex">
+      <ul className="flex flex-col gap-4 p-4">
         {navigation.map(({ name, href, icon: Icon }) => (
           <li key={name} className="flex items-center gap-2">
             <Icon className="size-4" />
@@ -40,6 +47,13 @@ export default function Sidenav() {
           </li>
         ))}
       </ul>
+      <button className="rounded-none! p-1!" onClick={() => setIsOpen(!isOpen)}>
+        <ChevronDoubleLeftIcon className="size-4" />{" "}
+      </button>
     </div>
+  ) : (
+    <button className="rounded-none! p-1!" onClick={() => setIsOpen(!isOpen)}>
+      <ChevronDoubleRightIcon className="size-4" />
+    </button>
   );
 }
