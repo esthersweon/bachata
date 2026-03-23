@@ -38,7 +38,7 @@ async function SearchResults({
             //   setSelectedMovementId(id !== selectedMovementId ? id : null)
             // }
           >
-            <div className="flex justify-between items-center gap-8">
+            <div className="flex justify-between items-center gap-4">
               <h4 className="text-nowrap">{name}</h4>
               <div className="flex gap-2 items-center">
                 <div
