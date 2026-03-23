@@ -29,12 +29,12 @@ export default function Home() {
   return (
     <main>
       <div className="flex flex-wrap gap-4">
-        <div className="flex-1 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+        <div className="flex-2 min-w-[50%] flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
           <h2>Upcoming events</h2>
           <ul className="flex flex-col gap-2">
             {events.map((event) => (
               <li key={event.name} className="bg-black p-2 rounded-lg">
-                <div className="flex justify-between items-center">
+                <div className="flex flex-wrap justify-between items-center">
                   <h3>{event.name}</h3>
 
                   <div
@@ -55,17 +55,17 @@ export default function Home() {
           </ul>
         </div>
 
-        <div className="flex-2 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+        <div className="flex-1 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
           <p>Follow more people to see more activity</p>
-          <h2>My activity feed:</h2>
+          <h2 className="text-nowrap">My activity feed:</h2>
           <ul>
             <li>RSVPs for people I follow</li>
             <li>Lists created by people I follow</li>
           </ul>
         </div>
 
-        <div className="flex-1 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
-          <h2>Past events</h2>
+        <div className="flex-2 min-w-[50%] flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+          <h2 className="text-nowrap">Past events</h2>
           <ul className="flex flex-col gap-2">
             <li>Joliet: 3/25</li>
             <li>Victorian: 4/15</li>
@@ -73,8 +73,8 @@ export default function Home() {
           </ul>
         </div>
 
-        <div className="flex-2 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
-          <h2>People you may know:</h2>
+        <div className="flex-1 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+          <h2 className="text-nowrap">People you may know:</h2>
           <ul>
             <li>John Doe</li>
             <li>Jane Doe</li>
