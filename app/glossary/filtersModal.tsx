@@ -1,14 +1,18 @@
+"use client";
+
 import { FunnelIcon } from "@heroicons/react/24/outline";
+import { useRouter, useSearchParams } from "next/navigation";
 import { categoryFilters, levelFilters } from "../mockData";
 import Modal from "../ui/modal";
+import { updateQuery } from "./helpers";
 
-export default function FiltersModal({
-  filter,
-  setFilter,
-}: {
-  filter: { level: string };
-  setFilter: (filter: { level: string }) => void;
-}) {
+export default function FiltersModal() {
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const level = searchParams.get("level") ?? "";
+  const category = searchParams.get("category") ?? "";
+
   return (
     <Modal
       title="Filters"
@@ -24,12 +28,21 @@ export default function FiltersModal({
       <div className="flex gap-2">
         {levelFilters.map(({ color, id, abbreviation }) => (
           <button
-            className="text-xs"
+            key={id}
+            className="text-xs text-nowrap"
             style={{
               backgroundColor: color,
-              border: filter.level === id ? "2px solid white" : "none",
+              border: level === id ? "2px solid white" : "none",
             }}
-            onClick={() => setFilter({ level: id })}
+            onClick={() =>
+              router.push(
+                `http://localhost:3000/glossary${updateQuery({
+                  searchParams,
+                  name: "level",
+                  value: id,
+                })}`,
+              )
+            }
           >
             {abbreviation}
           </button>
@@ -38,7 +51,22 @@ export default function FiltersModal({
       <h3>Categories</h3>
       <div className="flex gap-2">
         {categoryFilters.map(({ id, name }) => (
-          <button key={id} className="text-xs bg-gray-700!">
+          <button
+            key={id}
+            className="text-xs bg-gray-700! text-nowrap"
+            style={{
+              border: category === id ? "2px solid white" : "none",
+            }}
+            onClick={() =>
+              router.push(
+                `http://localhost:3000/glossary${updateQuery({
+                  searchParams,
+                  name: "category",
+                  value: id,
+                })}`,
+              )
+            }
+          >
             {name}
           </button>
         ))}
