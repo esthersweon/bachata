@@ -1,22 +1,18 @@
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import mockData from "../mockData";
 import Modal from "../ui/modal";
+import type { SearchResult } from "./types";
 
 export default function MovementDetails({
-  movementId,
-}: {
-  movementId: number;
-}) {
-  const movement = mockData.find(
-    ({ id }) => id === movementId,
-  ) as (typeof mockData)[number];
+  name,
+  description,
+}: Pick<SearchResult, "name" | "description">) {
   return (
     <Modal
-      title={movement.name}
+      title={name}
       triggerNode={<InformationCircleIcon className="size-4" />}
     >
       <div className="flex flex-col gap-2">
-        <p>{movement?.description}</p>
+        <p>{description}</p>
       </div>
     </Modal>
   );

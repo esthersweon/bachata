@@ -1,43 +1,42 @@
-import mockData from "../mockData";
+import { categoryIcons } from "../mockData";
 import MovementDetails from "./movementDetails";
+import type { SearchResult } from "./types";
 
-const SearchResults = ({
-  controls: { tabIndex, searchTerm, filter },
-  selectedMovementId,
-  setTabIndex,
-  setSelectedMovementId,
+async function SearchResults({
+  q,
+  level,
+  category,
 }: {
-  controls: { tabIndex: number; searchTerm: string; filter: { level: string } };
-  selectedMovementId: number | null;
-  setTabIndex: (idx: number) => void;
-  setSelectedMovementId: (id: number | null) => void;
-}) => {
-  const results = mockData.filter(
-    ({ name, level, category }) =>
-      (searchTerm === "" ||
-        name.toLowerCase().includes(searchTerm.toLowerCase())) &&
-      [level.id, ""].includes(filter.level) &&
-      [category.id, 0].includes(tabIndex),
-  );
+  q: string;
+  level: string;
+  category: string;
+}) {
+  const results: SearchResult[] = await (
+    await fetch(
+      `http://localhost:3000/api/glossary?q=${q}&level=${level}&category=${category}`,
+    )
+  ).json();
 
-  return (
-    <>
-      {results.length === 0 && (
-        <div className="text-gray-300 h-20 flex items-center justify-center">
-          No results found. Please adjust your search criteria.
-        </div>
-      )}
-      <ul className="flex flex-wrap gap-2 space-y-1">
-        {results.map(({ id, name, description, color, category }) => (
+  return results.length === 0 ? (
+    <div className="text-gray-300 h-20 flex items-center justify-center">
+      No results found. Please adjust your search criteria.
+    </div>
+  ) : (
+    <ul className="flex flex-wrap gap-2 space-y-1">
+      {results.map(({ id, name, description, color, category }) => {
+        const Icon = categoryIcons[category.name] ?? null;
+        return (
           <li
             key={id}
             className="flex-1 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-75 max-w-full"
-            style={{
-              outline: selectedMovementId === id ? "1px solid white" : "none",
-            }}
-            onClick={() =>
-              setSelectedMovementId(id !== selectedMovementId ? id : null)
+            style={
+              {
+                // outline: selectedMovementId === id ? "1px solid white" : "none",
+              }
             }
+            // onClick={() =>
+            //   setSelectedMovementId(id !== selectedMovementId ? id : null)
+            // }
           >
             <div className="flex justify-between items-center gap-8">
               <h4 className="text-nowrap">{name}</h4>
@@ -47,25 +46,19 @@ const SearchResults = ({
                   style={{ backgroundColor: color }}
                 ></div>
 
-                <button
-                  className="text-xs bg-gray-700! flex items-center gap-2"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setTabIndex(category.id);
-                  }}
-                >
-                  {category.icon && <category.icon className="size-4" />}
+                <button className="text-xs bg-gray-700! flex items-center gap-2">
+                  {Icon && <Icon className="size-4" />}
                 </button>
 
-                <MovementDetails movementId={id} />
+                <MovementDetails name={name} description={description} />
               </div>
             </div>
             <p className="text-xs font-light">{description}</p>
           </li>
-        ))}
-      </ul>
-    </>
+        );
+      })}
+    </ul>
   );
-};
+}
 
 export default SearchResults;
