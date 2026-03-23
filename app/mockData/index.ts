@@ -17,32 +17,32 @@ export const categoryIcons: {
 };
 
 export const categoryFilters: {
-  id: number;
+  id: string;
   name: string;
   description: string;
 }[] = [
   {
-    id: 0,
+    id: "",
     name: "All",
     description: "All categories",
   },
   {
-    id: 1,
+    id: "1",
     name: "Footwork",
     description: "Footwork movements",
   },
   {
-    id: 2,
+    id: "2",
     name: "Turns and spins",
     description: "Turns and spins movements",
   },
   {
-    id: 3,
+    id: "3",
     name: "Isolations",
     description: "Body isolations movements",
   },
   {
-    id: 4,
+    id: "4",
     name: "Sensual moves",
     description: "Sensual bachata movements",
   },

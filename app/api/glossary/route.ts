@@ -1,32 +1,32 @@
 import { NextRequest } from "next/server";
 
 const categoryFilters: {
-  id: number;
+  id: string;
   name: string;
   description: string;
 }[] = [
   {
-    id: 0,
+    id: "0",
     name: "All",
     description: "All categories",
   },
   {
-    id: 1,
+    id: "1",
     name: "Footwork",
     description: "Footwork movements",
   },
   {
-    id: 2,
+    id: "2",
     name: "Turns and spins",
     description: "Turns and spins movements",
   },
   {
-    id: 3,
+    id: "3",
     name: "Isolations",
     description: "Body isolations movements",
   },
   {
-    id: 4,
+    id: "4",
     name: "Sensual moves",
     description: "Sensual bachata movements",
   },
@@ -146,17 +146,16 @@ const mockData = [
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
-  const searchTerm = searchParams.get("searchTerm") ?? "";
+  const q = searchParams.get("q") ?? "";
   const level = searchParams.get("level") ?? "";
-  const tabIndex = Number(searchParams.get("tabIndex")) ?? 0;
+  const category = searchParams.get("category") ?? "";
 
   return Response.json(
     mockData.filter(
-      ({ name, level: dataLevel, category }) =>
-        (searchTerm === "" ||
-          name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      ({ name, level: dataLevel, category: dataCategory }) =>
+        (q === "" || name.toLowerCase().includes(q.toLowerCase())) &&
         [dataLevel.id, ""].includes(level) &&
-        [category.id, 0].includes(tabIndex),
+        [dataCategory.id, ""].includes(category),
     ),
     { headers: { "Content-Type": "application/json" } },
   );
