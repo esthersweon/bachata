@@ -1,15 +1,23 @@
 export default function Profile() {
   return (
     <main>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-wrap justify-between items-center">
         <h1>Esther Weon</h1>
         <div className="bg-gray-800 p-4 rounded-full">Follow</div>
+      </div>
+      <div className="flex flex-col gap-2">
         <p>Dance anniversary: 3/25</p>
-        <ul>
-          <li>Followers: 100</li>
-          <li>Following: 100</li>
-        </ul>
-        <div className="flex gap-4">
+        <div className="flex gap-2">
+          <div className="flex flex-col gap-2">
+            <div>Followers</div>
+            <div>100</div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <div>Following</div>
+            <div>100</div>
+          </div>
+        </div>
+        <div className="flex flex-wrap gap-4">
           <div className="bg-gray-800 p-4 rounded-lg flex-1">
             <h2>My events:</h2>
             <ul>
@@ -39,9 +47,7 @@ export default function Profile() {
             </ul>
             <button>Create new list</button>
           </div>
-        </div>
 
-        <div className="flex gap-4">
           <div className="bg-gray-800 p-4 rounded-lg flex-1">
             <h2>Recommended partners:</h2>
             <ul>
@@ -49,6 +55,7 @@ export default function Profile() {
               <li>Jane Doe</li>
             </ul>
           </div>
+
           <div className="bg-gray-800 p-4 rounded-lg flex-1">
             <h2>Badges</h2>
             <ul>
@@ -56,6 +63,7 @@ export default function Profile() {
               <li>Sensual</li>
             </ul>
           </div>
+
           <div className="bg-gray-800 p-4 rounded-lg flex-1">
             <h2>Settings</h2>
             <ul>

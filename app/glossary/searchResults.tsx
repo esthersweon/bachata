@@ -28,7 +28,7 @@ async function SearchResults({
         return (
           <li
             key={id}
-            className="flex-1 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-75 max-w-full"
+            className="flex-1 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full"
             style={
               {
                 // outline: selectedMovementId === id ? "1px solid white" : "none",

@@ -12,12 +12,10 @@ export default async function Glossary({
 }) {
   const { q = "", level = "", category = "" } = await searchParams;
 
-  console.log("esther", { q, level, category });
-
   return (
     <main>
       <div className="space-y-4">
-        <div className="flex justify-between items-center gap-2">
+        <div className="flex flex-wrap justify-between items-center gap-2">
           <h1>Glossary</h1>
           <AddToGlossaryModal />
         </div>
@@ -25,7 +23,7 @@ export default async function Glossary({
         <p>Search for a movement to get started! 💃</p>
 
         <CategoryTabs />
-        <div className="p-2 flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
           <div className="flex justify-between items-center gap-2">
             <div className="flex-1">
               <SearchInput />

@@ -29,7 +29,7 @@ export default function FiltersModal() {
         {levelFilters.map(({ color, id, abbreviation }) => (
           <button
             key={id}
-            className="text-xs text-nowrap"
+            className="text-xs"
             style={{
               backgroundColor: color,
               border: level === id ? "2px solid white" : "none",
@@ -53,7 +53,7 @@ export default function FiltersModal() {
         {categoryFilters.map(({ id, name }) => (
           <button
             key={id}
-            className="text-xs bg-gray-700! text-nowrap"
+            className="text-xs bg-gray-700!"
             style={{
               border: category === id ? "2px solid white" : "none",
             }}
