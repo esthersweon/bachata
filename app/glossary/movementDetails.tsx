@@ -1,11 +1,11 @@
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import Modal from "../ui/modal";
-import type { SearchResult } from "./types";
+import type { Movement } from "./types";
 
 export default function MovementDetails({
   name,
   description,
-}: Pick<SearchResult, "name" | "description">) {
+}: Pick<Movement, "name" | "description">) {
   return (
     <Modal
       title={name}

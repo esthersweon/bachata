@@ -52,34 +52,29 @@ export const levelFilters: {
   id: string;
   name: string;
   description: string;
-  abbreviation: string;
   color: string;
 }[] = [
   {
     id: "",
     name: "All",
-    abbreviation: "All",
     description: "All categories",
     color: "gray",
   },
   {
     id: "1",
     name: "Beginner",
-    abbreviation: "Beg.",
     description: "< 6 months",
     color: "green",
   },
   {
     id: "2",
     name: "Intermediate",
-    abbreviation: "Int.",
     description: "6 months - 1 year",
     color: "orange",
   },
   {
     id: "3",
     name: "Advanced",
-    abbreviation: "Adv.",
     description: "> 1 year",
     color: "red",
   },

@@ -25,7 +25,7 @@ export default function Modal({
   const [open, setOpen] = useState(false);
 
   return (
-    <div className={className}>
+    <div>
       <div
         onClick={(e) => {
           e.stopPropagation();
@@ -66,7 +66,9 @@ export default function Modal({
                       {title}
                     </DialogTitle>
                     <div className="mt-2">
-                      <div className="text-sm text-gray-400">{children}</div>
+                      <div className={`text-sm text-gray-400 ${className}`}>
+                        {children}
+                      </div>
                     </div>
                   </div>
                 </div>
