@@ -1,148 +1,5 @@
+import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
-
-const categoryFilters: {
-  id: string;
-  name: string;
-  description: string;
-}[] = [
-  {
-    id: "0",
-    name: "All",
-    description: "All categories",
-  },
-  {
-    id: "1",
-    name: "Footwork",
-    description: "Footwork movements",
-  },
-  {
-    id: "2",
-    name: "Turns and spins",
-    description: "Turns and spins movements",
-  },
-  {
-    id: "3",
-    name: "Isolations",
-    description: "Body isolations movements",
-  },
-  {
-    id: "4",
-    name: "Sensual moves",
-    description: "Sensual bachata movements",
-  },
-];
-
-const levelFilters: {
-  id: string;
-  name: string;
-  description: string;
-  abbreviation: string;
-  color: string;
-}[] = [
-  {
-    id: "",
-    name: "All",
-    abbreviation: "All",
-    description: "All categories",
-    color: "gray",
-  },
-  {
-    id: "1",
-    name: "Beginner",
-    abbreviation: "Beg.",
-    description: "< 6 months",
-    color: "green",
-  },
-  {
-    id: "2",
-    name: "Intermediate",
-    abbreviation: "Int.",
-    description: "6 months - 1 year",
-    color: "orange",
-  },
-  {
-    id: "3",
-    name: "Advanced",
-    abbreviation: "Adv.",
-    description: "> 1 year",
-    color: "red",
-  },
-];
-
-const mockData = [
-  {
-    id: 1,
-    name: "Basic Step",
-    description: "The foundation",
-    level: levelFilters[1],
-    color: levelFilters[1].color,
-    category: categoryFilters[1],
-  },
-  {
-    id: 2,
-    name: "Racinto Step",
-    description: "A variation of the basic step",
-    level: levelFilters[1],
-    color: levelFilters[1].color,
-    category: categoryFilters[1],
-  },
-  {
-    id: 3,
-    name: "Madrid Step",
-    description: "Diagonal movement",
-    level: levelFilters[2],
-    color: levelFilters[2].color,
-    category: categoryFilters[1],
-  },
-  {
-    id: 4,
-    name: "Contra Turn",
-    description: "You go wheee",
-    level: levelFilters[3],
-    color: levelFilters[3].color,
-    category: categoryFilters[2],
-  },
-  {
-    id: 5,
-    name: "Sensual Basic Step",
-    description: "Infinity hips",
-    level: levelFilters[1],
-    color: levelFilters[1].color,
-    category: categoryFilters[1],
-  },
-  {
-    id: 6,
-    name: "Box step",
-    description: "AKA Recinto Step",
-    level: levelFilters[1],
-    color: levelFilters[1].color,
-    category: categoryFilters[1],
-  },
-  {
-    id: 7,
-    name: "Right turn",
-    description: "Turn to right",
-    level: levelFilters[1],
-    color: levelFilters[1].color,
-    category: categoryFilters[2],
-  },
-  {
-    id: 8,
-    name: "Left turn",
-    description: "Turn to left",
-    level: levelFilters[1],
-    color: levelFilters[1].color,
-    category: categoryFilters[2],
-  },
-  {
-    id: 9,
-    name: "Hip isolations",
-    description: "Isolate those hips",
-    level: levelFilters[1],
-    color: levelFilters[1].color,
-    category: categoryFilters[3],
-  },
-];
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -150,31 +7,65 @@ export async function GET(request: NextRequest) {
   const level = searchParams.get("level") ?? "";
   const category = searchParams.get("category") ?? "";
 
-  return Response.json(
-    mockData.filter(
-      ({ name, level: dataLevel, category: dataCategory }) =>
-        (q === "" || name.toLowerCase().includes(q.toLowerCase())) &&
-        [dataLevel.id, ""].includes(level) &&
-        [dataCategory.id, ""].includes(category),
-    ),
-    { headers: { "Content-Type": "application/json" } },
-  );
+  const url = process.env.POSTGRES_URL;
+  if (!url) {
+    return Response.json([], {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  try {
+    const sql = neon(url);
+
+    const qPattern = `%${q}%`;
+    const levelFilter = level ? sql`AND l.id = ${level}` : sql``;
+    const categoryFilter = category ? sql`AND c.id = ${category}` : sql``;
+
+    const results =
+      await sql`SELECT m.id, m.name, m.description, l.name as level, c.name as category FROM movements m
+      JOIN levels l ON m.level_id = l.id
+      JOIN categories c ON m.category_id = c.id
+      WHERE (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
+      ${levelFilter}
+      ${categoryFilter}`;
+
+    return Response.json(results ?? [], {
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch {
+    return Response.json([], {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }
 
 export async function POST(request: Request) {
-  const { name, description, level, color, category } = await request.json();
+  const { name, description, level, category } = await request.json();
 
-  const newMovement = {
-    id: Date.now(),
-    name,
-    description,
-    level,
-    color,
-    category,
-  };
+  const url = process.env.POSTGRES_URL;
+  if (!url) {
+    return Response.json([], {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 
-  return new Response(JSON.stringify(newMovement), {
-    status: 201,
-    headers: { "Content-Type": "application/json" },
-  });
+  try {
+    const sql = neon(url);
+    const result =
+      await sql`INSERT INTO movements (name, description, level_id, category_id)
+      VALUES (${name}, ${description}, ${level}, ${category})`;
+
+    return new Response(JSON.stringify(result), {
+      status: 201,
+      headers: { "Content-Type": "application/json" },
+    });
+  } catch {
+    return new Response(JSON.stringify({ error: "Failed to add movement" }), {
+      status: 500,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
 }

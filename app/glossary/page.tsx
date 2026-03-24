@@ -33,7 +33,13 @@ export default async function Glossary({
             </div>
           </div>
 
-          <Suspense fallback={<div>Loading results...</div>}>
+          <Suspense
+            fallback={
+              <div className="text-gray-300 h-20 flex items-center justify-center">
+                Loading results...
+              </div>
+            }
+          >
             <SearchResults q={q} level={level} category={category} />
           </Suspense>
         </div>

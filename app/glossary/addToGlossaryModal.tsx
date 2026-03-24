@@ -20,7 +20,7 @@ export default function AddToGlossaryModal() {
     const description = formData.get("description");
     const level = formData.get("level");
     const category = formData.get("category");
-    console.log({ name, description, level, category });
+    console.info({ name, description, level, category });
   };
 
   return (

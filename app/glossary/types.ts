@@ -1,9 +1,15 @@
-export type SearchResult = {
-  id: number;
+export type MovementCategory = {
+  id: string;
   name: string;
   description: string;
-  color: string;
-  category: { id: number; name: string };
+};
+
+export type Movement = {
+  id: string;
+  name: string;
+  description: string;
+  category: string;
+  level: string;
 };
 
 export type SearchControls = {

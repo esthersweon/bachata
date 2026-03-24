@@ -1,6 +1,8 @@
 import { categoryIcons } from "../mockData";
 import MovementDetails from "./movementDetails";
-import type { SearchResult } from "./types";
+import type { Movement } from "./types";
+
+export const dynamic = "force-dynamic";
 
 async function SearchResults({
   q,
@@ -11,20 +13,20 @@ async function SearchResults({
   level: string;
   category: string;
 }) {
-  const results: SearchResult[] = await (
+  const movements: Movement[] = await (
     await fetch(
       `http://localhost:3000/api/glossary?q=${q}&level=${level}&category=${category}`,
     )
   ).json();
 
-  return results.length === 0 ? (
+  return movements.length === 0 ? (
     <div className="text-gray-300 h-20 flex items-center justify-center">
       No results found. Please adjust your search criteria.
     </div>
   ) : (
     <ul className="flex flex-wrap gap-2 space-y-1">
-      {results.map(({ id, name, description, color, category }) => {
-        const Icon = categoryIcons[category.name] ?? null;
+      {movements.map(({ id, name, description, category }) => {
+        const Icon = categoryIcons[category] ?? null;
         return (
           <li
             key={id}
@@ -33,10 +35,7 @@ async function SearchResults({
             <div className="flex justify-between items-center gap-4">
               <h4 className="text-nowrap">{name}</h4>
               <div className="flex gap-2 items-center">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: color }}
-                ></div>
+                <div className="w-2 h-2 rounded-full"></div>
 
                 <button className="text-xs bg-gray-700! flex items-center gap-2">
                   {Icon && <Icon className="size-4" />}
