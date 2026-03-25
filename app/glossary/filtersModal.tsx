@@ -47,7 +47,7 @@ export default function FiltersModal() {
                   `http://localhost:3000/glossary${updateQuery({
                     searchParams,
                     name: "level",
-                    value: id,
+                    value: searchParams.get("level") === id ? "" : id,
                   })}`,
                 )
               }
@@ -72,7 +72,7 @@ export default function FiltersModal() {
                   `http://localhost:3000/glossary${updateQuery({
                     searchParams,
                     name: "category",
-                    value: id,
+                    value: searchParams.get("category") === id ? "" : id,
                   })}`,
                 )
               }
