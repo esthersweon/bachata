@@ -1,4 +1,5 @@
 import { neon } from "@neondatabase/serverless";
+import crypto from "crypto";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
@@ -23,7 +24,7 @@ export async function GET(request: NextRequest) {
     const categoryFilter = category ? sql`AND c.id = ${category}` : sql``;
 
     const results =
-      await sql`SELECT m.id, m.name, m.description, l.name as level, c.name as category FROM movements m
+      await sql`SELECT m.id, m.name, m.description, l.name as level, l.color as levelColor, c.name as category FROM movements m
       JOIN levels l ON m.level_id = l.id
       JOIN categories c ON m.category_id = c.id
       WHERE (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
@@ -55,8 +56,8 @@ export async function POST(request: Request) {
   try {
     const sql = neon(url);
     const result =
-      await sql`INSERT INTO movements (name, description, level_id, category_id)
-      VALUES (${name}, ${description}, ${level}, ${category})`;
+      await sql`INSERT INTO movements (id, name, description, level_id, category_id)
+      VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${level}, ${category})`;
 
     return new Response(JSON.stringify(result), {
       status: 201,

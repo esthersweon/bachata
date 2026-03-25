@@ -11,10 +11,16 @@ import {
   Textarea,
 } from "@headlessui/react";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { categoryFilters, levelFilters } from "../mockData";
 import Modal from "../ui/modal";
+import { MovementCategory, MovementLevel } from "./types";
 
-export default function AddToGlossaryModal() {
+export default function AddToGlossaryModal({
+  categories,
+  levels,
+}: {
+  categories: MovementCategory[];
+  levels: MovementLevel[];
+}) {
   const submitForm = (formData: FormData) => {
     const name = formData.get("name");
     const description = formData.get("description");
@@ -65,7 +71,7 @@ export default function AddToGlossaryModal() {
               anchor="bottom end"
               className="z-10 border border-gray-700 rounded-lg"
             >
-              {levelFilters.slice(1).map(({ id, name }) => (
+              {levels.slice(1).map(({ id, name }) => (
                 <MenuItem
                   key={id}
                   as="div"
@@ -85,7 +91,7 @@ export default function AddToGlossaryModal() {
               anchor="bottom end"
               className="z-10 border border-gray-700 rounded-lg"
             >
-              {categoryFilters.slice(1).map(({ id, name }) => (
+              {categories.slice(1).map(({ id, name }) => (
                 <MenuItem
                   key={id}
                   as="div"

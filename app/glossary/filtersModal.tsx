@@ -2,18 +2,24 @@
 
 import { FunnelIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
-import { categoryFilters, levelFilters } from "../mockData";
 import Modal from "../ui/modal";
 import { updateQuery } from "./helpers";
+import { MovementCategory, MovementLevel } from "./types";
 
-export default function FiltersModal() {
+export default function FiltersModal({
+  categories,
+  levels,
+}: {
+  categories: MovementCategory[];
+  levels: MovementLevel[];
+}) {
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const level = searchParams.get("level") ?? "";
-  const category = searchParams.get("category") ?? "";
+  const levelId = searchParams.get("level") ?? "";
+  const categoryId = searchParams.get("category") ?? "";
 
-  const numFilters = [level, category].filter(Boolean).length;
+  const numFilters = [levelId, categoryId].filter(Boolean).length;
 
   return (
     <Modal
@@ -33,21 +39,21 @@ export default function FiltersModal() {
     >
       <div className="flex flex-col gap-2">
         <h3>Levels</h3>
-        <div className="flex gap-2">
-          {levelFilters.map(({ color, id, name }) => (
+        <div className="flex flex-wrap gap-2">
+          {levels.map(({ color, id, name }) => (
             <button
               key={id}
               className="text-xs"
               style={{
                 backgroundColor: color,
-                border: level === id ? "2px solid white" : "none",
+                border: levelId === id ? "2px solid white" : "none",
               }}
               onClick={() =>
                 router.push(
-                  `http://localhost:3000/glossary${updateQuery({
+                  `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
                     searchParams,
                     name: "level",
-                    value: searchParams.get("level") === id ? "" : id,
+                    value: levelId === id ? "" : id,
                   })}`,
                 )
               }
@@ -59,20 +65,18 @@ export default function FiltersModal() {
       </div>
       <div className="flex flex-col gap-2">
         <h3>Categories</h3>
-        <div className="flex gap-2">
-          {categoryFilters.map(({ id, name }) => (
+        <div className="flex flex-wrap gap-2">
+          {categories.map(({ id, name }) => (
             <button
               key={id}
               className="text-xs bg-gray-700!"
-              style={{
-                border: category === id ? "2px solid white" : "none",
-              }}
+              style={{ border: categoryId === id ? "2px solid white" : "none" }}
               onClick={() =>
                 router.push(
-                  `http://localhost:3000/glossary${updateQuery({
+                  `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
                     searchParams,
                     name: "category",
-                    value: searchParams.get("category") === id ? "" : id,
+                    value: categoryId === id ? "" : id,
                   })}`,
                 )
               }
