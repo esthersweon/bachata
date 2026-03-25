@@ -11,22 +11,42 @@ import {
   Textarea,
 } from "@headlessui/react";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Modal from "../ui/modal";
 import { MovementCategory, MovementLevel } from "./types";
 
-export default function AddToGlossaryModal({
+export default function AddMovementModal({
   categories,
   levels,
 }: {
   categories: MovementCategory[];
   levels: MovementLevel[];
 }) {
+  const [levelId, setLevelId] = useState("");
+  const [categoryId, setCategoryId] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const router = useRouter();
+
   const submitForm = (formData: FormData) => {
     const name = formData.get("name");
     const description = formData.get("description");
-    const level = formData.get("level");
-    const category = formData.get("category");
-    console.info({ name, description, level, category });
+    const levelId = formData.get("levelId");
+    const categoryId = formData.get("categoryId");
+
+    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary/filters`, {
+      method: "POST",
+      body: JSON.stringify({ name, description, levelId, categoryId }),
+    })
+      .then((response: Response) => response.json())
+      .then(({ ok }) => {
+        if (ok) router.refresh();
+        else setError("Failed to add movement. Please try again.");
+      })
+      .catch((error: Error) =>
+        setError(`Failed to add movement: ${error.message}`),
+      );
   };
 
   return (
@@ -61,21 +81,27 @@ export default function AddToGlossaryModal({
           />
         </Field>
 
+        <input type="hidden" name="levelId" value={levelId} />
+        <input type="hidden" name="categoryId" value={categoryId} />
+
         <div className="flex gap-2">
           <Menu>
             <MenuButton className="flex items-center gap-1 bg-gray-800!">
-              Level <ChevronDownIcon className="size-4" />
+              {levels.find(({ id }) => id === levelId)?.name ?? "Level"}{" "}
+              <ChevronDownIcon className="size-4" />
             </MenuButton>
             <MenuItems
               transition
               anchor="bottom end"
-              className="z-10 border border-gray-700 rounded-lg"
+              className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
             >
-              {levels.slice(1).map(({ id, name }) => (
+              {levels.map(({ id, name }) => (
                 <MenuItem
                   key={id}
-                  as="div"
-                  className="cursor-pointer p-2 bg-gray-800"
+                  as="button"
+                  type="button"
+                  className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+                  onClick={() => setLevelId(id)}
                 >
                   {name}
                 </MenuItem>
@@ -84,24 +110,29 @@ export default function AddToGlossaryModal({
           </Menu>
           <Menu>
             <MenuButton className="flex items-center gap-1 bg-gray-800!">
-              Category <ChevronDownIcon className="size-4" />
+              {categories.find(({ id }) => id === categoryId)?.name ??
+                "Category"}{" "}
+              <ChevronDownIcon className="size-4" />
             </MenuButton>
             <MenuItems
               transition
               anchor="bottom end"
-              className="z-10 border border-gray-700 rounded-lg"
+              className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
             >
-              {categories.slice(1).map(({ id, name }) => (
+              {categories.map(({ id, name }) => (
                 <MenuItem
                   key={id}
-                  as="div"
-                  className="cursor-pointer p-2 bg-gray-800"
+                  as="button"
+                  type="button"
+                  className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+                  onClick={() => setCategoryId(id)}
                 >
                   {name}
                 </MenuItem>
               ))}
             </MenuItems>
           </Menu>
+          {error && <p className="text-red-500">{error}</p>}
         </div>
 
         <div className="self-end">

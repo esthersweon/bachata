@@ -38,7 +38,6 @@ export default function FiltersModal({
       icon={<FunnelIcon className="size-4" />}
     >
       <div className="flex flex-col gap-2">
-        <h3>Levels</h3>
         <div className="flex flex-wrap gap-2">
           {levels.map(({ color, id, name }) => (
             <button
@@ -54,29 +53,6 @@ export default function FiltersModal({
                     searchParams,
                     name: "level",
                     value: levelId === id ? "" : id,
-                  })}`,
-                )
-              }
-            >
-              {name}
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-2">
-        <h3>Categories</h3>
-        <div className="flex flex-wrap gap-2">
-          {categories.map(({ id, name }) => (
-            <button
-              key={id}
-              className="text-xs bg-gray-700!"
-              style={{ border: categoryId === id ? "2px solid white" : "none" }}
-              onClick={() =>
-                router.push(
-                  `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
-                    searchParams,
-                    name: "category",
-                    value: categoryId === id ? "" : id,
                   })}`,
                 )
               }

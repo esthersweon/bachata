@@ -20,15 +20,42 @@ export async function GET(request: NextRequest) {
     const levels = await sql`SELECT id, name, color FROM levels`;
 
     return Response.json(
-      {
-        categories: [{ id: "", name: "All" }, ...categories],
-        levels: [{ id: "", name: "All", color: "gray" }, ...levels],
-      },
+      { categories, levels },
       { headers: { "Content-Type": "application/json" } },
     );
   } catch {
     return Response.json(
       { categories: [], levels: [] },
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      },
+    );
+  }
+}
+
+export async function POST(request: NextRequest) {
+  const { name, description, levelId, categoryId } = await request.json();
+
+  const url = process.env.POSTGRES_URL;
+  if (!url) {
+    return Response.json([], {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  try {
+    const sql = neon(url);
+    const result =
+      await sql`INSERT INTO movements (id, name, description, level_id, category_id) VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${levelId}, ${categoryId})`;
+    return Response.json(
+      { ok: true },
+      { status: 201, headers: { "Content-Type": "application/json" } },
+    );
+  } catch (error: unknown) {
+    return Response.json(
+      { ok: false, error: (error as Error).message },
       {
         status: 500,
         headers: { "Content-Type": "application/json" },

@@ -20,7 +20,7 @@ export default function CategoryTabs({
       tabIndex={categories.findIndex(({ id }) => id === categoryId) ?? 0}
     >
       <TabList className="flex flex-wrap gap-1 cursor-pointer">
-        {categories.map(({ id, name }) => {
+        {[{ id: "", name: "All" }, ...categories].map(({ id, name }) => {
           const Icon =
             categoriesToIcons[name as keyof typeof categoriesToIcons] ?? null;
 

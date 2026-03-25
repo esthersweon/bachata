@@ -1,9 +1,10 @@
 import { Suspense } from "react";
-import AddToGlossaryModal from "./addToGlossaryModal";
+import AddMovementModal from "./addMovementModal";
 import CategoryTabs from "./categoryTabs";
 import FiltersModal from "./filtersModal";
 import SearchInput from "./searchInput";
 import SearchResults from "./searchResults";
+import { MovementCategory, MovementLevel } from "./types";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +15,10 @@ export default async function Glossary({
 }) {
   const { q = "", level = "", category = "" } = await searchParams;
 
-  const { categories, levels } = await (
+  const {
+    categories,
+    levels,
+  }: { categories: MovementCategory[]; levels: MovementLevel[] } = await (
     await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary/filters`)
   ).json();
 
@@ -23,7 +27,7 @@ export default async function Glossary({
       <div className="space-y-4">
         <div className="flex flex-wrap justify-between items-center gap-2">
           <h1>Glossary</h1>
-          <AddToGlossaryModal categories={categories} levels={levels} />
+          <AddMovementModal categories={categories} levels={levels} />
         </div>
 
         <p>Search for a movement to get started! 💃</p>
