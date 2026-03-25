@@ -29,7 +29,8 @@ export async function GET(request: NextRequest) {
       JOIN categories c ON m.category_id = c.id
       WHERE (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
       ${levelFilter}
-      ${categoryFilter}`;
+      ${categoryFilter}
+      ORDER BY m.name`;
 
     return Response.json(results ?? [], {
       headers: { "Content-Type": "application/json" },
