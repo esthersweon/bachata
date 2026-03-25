@@ -18,7 +18,9 @@ export default function SearchInput() {
     }
 
     const search = currentParams.toString();
-    router.push(`http://localhost:3000/glossary${search ? `?${search}` : ""}`);
+    router.push(
+      `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${search ? `?${search}` : ""}`,
+    );
   };
 
   return (
