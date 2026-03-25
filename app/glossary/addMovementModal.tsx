@@ -23,11 +23,12 @@ export default function AddMovementModal({
   categories: MovementCategory[];
   levels: MovementLevel[];
 }) {
+  const router = useRouter();
+
+  const [showModal, setShowModal] = useState(false);
   const [levelId, setLevelId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [error, setError] = useState<string | null>(null);
-
-  const router = useRouter();
 
   const submitForm = (formData: FormData) => {
     const name = formData.get("name");
@@ -41,8 +42,10 @@ export default function AddMovementModal({
     })
       .then((response: Response) => response.json())
       .then(({ ok }) => {
-        if (ok) router.refresh();
-        else setError("Failed to add movement. Please try again.");
+        if (ok) {
+          router.refresh();
+          setShowModal(false);
+        } else setError("Failed to add movement. Please try again.");
       })
       .catch((error: Error) =>
         setError(`Failed to add movement: ${error.message}`),
@@ -50,95 +53,101 @@ export default function AddMovementModal({
   };
 
   return (
-    <Modal
-      title="Add Movement"
-      icon={<PlusIcon className="size-4" />}
-      triggerNode={
-        <button className="flex items-center gap-1">
-          <PlusIcon className="size-4" />
-          <div>Add Movement</div>
-        </button>
-      }
-    >
-      <form className="flex flex-col space-y-4" action={submitForm}>
-        <Field>
-          <Label htmlFor="name">Name</Label>
-          <Input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="e.g. Basic Step"
-          />
-        </Field>
-        <Field>
-          <Label htmlFor="description">Description</Label>
-          <Textarea
-            rows={3}
-            className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
-            id="description"
-            name="description"
-            placeholder="e.g. The foundation of bachata"
-          />
-        </Field>
+    <>
+      <button
+        className="flex items-center gap-1"
+        onClick={() => setShowModal(true)}
+      >
+        <PlusIcon className="size-4" />
+        <div>Add Movement</div>
+      </button>
+      {showModal && (
+        <Modal
+          title="Add Movement"
+          icon={<PlusIcon className="size-4" />}
+          onClose={() => setShowModal(false)}
+        >
+          <form className="flex flex-col space-y-4" action={submitForm}>
+            <Field>
+              <Label htmlFor="name">Name</Label>
+              <Input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="e.g. Basic Step"
+              />
+            </Field>
+            <Field>
+              <Label htmlFor="description">Description</Label>
+              <Textarea
+                rows={3}
+                className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
+                id="description"
+                name="description"
+                placeholder="e.g. The foundation of bachata"
+              />
+            </Field>
 
-        <input type="hidden" name="levelId" value={levelId} />
-        <input type="hidden" name="categoryId" value={categoryId} />
+            <input type="hidden" name="levelId" value={levelId} />
+            <input type="hidden" name="categoryId" value={categoryId} />
 
-        <div className="flex gap-2">
-          <Menu>
-            <MenuButton className="flex items-center gap-1 bg-gray-800!">
-              {levels.find(({ id }) => id === levelId)?.name ?? "Level"}{" "}
-              <ChevronDownIcon className="size-4" />
-            </MenuButton>
-            <MenuItems
-              transition
-              anchor="bottom end"
-              className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
-            >
-              {levels.map(({ id, name }) => (
-                <MenuItem
-                  key={id}
-                  as="button"
-                  type="button"
-                  className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
-                  onClick={() => setLevelId(id)}
+            <div className="flex gap-2">
+              <Menu>
+                <MenuButton className="flex items-center gap-1 bg-gray-800!">
+                  {levels.find(({ id }) => id === levelId)?.name ?? "Level"}{" "}
+                  <ChevronDownIcon className="size-4" />
+                </MenuButton>
+                <MenuItems
+                  transition
+                  anchor="bottom end"
+                  className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
                 >
-                  {name}
-                </MenuItem>
-              ))}
-            </MenuItems>
-          </Menu>
-          <Menu>
-            <MenuButton className="flex items-center gap-1 bg-gray-800!">
-              {categories.find(({ id }) => id === categoryId)?.name ??
-                "Category"}{" "}
-              <ChevronDownIcon className="size-4" />
-            </MenuButton>
-            <MenuItems
-              transition
-              anchor="bottom end"
-              className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
-            >
-              {categories.map(({ id, name }) => (
-                <MenuItem
-                  key={id}
-                  as="button"
-                  type="button"
-                  className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
-                  onClick={() => setCategoryId(id)}
+                  {levels.map(({ id, name }) => (
+                    <MenuItem
+                      key={id}
+                      as="button"
+                      type="button"
+                      className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+                      onClick={() => setLevelId(id)}
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </MenuItems>
+              </Menu>
+              <Menu>
+                <MenuButton className="flex items-center gap-1 bg-gray-800!">
+                  {categories.find(({ id }) => id === categoryId)?.name ??
+                    "Category"}{" "}
+                  <ChevronDownIcon className="size-4" />
+                </MenuButton>
+                <MenuItems
+                  transition
+                  anchor="bottom end"
+                  className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
                 >
-                  {name}
-                </MenuItem>
-              ))}
-            </MenuItems>
-          </Menu>
-          {error && <p className="text-red-500">{error}</p>}
-        </div>
+                  {categories.map(({ id, name }) => (
+                    <MenuItem
+                      key={id}
+                      as="button"
+                      type="button"
+                      className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+                      onClick={() => setCategoryId(id)}
+                    >
+                      {name}
+                    </MenuItem>
+                  ))}
+                </MenuItems>
+              </Menu>
+              {error && <p className="text-red-500">{error}</p>}
+            </div>
 
-        <div className="self-end">
-          <button type="submit">Add</button>
-        </div>
-      </form>
-    </Modal>
+            <div className="self-end">
+              <button type="submit">Add</button>
+            </div>
+          </form>
+        </Modal>
+      )}
+    </>
   );
 }

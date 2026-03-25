@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import AddMovementModal from "./addMovementModal";
 import CategoryTabs from "./categoryTabs";
-import FiltersModal from "./filtersModal";
+import FiltersMenu from "./filtersMenu";
 import SearchInput from "./searchInput";
 import SearchResults from "./searchResults";
 import { MovementCategory, MovementLevel } from "./types";
@@ -39,7 +39,7 @@ export default async function Glossary({
               <SearchInput />
             </div>
             <div>
-              <FiltersModal categories={categories} levels={levels} />
+              <FiltersMenu levels={levels} />
             </div>
           </div>
 
