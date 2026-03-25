@@ -28,7 +28,6 @@ export default function SearchInput() {
       <input
         type="text"
         placeholder="Search"
-        value={searchParams.get("q") ?? ""}
         onChange={(e) => updateQuery("q", e.target.value)}
       />
     </div>
