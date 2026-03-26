@@ -1,3 +1,4 @@
+import Checkbox from "../ui/checkbox";
 import { categoriesToIcons } from "./constants";
 import type { Movement } from "./types";
 
@@ -31,20 +32,25 @@ async function SearchResults({
             key={id}
             className="flex-1 grow-0 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full"
           >
-            <div className="flex justify-between items-center gap-4 cursor-pointer">
-              <h4 className="text-nowrap">{name}</h4>
-              <div className="flex gap-2 items-center">
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{ backgroundColor: levelColor ?? "none" }}
-                ></div>
+            <div className="flex gap-4 items-center">
+              <Checkbox />
+              <div className="w-full flex justify-between items-center gap-4 cursor-pointer">
+                <div>
+                  <h4 className="text-nowrap">{name}</h4>
+                  <p className="text-xs font-light">{description}</p>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <div
+                    className="w-2 h-2 rounded-full"
+                    style={{ backgroundColor: levelColor ?? "none" }}
+                  />
 
-                <button className="text-xs bg-gray-700! flex items-center gap-2">
-                  {Icon && <Icon className="size-4" />}
-                </button>
+                  <button className="text-xs bg-gray-700! flex items-center gap-2">
+                    {Icon && <Icon className="size-4" />}
+                  </button>
+                </div>
               </div>
             </div>
-            <p className="text-xs font-light">{description}</p>
           </li>
         );
       })}
