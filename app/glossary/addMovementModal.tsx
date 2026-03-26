@@ -45,7 +45,9 @@ export default function AddMovementModal({
         if (ok) {
           router.refresh();
           setShowModal(false);
-        } else setError("Failed to add movement. Please try again.");
+        } else {
+          setError("Failed to add movement. Please try again.");
+        }
       })
       .catch((error: Error) =>
         setError(`Failed to add movement: ${error.message}`),
@@ -77,6 +79,7 @@ export default function AddMovementModal({
                 placeholder="e.g. Basic Step"
               />
             </Field>
+
             <Field>
               <Label htmlFor="description">Description</Label>
               <Textarea
@@ -139,8 +142,9 @@ export default function AddMovementModal({
                   ))}
                 </MenuItems>
               </Menu>
-              {error && <p className="text-red-500">{error}</p>}
             </div>
+
+            {error && <p className="text-red-500">{error}</p>}
 
             <div className="self-end">
               <button type="submit">Add Movement</button>

@@ -47,8 +47,8 @@ export async function POST(request: NextRequest) {
 
   try {
     const sql = neon(url);
-    const result =
-      await sql`INSERT INTO categories (id, name, description) VALUES (${crypto.randomUUID()}, ${name}, ${description})`;
+    await sql`INSERT INTO categories (id, name, description) VALUES (${crypto.randomUUID()}, ${name}, ${description})`;
+
     return Response.json(
       { ok: true },
       { status: 201, headers: { "Content-Type": "application/json" } },

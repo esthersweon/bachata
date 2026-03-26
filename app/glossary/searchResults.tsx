@@ -1,5 +1,7 @@
+import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import Checkbox from "../ui/checkbox";
 import { categoriesToIcons } from "./constants";
+import DeleteMovementButton from "./deleteMovementButton";
 import type { Movement } from "./types";
 
 export const dynamic = "force-dynamic";
@@ -30,7 +32,7 @@ async function SearchResults({
         return (
           <li
             key={id}
-            className="flex-1 grow-0 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full"
+            className="flex-1 grow-0 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full group"
           >
             <div className="flex gap-4 items-center">
               <Checkbox />
@@ -40,6 +42,8 @@ async function SearchResults({
                   <p className="text-xs font-light">{description}</p>
                 </div>
                 <div className="flex gap-2 items-center">
+                  <PlusCircleIcon className="size-4 hidden group-hover:block" />
+                  <DeleteMovementButton id={id} name={name} />
                   <div
                     className="w-2 h-2 rounded-full"
                     style={{ backgroundColor: levelColor ?? "none" }}

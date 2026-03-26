@@ -17,7 +17,7 @@ export default function Modal({
 }: {
   icon?: React.ReactNode;
   onClose: () => void;
-  title: string;
+  title?: string;
   children: React.ReactNode;
   className?: string;
 }) {
@@ -47,12 +47,14 @@ export default function Modal({
                   )}
                 </div>
                 <div className="w-full mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-                  <DialogTitle
-                    as="h3"
-                    className="text-base font-semibold text-white"
-                  >
-                    {title}
-                  </DialogTitle>
+                  {title && (
+                    <DialogTitle
+                      as="h3"
+                      className="text-base font-semibold text-white"
+                    >
+                      {title}
+                    </DialogTitle>
+                  )}
                   <div className="mt-2">
                     <div className={`text-sm text-gray-400 ${className}`}>
                       {children}

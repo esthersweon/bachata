@@ -35,16 +35,16 @@ export async function GET(request: NextRequest) {
     return Response.json(results ?? [], {
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
-    return Response.json([], {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+  } catch (error: unknown) {
+    return Response.json(
+      { error: `Failed to get movements: ${(error as Error).message}` },
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
   }
 }
 
 export async function POST(request: Request) {
-  const { name, description, level, category } = await request.json();
+  const { name, description, levelId, categoryId } = await request.json();
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -56,18 +56,44 @@ export async function POST(request: Request) {
 
   try {
     const sql = neon(url);
-    const result =
-      await sql`INSERT INTO movements (id, name, description, level_id, category_id)
-      VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${level}, ${category})`;
+    await sql`INSERT INTO movements (id, name, description, level_id, category_id)
+      VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${levelId}, ${categoryId})`;
 
-    return new Response(JSON.stringify(result), {
-      status: 201,
+    return Response.json(
+      { ok: true },
+      { status: 201, headers: { "Content-Type": "application/json" } },
+    );
+  } catch (error: unknown) {
+    return Response.json(
+      { error: `Failed to add movement: ${(error as Error).message}` },
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest) {
+  const { id } = await request.json();
+
+  const url = process.env.POSTGRES_URL;
+  if (!url) {
+    return Response.json([], {
+      status: 503,
       headers: { "Content-Type": "application/json" },
     });
-  } catch {
-    return new Response(JSON.stringify({ error: "Failed to add movement" }), {
-      status: 500,
+  }
+
+  try {
+    const sql = neon(url);
+    const result = await sql`DELETE FROM movements WHERE id = ${id}`;
+
+    return Response.json(result, {
+      status: 200,
       headers: { "Content-Type": "application/json" },
     });
+  } catch (error: unknown) {
+    return Response.json(
+      { error: `Failed to delete movement: ${(error as Error).message}` },
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
   }
 }
