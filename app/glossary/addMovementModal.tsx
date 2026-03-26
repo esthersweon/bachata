@@ -36,7 +36,7 @@ export default function AddMovementModal({
     const levelId = formData.get("levelId");
     const categoryId = formData.get("categoryId");
 
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary/filters`, {
+    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary`, {
       method: "POST",
       body: JSON.stringify({ name, description, levelId, categoryId }),
     })
@@ -143,7 +143,7 @@ export default function AddMovementModal({
             </div>
 
             <div className="self-end">
-              <button type="submit">Add</button>
+              <button type="submit">Add Movement</button>
             </div>
           </form>
         </Modal>

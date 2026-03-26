@@ -35,7 +35,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { name, description, levelId, categoryId } = await request.json();
+  const { name, description } = await request.json();
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
   try {
     const sql = neon(url);
     const result =
-      await sql`INSERT INTO movements (id, name, description, level_id, category_id) VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${levelId}, ${categoryId})`;
+      await sql`INSERT INTO categories (id, name, description) VALUES (${crypto.randomUUID()}, ${name}, ${description})`;
     return Response.json(
       { ok: true },
       { status: 201, headers: { "Content-Type": "application/json" } },
