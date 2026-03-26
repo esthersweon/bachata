@@ -33,7 +33,7 @@ const navigation: {
 ];
 
 export default function Sidenav() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return isOpen ? (
     <div className="flex justify-between w-40 h-full bg-gray-800">
@@ -47,12 +47,18 @@ export default function Sidenav() {
           </li>
         ))}
       </ul>
-      <button className="rounded-none! p-1!" onClick={() => setIsOpen(!isOpen)}>
+      <button
+        className="rounded-none! p-1! bg-gray-600!"
+        onClick={() => setIsOpen(!isOpen)}
+      >
         <ChevronDoubleLeftIcon className="size-4" />
       </button>
     </div>
   ) : (
-    <button className="rounded-none! p-1!" onClick={() => setIsOpen(!isOpen)}>
+    <button
+      className="rounded-none! p-1! bg-gray-600!"
+      onClick={() => setIsOpen(!isOpen)}
+    >
       <ChevronDoubleRightIcon className="size-4" />
     </button>
   );

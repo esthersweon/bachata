@@ -1,21 +1,38 @@
+import ActivitiesFeed, { activities } from "./home/activitiesFeed";
+import UserRecommendations from "./home/userRecommendations";
+
 const events = [
   {
     name: "Joliet",
+    image:
+      "https://danceruniversity.com/wp-content/uploads/2025/01/PHOTO-2026-03-22-21-03-17.jpg",
     date: "Saturday, March 25th",
     rsvp: "YES",
     attendees: ["John", "Jane", "Mary"],
   },
   {
     name: "Victorian",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA2HQAQqfprQvLvdhp16l99UEuwhIOBTewGQ&s",
     date: "Sunday, April 15th",
     rsvp: "NO",
     attendees: ["Mary"],
   },
   {
     name: "Crown",
+    image:
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6jVip330b1K30d_gO9oTKAuHPu3lXM-2a0A&s",
     date: "Friday, May 15th",
     rsvp: "UNDECIDED",
     attendees: ["Mary"],
+  },
+  {
+    name: "The Continental",
+    image:
+      "https://images.momence.com/h/40391/session-template-banner/e1261ff9-c2c0-4a43-a095-1e5a781ad4b6.jpg",
+    date: "Monday, Jun 2nd",
+    rsvp: "YES",
+    attendees: ["Jane"],
   },
 ];
 
@@ -27,60 +44,56 @@ const rsvpToLabel = {
 
 export default function Home() {
   return (
-    <main>
-      <div className="flex flex-wrap gap-4">
-        <div className="flex-2 min-w-[50%] flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+    <main className="flex flex-col gap-2">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
           <h2>Upcoming events</h2>
-          <ul className="flex flex-col gap-2">
+          <ul className="flex flex-wrap gap-2">
             {events.map((event) => (
-              <li key={event.name} className="bg-black p-2 rounded-lg">
-                <div className="flex flex-wrap justify-between items-center">
-                  <h3>{event.name}</h3>
+              <li
+                key={event.name}
+                className="basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col bg-black rounded-lg overflow-hidden"
+              >
+                <img
+                  src={event.image}
+                  alt={event.name}
+                  className="h-50 object-cover"
+                />
+                <div className="flex flex-col gap-2 p-4">
+                  <div className="flex flex-wrap justify-between gap-2 items-center">
+                    <h3>{event.name}</h3>
 
-                  <div
-                    style={{
-                      backgroundColor:
+                    <div
+                      style={{
+                        backgroundColor:
+                          rsvpToLabel[event.rsvp as keyof typeof rsvpToLabel]
+                            .color,
+                      }}
+                      className="px-2 py-1 rounded-full"
+                    >
+                      {
                         rsvpToLabel[event.rsvp as keyof typeof rsvpToLabel]
-                          .color,
-                    }}
-                    className="px-2 py-1 rounded-full"
-                  >
-                    {rsvpToLabel[event.rsvp as keyof typeof rsvpToLabel].label}
+                          .label
+                      }
+                    </div>
                   </div>
+                  <p>{event.date}</p>
+                  <p>Friends attending: {event.attendees.join(", ")}</p>
                 </div>
-                <p>{event.date}</p>
-                <p>Friends attending: {event.attendees.join(", ")}</p>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="flex-1 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
-          <p>Follow more people to see more activity</p>
-          <h2 className="text-nowrap">My activity feed:</h2>
-          <ul>
-            <li>RSVPs for people I follow</li>
-            <li>Lists created by people I follow</li>
-          </ul>
+        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+          <ActivitiesFeed />
         </div>
 
-        <div className="flex-2 min-w-[50%] flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-nowrap">Past events</h2>
-          <ul className="flex flex-col gap-2">
-            <li>Joliet: 3/25</li>
-            <li>Victorian: 4/15</li>
-            <li>Crown: 5/15</li>
-          </ul>
-        </div>
-
-        <div className="flex-1 flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
-          <h2 className="text-nowrap">People you may know:</h2>
-          <ul>
-            <li>John Doe</li>
-            <li>Jane Doe</li>
-            <li>Mary Smith</li>
-          </ul>
-        </div>
+        {activities.length > 0 && (
+          <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+            <UserRecommendations />
+          </div>
+        )}
       </div>
     </main>
   );
