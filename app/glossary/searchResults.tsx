@@ -1,5 +1,5 @@
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import Checkbox from "../ui/checkbox";
+import AddToListButton from "./addToListButton";
 import { categoriesToIcons } from "./constants";
 import DeleteMovementButton from "./deleteMovementButton";
 import type { Movement } from "./types";
@@ -42,7 +42,7 @@ async function SearchResults({
                   <p className="text-xs font-light">{description}</p>
                 </div>
                 <div className="flex gap-2 items-center">
-                  <PlusCircleIcon className="size-4 hidden group-hover:block" />
+                  <AddToListButton id={id} />
                   <DeleteMovementButton id={id} name={name} />
                   <div
                     className="w-2 h-2 rounded-full"
