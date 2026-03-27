@@ -19,7 +19,7 @@ const events = [
     attendees: ["Mary"],
   },
   {
-    name: "Crown",
+    name: "Crown Social",
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6jVip330b1K30d_gO9oTKAuHPu3lXM-2a0A&s",
     date: "Friday, May 15th",
@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <main className="flex flex-col gap-2">
       <div className="flex flex-wrap gap-2">
-        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-4 bg-gray-800 p-4 rounded-lg">
           <h2>Upcoming events</h2>
           <ul className="flex flex-wrap gap-2">
             {events.map((event) => (
@@ -57,10 +57,10 @@ export default function Home() {
                 <img
                   src={event.image}
                   alt={event.name}
-                  className="h-50 object-cover"
+                  className="h-40 object-cover"
                 />
-                <div className="flex flex-col gap-2 p-4">
-                  <div className="flex flex-wrap justify-between gap-2 items-center">
+                <div className="flex flex-col gap-1 p-4">
+                  <div className="flex flex-wrap justify-between gap-1 items-center">
                     <h3>{event.name}</h3>
 
                     <div
