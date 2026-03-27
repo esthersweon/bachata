@@ -24,7 +24,7 @@ export default async function Glossary({
 
   return (
     <main>
-      <div className="space-y-4">
+      <div className="space-y-2">
         <div className="flex flex-wrap justify-between items-center gap-2">
           <h1>Glossary</h1>
           <AddMovementModal categories={categories} levels={levels} />

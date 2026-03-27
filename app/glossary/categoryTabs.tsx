@@ -92,7 +92,7 @@ export default function CategoryTabs({
           icon={<PlusIcon className="size-4" />}
           onClose={() => setShowModal(false)}
         >
-          <form className="flex flex-col space-y-4" action={submitForm}>
+          <form className="flex flex-col space-y-2" action={submitForm}>
             <Field>
               <Label htmlFor="name">Name</Label>
               <Input

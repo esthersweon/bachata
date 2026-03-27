@@ -30,11 +30,42 @@ export default function AddMovementModal({
   const [categoryId, setCategoryId] = useState("");
   const [error, setError] = useState<string | null>(null);
 
+  const formatMissingFieldsError = (missingFields: string[]) => {
+    if (missingFields.length === 1) {
+      return missingFields[0];
+    } else if (missingFields.length === 2) {
+      return `${missingFields[0]} and ${missingFields[1]}`;
+    } else {
+      return (
+        missingFields.slice(0, -1).join(", ") +
+        ", and " +
+        missingFields[missingFields.length - 1]
+      );
+    }
+  };
+
   const submitForm = (formData: FormData) => {
     const name = formData.get("name");
     const description = formData.get("description");
     const levelId = formData.get("levelId");
     const categoryId = formData.get("categoryId");
+
+    if (!name || !description || !levelId || !categoryId) {
+      const missingFields = [
+        { name: "Name", value: name },
+        { name: "Description", value: description },
+        { name: "Level", value: levelId },
+        { name: "Category", value: categoryId },
+      ]
+        .filter(({ value }) => !value)
+        .map(({ name }) => `"${name}"`);
+
+      setError(
+        `Please fill in the ${formatMissingFieldsError(missingFields)} field${missingFields.length > 1 ? "s" : ""}.`,
+      );
+
+      return;
+    }
 
     fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary`, {
       method: "POST",
@@ -69,8 +100,8 @@ export default function AddMovementModal({
           icon={<PlusIcon className="size-4" />}
           onClose={() => setShowModal(false)}
         >
-          <form className="flex flex-col space-y-4" action={submitForm}>
-            <Field>
+          <form className="flex flex-col gap-4" action={submitForm}>
+            <Field className="flex flex-col gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 type="text"
@@ -80,11 +111,11 @@ export default function AddMovementModal({
               />
             </Field>
 
-            <Field>
+            <Field className="flex flex-col gap-2">
               <Label htmlFor="description">Description</Label>
               <Textarea
                 rows={3}
-                className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
+                className="block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
                 id="description"
                 name="description"
                 placeholder="e.g. The foundation of bachata"
@@ -144,7 +175,7 @@ export default function AddMovementModal({
               </Menu>
             </div>
 
-            {error && <p className="text-red-500">{error}</p>}
+            <p className="text-xs text-red-500">{error}</p>
 
             <div className="self-end">
               <button type="submit">Add Movement</button>
