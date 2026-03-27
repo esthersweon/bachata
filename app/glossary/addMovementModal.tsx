@@ -67,7 +67,7 @@ export default function AddMovementModal({
       return;
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary`, {
+    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
       method: "POST",
       body: JSON.stringify({ name, description, levelId, categoryId }),
     })

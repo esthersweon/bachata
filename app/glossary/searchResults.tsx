@@ -17,7 +17,7 @@ async function SearchResults({
 }) {
   const movements: Movement[] = await (
     await fetch(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary?q=${q}&level=${level}&category=${category}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}`,
     )
   ).json();
 

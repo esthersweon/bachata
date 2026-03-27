@@ -19,7 +19,7 @@ export default async function Glossary({
     categories,
     levels,
   }: { categories: MovementCategory[]; levels: MovementLevel[] } = await (
-    await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary/filters`)
+    await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/filters`)
   ).json();
 
   return (

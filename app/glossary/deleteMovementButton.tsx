@@ -17,7 +17,7 @@ export default function DeleteMovementButton({
   const [showModal, setShowModal] = useState(false);
 
   const deleteMovement = (id: string) => {
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary`, {
+    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
       method: "DELETE",
       body: JSON.stringify({ id }),
     });

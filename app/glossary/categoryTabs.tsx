@@ -33,7 +33,7 @@ export default function CategoryTabs({
     const name = formData.get("name");
     const description = formData.get("description");
 
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/glossary/filters`, {
+    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/filters`, {
       method: "POST",
       body: JSON.stringify({ name, description }),
     })
