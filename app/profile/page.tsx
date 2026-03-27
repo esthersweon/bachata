@@ -95,9 +95,6 @@ export default async function Profile() {
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <div className="flex flex-col flex-wrap gap-2 bg-gray-800 p-4 rounded-lg">
-          <MyBadges />
-        </div>
         <div className="flex flex-wrap gap-2">
           <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
             <h2>Upcoming Events</h2>
@@ -147,6 +144,10 @@ export default async function Profile() {
           <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
             <MyCombos />
           </div>
+        </div>
+
+        <div className="flex flex-col flex-wrap gap-2 bg-gray-800 p-4 rounded-lg">
+          <MyBadges />
         </div>
       </div>
     </main>

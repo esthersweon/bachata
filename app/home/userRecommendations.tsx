@@ -30,34 +30,37 @@ const users = [
 
 export default function UserRecommendations() {
   return (
-    <ul className="flex flex-wrap gap-2 justify-center">
-      {users.map(({ name, profilePicture }) => (
-        <li
-          key={name}
-          className="flex flex-col items-center gap-2 bg-black p-4 rounded-lg"
-        >
-          {profilePicture ? (
-            <img
-              src={profilePicture}
-              alt={name}
-              className="size-10 rounded-full"
-            />
-          ) : (
-            <UserIcon className="size-10" />
-          )}
+    <>
+      <ul className="flex flex-wrap gap-2 justify-center">
+        {users.map(({ name, profilePicture }) => (
+          <li
+            key={name}
+            className="flex flex-col items-center gap-2 bg-black p-4 rounded-lg"
+          >
+            {profilePicture ? (
+              <img
+                src={profilePicture}
+                alt={name}
+                className="size-10 rounded-full"
+              />
+            ) : (
+              <UserIcon className="size-10" />
+            )}
 
-          <h3>{name}</h3>
+            <h3>{name}</h3>
 
-          <div className="flex gap-2">
-            <button className="flex items-center gap-2">
-              <PlusIcon className="size-4" /> Follow
-            </button>
-            <button className="flex items-center gap-2">
-              <InboxIcon className="size-4" /> Message
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+            <div className="flex gap-2">
+              <button className="flex items-center gap-2">
+                <PlusIcon className="size-4" /> Follow
+              </button>
+              <button className="flex items-center gap-2">
+                <InboxIcon className="size-4" /> Message
+              </button>
+            </div>
+          </li>
+        ))}
+      </ul>
+      <div>Recommended follows/leads?</div>
+    </>
   );
 }
