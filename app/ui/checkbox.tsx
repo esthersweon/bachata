@@ -1,12 +1,13 @@
-"use client";
-
 import { Checkbox as HeadlessUICheckbox } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/24/outline";
-import { useState } from "react";
 
-export default function Checkbox() {
-  const [checked, setChecked] = useState(false);
-
+export default function Checkbox({
+  checked,
+  setChecked,
+}: {
+  checked: boolean;
+  setChecked?: () => void;
+}) {
   return (
     <HeadlessUICheckbox
       checked={checked}

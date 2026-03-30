@@ -1,4 +1,3 @@
-import Checkbox from "../ui/checkbox";
 import AddToListButton from "./addToListButton";
 import { categoriesToIcons } from "./constants";
 import DeleteMovementButton from "./deleteMovementButton";
@@ -35,14 +34,13 @@ async function SearchResults({
             className="flex-1 grow-0 bg-gray-800 py-2 px-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full group"
           >
             <div className="flex gap-4 items-center">
-              <Checkbox />
               <div className="w-full flex justify-between items-center gap-4 cursor-pointer">
                 <div>
                   <h4 className="text-nowrap">{name}</h4>
                   <p className="text-xs font-light">{description}</p>
                 </div>
                 <div className="flex gap-2 items-center">
-                  <AddToListButton id={id} />
+                  <AddToListButton movementId={id} />
                   <DeleteMovementButton id={id} name={name} />
                   <div
                     className="w-2 h-2 rounded-full"
