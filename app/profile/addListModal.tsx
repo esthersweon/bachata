@@ -25,23 +25,15 @@ export default function AddListModal() {
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists`, {
         method: "POST",
-        body: JSON.stringify({ name: listName.trim() }),
-      })
-    ).json();
-
-    const listMovementsResponse = await (
-      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists/movements`, {
-        method: "POST",
         body: JSON.stringify({
-          listIds: [response.id],
+          name: listName.trim(),
           movementIds: selectedMovementIds,
         }),
       })
     ).json();
 
-    setError(response?.error ?? listMovementsResponse?.error ?? null);
-
-    if (response.ok && listMovementsResponse.ok) {
+    setError(response?.error || null);
+    if (response.ok) {
       setShowModal(false);
       router.refresh();
     }

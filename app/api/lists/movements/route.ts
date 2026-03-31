@@ -25,42 +25,6 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function POST(request: NextRequest) {
-  const { movementIds, listIds } = await request.json();
-
-  const url = process.env.POSTGRES_URL;
-  if (!url) {
-    return Response.json([], {
-      status: 503,
-      headers: { "Content-Type": "application/json" },
-    });
-  }
-  try {
-    const sql = neon(url);
-    if (listIds.length > 0) {
-      await sql.transaction(
-        listIds.flatMap((listId: string) =>
-          movementIds.map(
-            (movementId: string) =>
-              sql`INSERT INTO lists_movements (id, movement_id, list_id)
-                  VALUES (${crypto.randomUUID()}, ${movementId}, ${listId})`,
-          ),
-        ),
-      );
-    }
-
-    return Response.json(
-      { ok: true },
-      { status: 201, headers: { "Content-Type": "application/json" } },
-    );
-  } catch (error: unknown) {
-    return Response.json(
-      { error: `Failed to add movement to lists: ${(error as Error).message}` },
-      { status: 500, headers: { "Content-Type": "application/json" } },
-    );
-  }
-}
-
 export async function DELETE(request: NextRequest) {
   const { movementId, listIds } = await request.json();
 

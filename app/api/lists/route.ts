@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { name } = await request.json();
+  const { name, movementIds = [] } = await request.json();
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -22,16 +22,26 @@ export async function POST(request: NextRequest) {
   }
   try {
     const sql = neon(url);
-    const id = crypto.randomUUID();
-    await sql`INSERT INTO lists (id, name) VALUES (${id}, ${name})`;
+    const listId = crypto.randomUUID();
+    const insertList = sql`INSERT INTO lists (id, name) VALUES (${listId}, ${name})`;
+    const insertMovements = movementIds.map(
+      (movementId: string) => sql`
+        INSERT INTO lists_movements (id, movement_id, list_id)
+        VALUES (${crypto.randomUUID()}, ${movementId}, ${listId})`,
+    );
+
+    await sql.transaction([insertList, ...insertMovements]);
 
     return Response.json(
-      { ok: true, id },
+      { ok: true, id: listId },
       { status: 201, headers: { "Content-Type": "application/json" } },
     );
-  } catch {
+  } catch (error: unknown) {
     return Response.json(
-      { ok: false },
+      {
+        ok: false,
+        error: `Failed to create list: ${(error as Error).message}`,
+      },
       { status: 500, headers: { "Content-Type": "application/json" } },
     );
   }
