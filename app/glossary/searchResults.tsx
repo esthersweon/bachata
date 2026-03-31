@@ -32,10 +32,10 @@ async function SearchResults({
         return (
           <li
             key={movement.id}
-            className="flex-1 md:grow-0 bg-gray-800 p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full group"
+            className="flex-1 md:grow-0 bg-gray-800 p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-50 max-w-full"
           >
             <div
-              className="flex w-full justify-between items-center gap-4 cursor-pointer"
+              className="flex flex-wrap justify-between items-center gap-2 cursor-pointer"
               style={{
                 color: movement.statusName === "Mastered" ? "gray" : "inherit",
               }}
