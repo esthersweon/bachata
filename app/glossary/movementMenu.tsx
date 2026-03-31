@@ -39,6 +39,7 @@ export default function MovementMenu(movement: Movement) {
         body: JSON.stringify({ id: movement.id, statusId }),
       })
     ).json();
+    if (response.ok) router.refresh();
 
     setError(response?.error ?? null);
   };

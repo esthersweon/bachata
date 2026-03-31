@@ -34,13 +34,18 @@ async function SearchResults({
             key={movement.id}
             className="flex-1 md:grow-0 bg-gray-800 p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full group"
           >
-            <div className="flex w-full justify-between items-center gap-4 cursor-pointer">
+            <div
+              className="flex w-full justify-between items-center gap-4 cursor-pointer"
+              style={{
+                color: movement.statusName === "Mastered" ? "gray" : "inherit",
+              }}
+            >
               <div>
                 <h4 className="text-nowrap">{movement.name}</h4>
                 <p className="text-xs font-light">{movement.description}</p>
               </div>
               <div className="flex flex-1 justify-end gap-2 items-center">
-                <div className="text-xs bg-gray-700! px-2 py-1 rounded-full hidden md:block">
+                <div className="text-xs text-nowrap bg-gray-700! px-2 py-1 rounded-full hidden md:block">
                   {movement.statusName}
                 </div>
 
