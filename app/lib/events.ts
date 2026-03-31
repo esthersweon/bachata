@@ -1,7 +1,7 @@
 import type { DanceEvent } from "@/app/types";
 import { neon } from "@neondatabase/serverless";
 
-export async function getEventsWithMeta(): Promise<{
+export async function getEventsWithStatus(): Promise<{
   status: 200 | 503 | 500;
   events: DanceEvent[];
 }> {
@@ -20,6 +20,6 @@ export async function getEventsWithMeta(): Promise<{
 }
 
 export async function getEvents(): Promise<DanceEvent[]> {
-  const { events } = await getEventsWithMeta();
+  const { events } = await getEventsWithStatus();
   return events;
 }
