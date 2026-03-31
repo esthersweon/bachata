@@ -36,7 +36,7 @@ export default function MyProgress() {
   return (
     <div className="flex flex-col">
       <h3>My Progress</h3>
-      <div className="flex flex-wrap gap-4">
+      <div className="flex flex-wrap gap-2">
         <PieChart
           style={{
             flex: 1,
@@ -86,7 +86,7 @@ export default function MyProgress() {
                   fill="white"
                   textAnchor={x > ncx ? "start" : "end"}
                   dominantBaseline="central"
-                  className="text-xs hover:cursor-pointer"
+                  className="font-bold underline hover:cursor-pointer"
                   onClick={() => setSelectedStatusName(name ?? null)}
                 >
                   {name}: {`${((percent ?? 1) * 100).toFixed(0)}%`}
@@ -112,7 +112,7 @@ export default function MyProgress() {
           {statuses.map(({ name, movements }, index) => (
             <div
               key={name}
-              className="flex flex-1 flex-col gap-2 text-center text-nowrap rounded-md"
+              className="flex flex-1 flex-col text-center text-nowrap rounded-md"
               style={{ border: `1px solid ${COLORS[index % COLORS.length]}` }}
             >
               <h4
