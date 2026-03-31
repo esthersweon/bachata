@@ -3,6 +3,7 @@ import { getLists } from "@/app/lib/lists";
 import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 import { formatDate } from "../helpers";
+import CreateListModal from "./createListModal";
 import MyBadges from "./myBadges";
 import MyProgress from "./myProgress";
 
@@ -15,14 +16,14 @@ export default async function Profile() {
       <Suspense fallback={<div>Loading profile...</div>}>
         <div className="flex justify-center items-center gap-4">
           <img
-            src="https://www.earwolf.com/wp-content/uploads/2019/12/Jane-Kim.png"
-            alt="Jane Kim"
+            src="https://avatars.githubusercontent.com/u/6993359?v=4"
+            alt="Esther Weon"
             className="size-30 rounded-full"
           />
 
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
-              <h1>Jane Kim</h1>
+              <h1>Esther Weon</h1>
               <div className="text-xs bg-gray-800 px-2 py-1 rounded-full">
                 Follow
               </div>
@@ -55,7 +56,7 @@ export default async function Profile() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center gap-8">
+        <div className="flex flex-col items-center gap-4">
           <MyBadges />
 
           <div className="flex flex-wrap gap-2 w-full">
@@ -105,27 +106,30 @@ export default async function Profile() {
               </ul>
             </div>
 
-            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(3/4*100%-0.5rem)] max-w-full">
+            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
               <MyProgress />
             </div>
-          </div>
 
-          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg w-full">
-            <h2>My Lists</h2>
-            <div className="flex flex-wrap gap-2">
-              {lists.map(({ id, name, movements }) => (
-                <div
-                  key={id}
-                  className="flex flex-col gap-2 bg-black p-4 rounded-lg"
-                >
-                  <h3 key={id}>{name}</h3>
-                  <ul>
-                    {movements.map(({ id: movementId, name }) => (
-                      <li key={movementId}>{name}</li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
+            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full">
+              <div className="flex items-center gap-2 justify-between">
+                <h2>My Lists</h2>
+                <CreateListModal />
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {lists.map(({ id, name, movements }) => (
+                  <div
+                    key={id}
+                    className="flex flex-col gap-2 bg-black p-4 rounded-lg basis-1/3"
+                  >
+                    <h3 key={id}>{name}</h3>
+                    <ul>
+                      {movements.map(({ id: movementId, name }) => (
+                        <li key={movementId}>{name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </div>

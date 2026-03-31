@@ -1,8 +1,7 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Status } from "../types";
-
 import {
   Pie,
   PieChart,
@@ -10,15 +9,14 @@ import {
   PieSectorShapeProps,
   Sector,
 } from "recharts";
+import { Status } from "../types";
 
 const RADIAN = Math.PI / 180;
 const COLORS = ["#bc1c0d", "#af6900", "#076554"];
 
 export default function MyProgress() {
+  const router = useRouter();
   const [statuses, setStatuses] = useState<Status[]>([]);
-  const [selectedStatusName, setSelectedStatusName] = useState<string | null>(
-    null,
-  );
   const [hasFetchedStatuses, setHasFetchedStatuses] = useState(false);
 
   useEffect(() => {
@@ -44,7 +42,8 @@ export default function MyProgress() {
           responsive
         >
           <Pie
-            data={statuses.map(({ name, movements }) => ({
+            data={statuses.map(({ id, name, movements }) => ({
+              id,
               name,
               value: movements.length,
             }))}
@@ -57,6 +56,7 @@ export default function MyProgress() {
               outerRadius,
               percent,
               name,
+              id,
             }: PieLabelRenderProps) => {
               if (
                 !percent ||
@@ -83,7 +83,11 @@ export default function MyProgress() {
                   textAnchor={x > ncx ? "start" : "end"}
                   dominantBaseline="central"
                   className="font-bold underline hover:cursor-pointer"
-                  onClick={() => setSelectedStatusName(name ?? null)}
+                  onClick={() =>
+                    router.push(
+                      `${process.env.NEXT_PUBLIC_DOMAIN}/glossary?status=${id}`,
+                    )
+                  }
                 >
                   {name}: {`${((percent ?? 1) * 100).toFixed(0)}%`}
                 </text>
@@ -94,45 +98,11 @@ export default function MyProgress() {
             isAnimationActive={true}
             shape={(props: PieSectorShapeProps) => {
               return (
-                <Sector
-                  {...props}
-                  fill={COLORS[props.index % COLORS.length]}
-                  className="hover:cursor-pointer"
-                  onClick={() => setSelectedStatusName(props.name ?? null)}
-                />
+                <Sector {...props} fill={COLORS[props.index % COLORS.length]} />
               );
             }}
           />
         </PieChart>
-        <div className="flex flex-1 flex-wrap gap-4 justify-center">
-          {statuses.map(({ name, movements }, index) => (
-            <div
-              key={name}
-              className="flex flex-1 flex-col text-center text-nowrap rounded-md"
-              style={{ border: `1px solid ${COLORS[index % COLORS.length]}` }}
-            >
-              <h4
-                className="p-2"
-                style={{ backgroundColor: COLORS[index % COLORS.length] }}
-              >
-                {name}
-              </h4>
-              {movements.length > 0 ? (
-                <ul className="p-4 flex flex-col gap-2">
-                  {movements.map(
-                    ({ id, name }: { id: string; name: string }) => (
-                      <li key={id}>{name}</li>
-                    ),
-                  )}
-                </ul>
-              ) : (
-                <div className="p-4">
-                  No movements assigned to this status yet.
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
