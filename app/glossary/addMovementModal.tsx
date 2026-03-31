@@ -127,30 +127,34 @@ export default function AddMovementModal({
 
             <div className="flex gap-2">
               <Menu>
-                <MenuButton className="flex items-center gap-1 bg-gray-800!">
+                <MenuButton className="flex items-center gap-1 bg-gray-700!">
                   {levels.find(({ id }) => id === levelId)?.name ?? "Level"}{" "}
                   <ChevronDownIcon className="size-4" />
                 </MenuButton>
                 <MenuItems
                   transition
                   anchor="bottom end"
-                  className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
+                  className="z-10 border border-gray-700! bg-gray-800! rounded-lg"
                 >
-                  {levels.map(({ id, name }) => (
+                  {levels.map(({ id, name, color }) => (
                     <MenuItem
                       key={id}
                       as="button"
                       type="button"
-                      className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+                      className="flex items-center gap-2 w-full cursor-pointer p-2 bg-gray-800! hover:bg-gray-700! text-left"
                       onClick={() => setLevelId(id)}
                     >
-                      {name}
+                      <div
+                        className="w-2 h-2 rounded-full"
+                        style={{ backgroundColor: color }}
+                      />
+                      <div>{name}</div>
                     </MenuItem>
                   ))}
                 </MenuItems>
               </Menu>
               <Menu>
-                <MenuButton className="flex items-center gap-1 bg-gray-800!">
+                <MenuButton className="flex items-center gap-1 bg-gray-700!">
                   {categories.find(({ id }) => id === categoryId)?.name ??
                     "Category"}{" "}
                   <ChevronDownIcon className="size-4" />
@@ -165,7 +169,7 @@ export default function AddMovementModal({
                       key={id}
                       as="button"
                       type="button"
-                      className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+                      className="block w-full cursor-pointer p-2 bg-gray-800! hover:bg-gray-700! text-left"
                       onClick={() => setCategoryId(id)}
                     >
                       {name}
