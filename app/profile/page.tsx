@@ -2,8 +2,7 @@ import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import { formatDate } from "../helpers";
 import { Event } from "../types";
 import MyBadges from "./myBadges";
-import MyCombos from "./myCombos";
-import MyLists from "./myLists";
+import MyProgress from "./myProgress";
 
 export default async function Profile() {
   const events: Event[] = await fetch(
@@ -54,11 +53,11 @@ export default async function Profile() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-8 px-10">
+      <div className="flex flex-col items-center gap-8">
         <MyBadges />
 
         <div className="flex flex-wrap gap-2 w-full">
-          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
+          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
             <h2>Upcoming Events</h2>
             <ul className="flex flex-col gap-2">
               {events
@@ -103,12 +102,8 @@ export default async function Profile() {
             </ul>
           </div>
 
-          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-            <MyLists />
-          </div>
-
-          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-            <MyCombos />
+          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(3/4*100%-0.5rem)] max-w-full">
+            <MyProgress />
           </div>
         </div>
       </div>

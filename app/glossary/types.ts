@@ -17,6 +17,7 @@ export type Movement = {
   category: string;
   level: string;
   levelColor: string;
+  statusId: string;
 };
 
 export type SearchControls = {

@@ -8,7 +8,7 @@ export type Event = {
   rsvp: string;
 };
 
-export type List = {
+export type Status = {
   id: string;
   name: string;
   movements: Movement[];

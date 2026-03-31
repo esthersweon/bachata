@@ -2,9 +2,9 @@ import { Suspense } from "react";
 import AddMovementModal from "./addMovementModal";
 import CategoryTabs from "./categoryTabs";
 import LevelsMenu from "./levelsMenu";
-import ListsMenu from "./listsMenu";
 import SearchInput from "./searchInput";
 import SearchResults from "./searchResults";
+import StatusesMenu from "./statusesMenu";
 import { MovementCategory, MovementLevel } from "./types";
 
 export const dynamic = "force-dynamic";
@@ -16,10 +16,10 @@ export default async function Glossary({
     q: string;
     level: string;
     category: string;
-    list: string;
+    status: string;
   }>;
 }) {
-  const { q = "", level = "", category = "", list = "" } = await searchParams;
+  const { q = "", level = "", category = "", status = "" } = await searchParams;
 
   const {
     categories,
@@ -28,8 +28,8 @@ export default async function Glossary({
     await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/filters`)
   ).json();
 
-  const lists = await (
-    await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists`)
+  const statuses = await (
+    await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`)
   ).json();
 
   return (
@@ -55,7 +55,7 @@ export default async function Glossary({
               <div className="flex-1">
                 <SearchInput />
               </div>
-              <ListsMenu lists={lists} />
+              <StatusesMenu statuses={statuses} />
               <LevelsMenu levels={levels} />
             </div>
 
@@ -63,7 +63,7 @@ export default async function Glossary({
               q={q}
               level={level}
               category={category}
-              list={list}
+              status={status}
             />
           </div>
         </Suspense>

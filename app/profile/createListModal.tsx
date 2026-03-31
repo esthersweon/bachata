@@ -23,16 +23,16 @@ export default function CreateListModal() {
       return;
     }
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/api/lists`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`,
       { method: "POST", body: JSON.stringify({ name: listName.trim() }) },
     ).then((response) => response.json());
 
     const listMovementsResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/api/lists/movements`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses/movements`,
       {
         method: "POST",
         body: JSON.stringify({
-          listIds: [response.id],
+          statusIds: [response.id],
           movementIds: selectedMovementIds,
         }),
       },

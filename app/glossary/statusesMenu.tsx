@@ -3,23 +3,24 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
-import { List } from "../types";
+import { Status } from "../types";
 import { updateQuery } from "./helpers";
 
-export default function ListsMenu({ lists }: { lists: List[] }) {
+export default function StasusesMenu({ statuses }: { statuses: Status[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const listId = searchParams.get("list") ?? "";
+  const statusId = searchParams.get("status") ?? "";
 
   return (
     <Menu>
       <MenuButton
-        className={`flex items-center gap-1 ${listId ? "font-bold bg-blue-900!" : "bg-gray-900!"}`}
+        className={`flex items-center gap-1 ${statusId ? "font-bold bg-blue-900!" : "bg-gray-900!"}`}
       >
-        List:{" "}
+        Status:{" "}
         {
-          [{ id: "", name: "All" }, ...lists].find(({ id }) => id === listId)
-            ?.name
+          [{ id: "", name: "All" }, ...statuses].find(
+            ({ id }) => id === statusId,
+          )?.name
         }{" "}
         <ChevronDownIcon className="size-4" />
       </MenuButton>
@@ -28,7 +29,7 @@ export default function ListsMenu({ lists }: { lists: List[] }) {
         anchor="bottom end"
         className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
       >
-        {[{ id: "", name: "All" }, ...lists].map(({ id, name }) => (
+        {[{ id: "", name: "All" }, ...statuses].map(({ id, name }) => (
           <MenuItem
             key={id}
             as="button"
@@ -38,8 +39,8 @@ export default function ListsMenu({ lists }: { lists: List[] }) {
               router.push(
                 `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
                   searchParams,
-                  name: "list",
-                  value: listId === id ? "" : id,
+                  name: "status",
+                  value: statusId === id ? "" : id,
                 })}`,
               )
             }

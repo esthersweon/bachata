@@ -8,16 +8,16 @@ async function SearchResults({
   q,
   level,
   category,
-  list,
+  status,
 }: {
   q: string;
   level: string;
   category: string;
-  list: string;
+  status: string;
 }) {
   const movements: Movement[] = await (
     await fetch(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}&list=${list}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}&status=${status}`,
     )
   ).json();
 
