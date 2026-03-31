@@ -21,10 +21,6 @@ export default function MyProgress() {
   );
   const [hasFetchedStatuses, setHasFetchedStatuses] = useState(false);
 
-  const selectedStatus = statuses.find(
-    ({ name }) => name === selectedStatusName,
-  );
-
   useEffect(() => {
     if (hasFetchedStatuses) return;
     setHasFetchedStatuses(true);

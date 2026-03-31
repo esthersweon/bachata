@@ -1,13 +1,11 @@
+import { getEvents } from "@/lib/events";
 import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import { formatDate } from "../helpers";
-import { Event } from "../types";
 import MyBadges from "./myBadges";
 import MyProgress from "./myProgress";
 
 export default async function Profile() {
-  const events: Event[] = await fetch(
-    `${process.env.NEXT_PUBLIC_DOMAIN}/api/events`,
-  ).then((response) => response.json());
+  const events = await getEvents();
 
   return (
     <main className="flex flex-col gap-8">

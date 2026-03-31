@@ -1,7 +1,7 @@
+import { getEvents } from "@/lib/events";
 import { formatDate } from "./helpers";
 import ActivitiesFeed, { activities } from "./home/activitiesFeed";
 import UserRecommendations from "./home/userRecommendations";
-import { Event } from "./types";
 
 const rsvpToLabel = {
   true: { label: "Attending", color: "green" },
@@ -10,9 +10,7 @@ const rsvpToLabel = {
 };
 
 export default async function Home() {
-  const events: Event[] = await fetch(
-    `${process.env.NEXT_PUBLIC_DOMAIN}/api/events`,
-  ).then((response) => response.json());
+  const events = await getEvents();
 
   return (
     <main className="flex flex-col gap-2">

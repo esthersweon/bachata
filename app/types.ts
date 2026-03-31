@@ -1,6 +1,6 @@
 import { Movement } from "./glossary/types";
 
-export type Event = {
+export type DanceEvent = {
   id: string;
   name: string;
   image: string;

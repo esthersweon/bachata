@@ -22,21 +22,22 @@ export default function CreateListModal() {
       setError("Please enter a name for the list");
       return;
     }
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`,
-      { method: "POST", body: JSON.stringify({ name: listName.trim() }) },
-    ).then((response) => response.json());
+    const response = await (
+      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`, {
+        method: "POST",
+        body: JSON.stringify({ name: listName.trim() }),
+      })
+    ).json();
 
-    const listMovementsResponse = await fetch(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses/movements`,
-      {
+    const listMovementsResponse = await (
+      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses/movements`, {
         method: "POST",
         body: JSON.stringify({
           statusIds: [response.id],
           movementIds: selectedMovementIds,
         }),
-      },
-    ).then((response) => response.json());
+      })
+    ).json();
 
     setError(response?.error ?? listMovementsResponse?.error ?? null);
 
