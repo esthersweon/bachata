@@ -1,46 +1,15 @@
 "use client";
 
 import {
-  ArrowLeftStartOnRectangleIcon,
-  BookOpenIcon,
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
-  Cog6ToothIcon,
-  HomeIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { useState } from "react";
 
-const topNavigation: {
-  name: string;
-  href: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-}[] = [
-  {
-    name: "Home",
-    href: "/",
-    icon: HomeIcon,
-  },
-  { name: "Profile", href: "/profile", icon: UserIcon },
-  // { name: "Inbox", href: "/inbox", icon: InboxIcon },
-  {
-    name: "Glossary",
-    href: "/glossary",
-    icon: BookOpenIcon,
-  },
-];
+import { bottomNavigation, topNavigation } from "@/app/ui/navigation";
 
-const bottomNavigation: {
-  name: string;
-  href: string;
-  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
-}[] = [
-  { name: "Settings", href: "/settings", icon: Cog6ToothIcon },
-  { name: "Logout", href: "/logout", icon: ArrowLeftStartOnRectangleIcon },
-];
-
-export default function Sidenav() {
+export default function Sidenav({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
 
   return isOpen ? (
@@ -70,6 +39,7 @@ export default function Sidenav() {
             </Link>
           </li>
         ))}
+        <li>{children}</li>
       </ul>
     </div>
   ) : (

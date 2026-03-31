@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import LogoutButton from "./ui/logoutButton";
 import SideNav from "./ui/sidenav";
 
 export const metadata: Metadata = {
-  title: "Bachata LA",
-  description: "Bachata learning platform for Angelenos",
+  title: "Bachata School",
+  description: "Learning and training platform for bachata dancers",
 };
 
 export default function RootLayout({
@@ -15,7 +16,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="flex h-screen">
-        <SideNav />
+        <SideNav>
+          <LogoutButton />
+        </SideNav>
         <div className="w-full p-4 overflow-y-scroll">{children}</div>
       </body>
     </html>

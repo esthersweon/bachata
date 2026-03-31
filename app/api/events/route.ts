@@ -1,4 +1,4 @@
-import { getEventsWithMeta } from "@/lib/events";
+import { getEventsWithMeta } from "@/app/lib/events";
 
 export async function GET(): Promise<Response> {
   const { status, events } = await getEventsWithMeta();

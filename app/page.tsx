@@ -1,4 +1,4 @@
-import { getEvents } from "@/lib/events";
+import { getEvents } from "@/app/lib/events";
 import { Suspense } from "react";
 import { formatDate } from "./helpers";
 import ActivitiesFeed, { activities } from "./home/activitiesFeed";
