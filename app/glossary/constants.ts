@@ -1,4 +1,5 @@
 import {
+  ArrowDownIcon,
   ArrowPathIcon,
   ArrowsRightLeftIcon,
   CheckCircleIcon,
@@ -16,4 +17,5 @@ export const categoriesToIcons: {
   "Turns and spins": ArrowPathIcon,
   Isolations: ArrowsRightLeftIcon,
   "Sensual moves": FireIcon,
+  Dips: ArrowDownIcon,
 };
