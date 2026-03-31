@@ -3,26 +3,23 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useRouter, useSearchParams } from "next/navigation";
+import { List } from "../types";
 import { updateQuery } from "./helpers";
-import { MovementLevel } from "./types";
 
-export default function FiltersMenu({ levels }: { levels: MovementLevel[] }) {
+export default function ListsMenu({ lists }: { lists: List[] }) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const levelId = searchParams.get("level") ?? "";
+  const listId = searchParams.get("list") ?? "";
 
   return (
     <Menu>
       <MenuButton
-        className="flex items-center gap-1"
-        style={{
-          backgroundColor: levels.find(({ id }) => id === levelId)?.color ?? "",
-        }}
+        className={`flex items-center gap-1 ${listId ? "font-bold bg-blue-900!" : "bg-gray-900!"}`}
       >
+        List:{" "}
         {
-          [{ id: "", name: "All Levels" }, ...levels].find(
-            ({ id }) => id === levelId,
-          )?.name
+          [{ id: "", name: "All" }, ...lists].find(({ id }) => id === listId)
+            ?.name
         }{" "}
         <ChevronDownIcon className="size-4" />
       </MenuButton>
@@ -31,7 +28,7 @@ export default function FiltersMenu({ levels }: { levels: MovementLevel[] }) {
         anchor="bottom end"
         className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
       >
-        {[{ id: "", name: "All Levels" }, ...levels].map(({ id, name }) => (
+        {[{ id: "", name: "All" }, ...lists].map(({ id, name }) => (
           <MenuItem
             key={id}
             as="button"
@@ -41,8 +38,8 @@ export default function FiltersMenu({ levels }: { levels: MovementLevel[] }) {
               router.push(
                 `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
                   searchParams,
-                  name: "level",
-                  value: levelId === id ? "" : id,
+                  name: "list",
+                  value: listId === id ? "" : id,
                 })}`,
               )
             }

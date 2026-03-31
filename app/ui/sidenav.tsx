@@ -7,7 +7,6 @@ import {
   ChevronDoubleRightIcon,
   Cog6ToothIcon,
   HomeIcon,
-  InboxIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
@@ -24,7 +23,7 @@ const topNavigation: {
     icon: HomeIcon,
   },
   { name: "Profile", href: "/profile", icon: UserIcon },
-  { name: "Inbox", href: "/inbox", icon: InboxIcon },
+  // { name: "Inbox", href: "/inbox", icon: InboxIcon },
   {
     name: "Glossary",
     href: "/glossary",

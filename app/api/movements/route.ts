@@ -7,6 +7,7 @@ export async function GET(request: NextRequest) {
   const q = searchParams.get("q") ?? "";
   const level = searchParams.get("level") ?? "";
   const category = searchParams.get("category") ?? "";
+  const list = searchParams.get("list") ?? "";
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -22,12 +23,16 @@ export async function GET(request: NextRequest) {
     const qPattern = `%${q}%`;
     const levelFilter = level ? sql`AND l.id = ${level}` : sql``;
     const categoryFilter = category ? sql`AND c.id = ${category}` : sql``;
+    const listFilter = list
+      ? sql`JOIN lists_movements lm ON m.id = lm.movement_id WHERE lm.list_id = ${list} AND`
+      : sql`WHERE`;
 
     const results =
-      await sql`SELECT m.id, m.name, m.description, l.name as level, l.color as "levelColor", c.name as category FROM movements m
+      await sql`SELECT DISTINCT m.id, m.name, m.description, l.name as level, l.color as "levelColor", c.name as category FROM movements m
       JOIN levels l ON m.level_id = l.id
       JOIN categories c ON m.category_id = c.id
-      WHERE (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
+      ${listFilter}
+      (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
       ${levelFilter}
       ${categoryFilter}
       ORDER BY m.name`;
