@@ -70,12 +70,12 @@ export default function MovementMenu(movement: Movement) {
   return (
     <>
       <Menu>
-        <MenuButton className="bg-gray-800! p-0! hover:text-gray-500!">
+        <MenuButton className="bg-secondary-bg! p-0! hover:text-gray-500!">
           <EllipsisVerticalIcon className="size-4" />
         </MenuButton>
         <MenuItems
           anchor="bottom"
-          className="z-10 border border-gray-700 bg-gray-800 rounded-sm cursor-pointer"
+          className="z-10 border border-tertiary-bg bg-secondary-bg rounded-sm cursor-pointer"
         >
           <MenuItem>
             <RadioGroup
@@ -84,13 +84,13 @@ export default function MovementMenu(movement: Movement) {
                 setSelectedStatusId(value);
                 updateStatus(value);
               }}
-              className="border-b border-gray-700"
+              className="border-b border-tertiary-bg"
             >
               {statuses.map(({ id, name }) => (
                 <Radio
                   key={id}
                   value={id}
-                  className="flex items-center cursor-pointer gap-2 p-2 py-1.5 hover:bg-gray-700"
+                  className="flex items-center cursor-pointer gap-2 p-2 py-1.5 hover:bg-tertiary-bg"
                 >
                   {id === selectedStatusId ? (
                     <CheckIcon className="size-3" />
@@ -104,7 +104,7 @@ export default function MovementMenu(movement: Movement) {
           </MenuItem>
           <MenuItem>
             <div
-              className="flex cursor-pointer gap-2 p-2 hover:bg-gray-700"
+              className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
               onClick={() => setShowDeleteConfirmation(true)}
             >
               <TrashIcon className="size-4" />
@@ -121,13 +121,13 @@ export default function MovementMenu(movement: Movement) {
         >
           <p>Are you sure you want to delete &quot;{movement.name}&quot;?</p>
           <div className="self-end">
-            <button className="bg-red-500!" onClick={deleteMovement}>
+            <button className="bg-danger!" onClick={deleteMovement}>
               Delete
             </button>
           </div>
         </Modal>
       )}
-      {error && <p className="text-red-500">{error}</p>}
+      {error && <p className="text-danger">{error}</p>}
     </>
   );
 }

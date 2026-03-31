@@ -111,9 +111,9 @@ export default function CreateListModal() {
                 </li>
               ))}
             </ul>
-            {error && <p className="text-red-500">{error}</p>}
+            {error && <p className="text-danger">{error}</p>}
             <button
-              className="bg-blue-500 text-white p-2 rounded-md"
+              className="bg-info text-primary-text p-2 rounded-md"
               onClick={createList}
             >
               Create List

@@ -70,7 +70,7 @@ export default function CategoryTabs({
                       `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({ searchParams, name: "category", value: id })}`,
                     )
                   }
-                  className={`${categoryId === (id ?? "") ? "font-bold bg-blue-900!" : "bg-gray-900!"} rounded-full! flex items-center gap-2`}
+                  className={`${categoryId === (id ?? "") ? "font-bold bg-selected!" : "bg-secondary-bg!"} rounded-full! flex items-center gap-2`}
                 >
                   {Icon && <Icon className="size-4" />}
                   <div>{name}</div>
@@ -109,7 +109,7 @@ export default function CategoryTabs({
               <Label htmlFor="description">Description</Label>
               <Textarea
                 rows={3}
-                className="mt-3 block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
+                className="mt-3 block w-full resize-none rounded-lg border-none bg-primary-text/5 px-3 py-1.5 text-sm/6 text-primary-text focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-primary-text/25"
                 id="description"
                 name="description"
                 placeholder="e.g. Connecting with your partner"

@@ -1,29 +1,40 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Light mode */
+  --light-primary-bg: #ffffff;
+  --light-secondary-bg: oklch(70.7% 0.022 261.325); /* bg-gray-400 */
+  --light-tertiary-bg: oklch(55.1% 0.027 264.364); /* bg-gray-500 */
+  --light-primary-text: #000000;
+
+  /* Dark mode */
+  --dark-primary-bg: #000000;
+  --dark-secondary-bg: oklch(27.8% 0.033 256.848); /* bg-gray-800 */
+  --dark-tertiary-bg: oklch(37.3% 0.034 259.733); /* bg-gray-700 */
+  --dark-primary-text: #ffffff;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@theme {
+  /* TODO: Allow switching between light and dark mode */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Base colors */
+  --color-danger: oklch(63.7% 0.237 25.331); /* bg-red-500 */
+  --color-info: oklch(62.3% 0.214 259.815); /* bg-blue-500 */
+  --color-selected: oklch(37.9% 0.146 265.522); /* bg-blue-900 */
+
+  /* Background colors */
+  --color-primary-bg: var(--dark-primary-bg);
+  --color-secondary-bg: var(--dark-secondary-bg);
+  --color-tertiary-bg: var(--dark-tertiary-bg);
+  --color-primary-text: var(--dark-primary-text);
+
+  /* Fonts */
+  --font-sans: "InterVariable", system-ui, sans-serif;
 }
 
 body {
+  @apply bg-primary-bg text-primary-text font-sans;
   font-size: 12px;
-  background: var(--background);
-  color: var(--foreground);
-  font-family: InterVariable, system-ui, sans-serif;
 }
 
 h1 {
@@ -51,10 +62,10 @@ h6 {
 }
 
 button {
-  @apply rounded-lg p-2 bg-blue-500 text-white text-nowrap outline-none border-none;
+  @apply rounded-lg p-2 bg-info text-primary-text text-nowrap outline-none border-none;
 }
 
 input,
 select {
-  @apply border-2 border-gray-300 rounded-xl p-2 w-full focus:outline-none;
+  @apply border border-gray-300 rounded-xl p-2 w-full focus:outline-none;
 }

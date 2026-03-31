@@ -116,7 +116,7 @@ export default function AddMovementModal({
               <Label htmlFor="description">Description</Label>
               <Textarea
                 rows={3}
-                className="block w-full resize-none rounded-lg border-none bg-white/5 px-3 py-1.5 text-sm/6 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25"
+                className="block w-full resize-none rounded-lg border-none bg-primary-text/5 px-3 py-1.5 text-sm/6 text-primary-text focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-primary-text/25"
                 id="description"
                 name="description"
                 placeholder="e.g. The foundation of bachata"
@@ -128,21 +128,21 @@ export default function AddMovementModal({
 
             <div className="flex gap-2">
               <Menu>
-                <MenuButton className="flex items-center gap-1 bg-gray-700!">
+                <MenuButton className="flex items-center gap-1 bg-tertiary-bg!">
                   {levels.find(({ id }) => id === levelId)?.name ?? "Level"}{" "}
                   <ChevronDownIcon className="size-4" />
                 </MenuButton>
                 <MenuItems
                   transition
                   anchor="bottom end"
-                  className="z-10 border border-gray-700! bg-gray-800! rounded-lg"
+                  className="z-10 border border-tertiary-bg! bg-secondary-bg! rounded-lg"
                 >
                   {levels.map(({ id, name, color }) => (
                     <MenuItem
                       key={id}
                       as="button"
                       type="button"
-                      className="flex items-center gap-2 w-full cursor-pointer p-2 bg-gray-800! hover:bg-gray-700! text-left"
+                      className="flex items-center gap-2 w-full cursor-pointer p-2 bg-secondary-bg! hover:bg-tertiary-bg! text-left"
                       onClick={() => setLevelId(id)}
                     >
                       <div
@@ -155,7 +155,7 @@ export default function AddMovementModal({
                 </MenuItems>
               </Menu>
               <Menu>
-                <MenuButton className="flex items-center gap-1 bg-gray-700!">
+                <MenuButton className="flex items-center gap-1 bg-tertiary-bg!">
                   {categories.find(({ id }) => id === categoryId)?.name ??
                     "Category"}{" "}
                   <ChevronDownIcon className="size-4" />
@@ -163,14 +163,14 @@ export default function AddMovementModal({
                 <MenuItems
                   transition
                   anchor="bottom end"
-                  className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
+                  className="z-10 border border-tertiary-bg bg-secondary-bg rounded-lg"
                 >
                   {categories.map(({ id, name }) => (
                     <MenuItem
                       key={id}
                       as="button"
                       type="button"
-                      className="block w-full cursor-pointer p-2 bg-gray-800! hover:bg-gray-700! text-left"
+                      className="block w-full cursor-pointer p-2 bg-secondary-bg! hover:bg-tertiary-bg! text-left"
                       onClick={() => setCategoryId(id)}
                     >
                       {name}
@@ -180,7 +180,7 @@ export default function AddMovementModal({
               </Menu>
             </div>
 
-            <p className="text-xs text-red-500">{error}</p>
+            <p className="text-xs text-danger">{error}</p>
 
             <div className="self-end">
               <button type="submit">Add Movement</button>

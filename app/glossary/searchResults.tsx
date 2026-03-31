@@ -32,7 +32,7 @@ async function SearchResults({
         return (
           <li
             key={movement.id}
-            className="flex-1 md:grow-0 bg-gray-800 p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-50 max-w-full"
+            className="flex-1 md:grow-0 bg-secondary-bg p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-50 max-w-full"
           >
             <div
               className="flex flex-wrap justify-between items-center gap-2 cursor-pointer"
@@ -45,7 +45,7 @@ async function SearchResults({
                 <p className="text-xs font-light">{movement.description}</p>
               </div>
               <div className="flex flex-1 justify-end gap-2 items-center">
-                <div className="text-xs text-nowrap bg-gray-700! px-2 py-1 rounded-full hidden md:block">
+                <div className="text-xs text-nowrap bg-tertiary-bg! px-2 py-1 rounded-full hidden md:block">
                   {movement.statusName}
                 </div>
 

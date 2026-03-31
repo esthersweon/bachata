@@ -18,7 +18,7 @@ export default function LoginForm() {
   return (
     <form
       action={formAction}
-      className="flex flex-col gap-4 rounded-lg bg-gray-700 p-8 min-w-80"
+      className="flex flex-col gap-4 rounded-lg bg-tertiary-bg p-8 min-w-80"
     >
       <div className="flex flex-col gap-4">
         <Field className="flex flex-col gap-2">
@@ -39,7 +39,7 @@ export default function LoginForm() {
             id="password"
             type="password"
             name="password"
-            placeholder="Enter password"
+            placeholder="Enter your password"
             required
             minLength={6}
           />
@@ -60,8 +60,8 @@ export default function LoginForm() {
       >
         {errorMessage && (
           <>
-            <ExclamationCircleIcon className="h-5 w-5 text-red-500" />
-            <p className="text-sm text-red-500">{errorMessage}</p>
+            <ExclamationCircleIcon className="h-5 w-5 text-danger" />
+            <p className="text-sm text-danger">{errorMessage}</p>
           </>
         )}
       </div>

@@ -76,7 +76,7 @@ export default function ActivitiesFeed() {
       {activities.map((activity) => (
         <li
           key={`${activity.timestamp}-${activity.user}`}
-          className="flex flex-col gap-2 bg-black p-4 rounded-lg"
+          className="flex flex-col gap-2 bg-primary-bg p-4 rounded-lg"
         >
           <div className="flex items-center gap-2">
             {activity.userProfilePicture ? (

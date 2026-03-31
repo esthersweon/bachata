@@ -25,7 +25,7 @@ export default function Settings() {
         <Switch
           checked={enabled}
           onChange={() => setEnabled(!enabled)}
-          className={`${enabled ? "bg-blue-800!" : "bg-yellow-200!"} relative inline-flex h-9.5 w-18.5 shrink-0 cursor-pointer rounded-full! p-1! border-2 border-transparent transition-colors duration-200 ease-in-out`}
+          className={`${enabled ? "bg-selected!" : "bg-yellow-200!"} relative inline-flex h-9.5 w-18.5 shrink-0 cursor-pointer rounded-full! p-1! border-2 border-transparent transition-colors duration-200 ease-in-out`}
         >
           <span className="sr-only">Use setting</span>
           {enabled ? (
@@ -35,7 +35,7 @@ export default function Settings() {
           )}
           <span
             aria-hidden="true"
-            className={`${enabled ? "translate-x-9 bg-gray-300" : "translate-x-0 bg-gray-700"} pointer-events-none inline-block h-7.5 w-7.5 transform rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
+            className={`${enabled ? "translate-x-9 bg-gray-300" : "translate-x-0 bg-tertiary-bg"} pointer-events-none inline-block h-7.5 w-7.5 transform rounded-full shadow-lg ring-0 transition duration-200 ease-in-out`}
           />
         </Switch>
       </div>

@@ -16,14 +16,14 @@ export default async function Home() {
   return (
     <main className="flex flex-col gap-2">
       <div className="flex flex-wrap gap-2">
-        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-4 bg-gray-800 p-4 rounded-lg">
+        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-4 bg-secondary-bg p-4 rounded-lg">
           <h2>Upcoming events</h2>
           <Suspense fallback={<div>Loading events...</div>}>
             <ul className="flex flex-wrap gap-2">
               {events.map((event) => (
                 <li
                   key={event.name}
-                  className="basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col bg-black rounded-lg overflow-hidden"
+                  className="basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col bg-primary-bg rounded-lg overflow-hidden"
                 >
                   <img
                     src={event.image}
@@ -58,12 +58,12 @@ export default async function Home() {
           </Suspense>
         </div>
 
-        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+        <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg">
           <ActivitiesFeed />
         </div>
 
         {activities.length > 0 && (
-          <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">
+          <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg">
             <UserRecommendations />
           </div>
         )}

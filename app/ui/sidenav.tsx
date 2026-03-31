@@ -13,9 +13,9 @@ export default function Sidenav({ children }: { children: React.ReactNode }) {
   const [isOpen, setIsOpen] = useState(true);
 
   return isOpen ? (
-    <div className="w-40 h-full bg-gray-800 flex flex-col justify-between pt-8">
+    <div className="w-40 h-full bg-secondary-bg flex flex-col justify-between pt-8">
       <button
-        className="p-1! bg-gray-600! absolute top-2 left-2"
+        className="p-1! bg-tertiary-bg! absolute top-2 left-2"
         onClick={() => setIsOpen(!isOpen)}
       >
         <ChevronDoubleLeftIcon className="size-4" />
@@ -44,7 +44,7 @@ export default function Sidenav({ children }: { children: React.ReactNode }) {
     </div>
   ) : (
     <button
-      className="p-1! bg-gray-600! absolute top-2 left-2"
+      className="p-1! bg-tertiary-bg! absolute top-2 left-2"
       onClick={() => setIsOpen(!isOpen)}
     >
       <ChevronDoubleRightIcon className="size-4" />

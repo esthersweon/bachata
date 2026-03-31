@@ -24,7 +24,7 @@ export default async function Profile() {
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
               <h1>Esther Weon</h1>
-              <div className="text-xs bg-gray-800 px-2 py-1 rounded-full">
+              <div className="text-xs bg-secondary-bg px-2 py-1 rounded-full">
                 Follow
               </div>
             </div>
@@ -60,7 +60,7 @@ export default async function Profile() {
           <MyBadges />
 
           <div className="flex flex-wrap gap-2 w-full">
-            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
+            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
               <h2>Upcoming Events</h2>
               <ul className="flex flex-col gap-2">
                 {events
@@ -68,7 +68,7 @@ export default async function Profile() {
                   .map(({ name, image, date }) => (
                     <li
                       key={name}
-                      className="bg-black p-4 rounded-lg flex items-center gap-2"
+                      className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
                     >
                       <img
                         src={image}
@@ -90,7 +90,7 @@ export default async function Profile() {
                   .map(({ name, image, date }) => (
                     <li
                       key={name}
-                      className="bg-black p-4 rounded-lg flex items-center gap-2"
+                      className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
                     >
                       <img
                         src={image}
@@ -106,11 +106,11 @@ export default async function Profile() {
               </ul>
             </div>
 
-            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
+            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
               <MyProgress />
             </div>
 
-            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full">
+            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full">
               <div className="flex items-center gap-2 justify-between">
                 <h2>My Lists</h2>
                 <CreateListModal />
@@ -119,7 +119,7 @@ export default async function Profile() {
                 {lists.map(({ id, name, movements }) => (
                   <div
                     key={id}
-                    className="flex flex-col gap-2 bg-black p-4 rounded-lg basis-1/3"
+                    className="flex flex-col gap-2 bg-primary-bg p-4 rounded-lg basis-1/3"
                   >
                     <h3 key={id}>{name}</h3>
                     <ul>

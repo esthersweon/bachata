@@ -35,7 +35,7 @@ export default function UserRecommendations() {
         {users.map(({ name, profilePicture }) => (
           <li
             key={name}
-            className="flex flex-col items-center gap-2 bg-black p-4 rounded-lg"
+            className="flex flex-col items-center gap-2 bg-primary-bg p-4 rounded-lg"
           >
             {profilePicture ? (
               <img
