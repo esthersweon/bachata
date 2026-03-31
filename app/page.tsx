@@ -1,4 +1,5 @@
 import { getEvents } from "@/lib/events";
+import { Suspense } from "react";
 import { formatDate } from "./helpers";
 import ActivitiesFeed, { activities } from "./home/activitiesFeed";
 import UserRecommendations from "./home/userRecommendations";
@@ -17,42 +18,44 @@ export default async function Home() {
       <div className="flex flex-wrap gap-2">
         <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-4 bg-gray-800 p-4 rounded-lg">
           <h2>Upcoming events</h2>
-          <ul className="flex flex-wrap gap-2">
-            {events.map((event) => (
-              <li
-                key={event.name}
-                className="basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col bg-black rounded-lg overflow-hidden"
-              >
-                <img
-                  src={event.image}
-                  alt={event.name}
-                  className="h-40 object-cover"
-                />
-                <div className="flex flex-col gap-1 p-4">
-                  <div className="flex flex-wrap justify-between gap-1 items-center">
-                    <h3>{event.name}</h3>
+          <Suspense fallback={<div>Loading events...</div>}>
+            <ul className="flex flex-wrap gap-2">
+              {events.map((event) => (
+                <li
+                  key={event.name}
+                  className="basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col bg-black rounded-lg overflow-hidden"
+                >
+                  <img
+                    src={event.image}
+                    alt={event.name}
+                    className="h-40 object-cover"
+                  />
+                  <div className="flex flex-col gap-1 p-4">
+                    <div className="flex flex-wrap justify-between gap-1 items-center">
+                      <h3>{event.name}</h3>
 
-                    <div
-                      style={{
-                        backgroundColor:
+                      <div
+                        style={{
+                          backgroundColor:
+                            rsvpToLabel[
+                              (event.rsvp ?? "null") as keyof typeof rsvpToLabel
+                            ].color,
+                        }}
+                        className="px-2 py-1 rounded-full"
+                      >
+                        {
                           rsvpToLabel[
                             (event.rsvp ?? "null") as keyof typeof rsvpToLabel
-                          ].color,
-                      }}
-                      className="px-2 py-1 rounded-full"
-                    >
-                      {
-                        rsvpToLabel[
-                          (event.rsvp ?? "null") as keyof typeof rsvpToLabel
-                        ].label
-                      }
+                          ].label
+                        }
+                      </div>
                     </div>
+                    <p>{formatDate(event.date)}</p>
                   </div>
-                  <p>{formatDate(event.date)}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
+                </li>
+              ))}
+            </ul>
+          </Suspense>
         </div>
 
         <div className="flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full flex flex-col gap-2 bg-gray-800 p-4 rounded-lg">

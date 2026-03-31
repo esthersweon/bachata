@@ -1,5 +1,6 @@
 import { getEvents } from "@/lib/events";
 import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
+import { Suspense } from "react";
 import { formatDate } from "../helpers";
 import MyBadges from "./myBadges";
 import MyProgress from "./myProgress";
@@ -55,50 +56,53 @@ export default async function Profile() {
         <MyBadges />
 
         <div className="flex flex-wrap gap-2 w-full">
-          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
-            <h2>Upcoming Events</h2>
-            <ul className="flex flex-col gap-2">
-              {events
-                .filter(({ date }) => new Date(date) >= new Date())
-                .map(({ name, image, date }) => (
-                  <li
-                    key={name}
-                    className="bg-black p-4 rounded-lg flex items-center gap-2"
-                  >
-                    <img
-                      src={image}
-                      alt={name}
-                      className="size-10 object-cover"
-                    />
-                    <div>
-                      <h4>{name}</h4>
-                      <p>{formatDate(date)}</p>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-            <h2>Past Events</h2>
-            <ul className="flex flex-col gap-2">
-              {events
-                .filter(({ date }) => new Date(date) < new Date())
-                .map(({ name, image, date }) => (
-                  <li
-                    key={name}
-                    className="bg-black p-4 rounded-lg flex items-center gap-2"
-                  >
-                    <img
-                      src={image}
-                      alt={name}
-                      className="size-10 object-cover"
-                    />
-                    <div>
-                      <h4>{name}</h4>
-                      <p>{formatDate(date)}</p>
-                    </div>
-                  </li>
-                ))}
-            </ul>
-          </div>
+          <Suspense fallback={<div>Loading events...</div>}>
+            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
+              <h2>Upcoming Events</h2>
+              <ul className="flex flex-col gap-2">
+                {events
+                  .filter(({ date }) => new Date(date) >= new Date())
+                  .map(({ name, image, date }) => (
+                    <li
+                      key={name}
+                      className="bg-black p-4 rounded-lg flex items-center gap-2"
+                    >
+                      <img
+                        src={image}
+                        alt={name}
+                        className="size-10 object-cover"
+                      />
+                      <div>
+                        <h4>{name}</h4>
+                        <p>{formatDate(date)}</p>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+
+              <h2>Past Events</h2>
+              <ul className="flex flex-col gap-2">
+                {events
+                  .filter(({ date }) => new Date(date) < new Date())
+                  .map(({ name, image, date }) => (
+                    <li
+                      key={name}
+                      className="bg-black p-4 rounded-lg flex items-center gap-2"
+                    >
+                      <img
+                        src={image}
+                        alt={name}
+                        className="size-10 object-cover"
+                      />
+                      <div>
+                        <h4>{name}</h4>
+                        <p>{formatDate(date)}</p>
+                      </div>
+                    </li>
+                  ))}
+              </ul>
+            </div>
+          </Suspense>
 
           <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(3/4*100%-0.5rem)] max-w-full">
             <MyProgress />

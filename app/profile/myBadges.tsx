@@ -1,14 +1,8 @@
 import { StarIcon } from "@heroicons/react/24/outline";
 
 const badges = [
-  {
-    name: "Attended 1 event",
-    color: "darkgoldenrod",
-  },
-  {
-    name: "Mastered 3 moves",
-    color: "blueviolet",
-  },
+  { name: "Attended 1 event", color: "darkgoldenrod" },
+  { name: "Mastered 3 moves", color: "blueviolet" },
 ];
 
 export default function MyBadges() {
