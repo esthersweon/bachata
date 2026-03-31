@@ -9,7 +9,7 @@ export default function Settings() {
   const [enabled, setEnabled] = useState<boolean>(true);
   return (
     <main>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <h1>Settings</h1>
         <h2>Notifications</h2>
         <div className="flex items-center gap-2">

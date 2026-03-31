@@ -95,8 +95,8 @@ export default function CategoryTabs({
           icon={<PlusIcon className="size-4" />}
           onClose={() => setShowModal(false)}
         >
-          <form className="flex flex-col space-y-2" action={submitForm}>
-            <Field>
+          <form className="flex flex-col gap-2" action={submitForm}>
+            <Field className="flex flex-col gap-2">
               <Label htmlFor="name">Name</Label>
               <Input
                 type="text"
@@ -115,9 +115,7 @@ export default function CategoryTabs({
                 placeholder="e.g. Connecting with your partner"
               />
             </Field>
-            <div className="self-end">
-              <button type="submit">Add Category</button>
-            </div>
+            <Button type="submit">Add Category</Button>
           </form>
         </Modal>
       )}

@@ -26,7 +26,7 @@ async function SearchResults({
       No results found. Please adjust your search criteria.
     </div>
   ) : (
-    <ul className="flex flex-wrap gap-2 space-y-1">
+    <ul className="flex flex-wrap gap-2">
       {movements.map((movement) => {
         const Icon = categoriesToIcons[movement.category] ?? null;
         return (
@@ -35,10 +35,7 @@ async function SearchResults({
             className="flex-1 md:grow-0 bg-secondary-bg p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-50 max-w-full"
           >
             <div
-              className="flex flex-wrap justify-between items-center gap-2 cursor-pointer"
-              style={{
-                color: movement.statusName === "Mastered" ? "gray" : "inherit",
-              }}
+              className={`flex flex-wrap justify-between items-center gap-2 cursor-pointer ${movement.statusName === "Mastered" ? "text-primary-text/40" : "text-primary-text"}`}
             >
               <div>
                 <h4 className="text-nowrap">{movement.name}</h4>

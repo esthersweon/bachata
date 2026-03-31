@@ -182,9 +182,7 @@ export default function AddMovementModal({
 
             <p className="text-xs text-danger">{error}</p>
 
-            <div className="self-end">
-              <button type="submit">Add Movement</button>
-            </div>
+            <Button type="submit">Add Movement</Button>
           </form>
         </Modal>
       )}

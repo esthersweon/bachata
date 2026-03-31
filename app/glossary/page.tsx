@@ -34,7 +34,7 @@ export default async function Glossary({
 
   return (
     <main>
-      <div className="space-y-2">
+      <div className="flex flex-col gap-2">
         <h1>Glossary</h1>
 
         <p>Search for a movement to get started! 💃</p>

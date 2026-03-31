@@ -119,7 +119,7 @@ export default async function Profile() {
                 {lists.map(({ id, name, movements }) => (
                   <div
                     key={id}
-                    className="flex flex-col gap-2 bg-primary-bg p-4 rounded-lg basis-1/3"
+                    className="flex-1 flex flex-col gap-2 bg-primary-bg p-4 rounded-lg basis-1/3"
                   >
                     <h3 key={id} className="text-nowrap">
                       {name}

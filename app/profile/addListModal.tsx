@@ -1,6 +1,6 @@
 "use client";
 
-import { Field, Input, Label } from "@headlessui/react";
+import { Button, Field, Input, Label } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -115,12 +115,7 @@ export default function AddListModal() {
               </div>
             </div>
             {error && <p className="text-danger">{error}</p>}
-            <button
-              className="bg-info text-primary-text p-2 rounded-md"
-              onClick={createList}
-            >
-              Add List
-            </button>
+            <Button onClick={createList}>Add List</Button>
           </div>
         </Modal>
       )}

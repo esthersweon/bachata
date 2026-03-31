@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Button,
   Menu,
   MenuButton,
   MenuItem,
@@ -120,11 +121,10 @@ export default function MovementMenu(movement: Movement) {
           className="flex flex-col gap-2"
         >
           <p>Are you sure you want to delete &quot;{movement.name}&quot;?</p>
-          <div className="self-end">
-            <button className="bg-danger!" onClick={deleteMovement}>
-              Delete
-            </button>
-          </div>
+
+          <Button className="bg-danger!" onClick={deleteMovement}>
+            Delete
+          </Button>
         </Modal>
       )}
       {error && <p className="text-danger">{error}</p>}
