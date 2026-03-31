@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { movementId, listIds } = await request.json();
+  const { movementIds, listIds } = await request.json();
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -37,13 +37,14 @@ export async function POST(request: NextRequest) {
   }
   try {
     const sql = neon(url);
-    const ids = Array.isArray(listIds) ? listIds : [];
-    if (ids.length > 0) {
+    if (listIds.length > 0) {
       await sql.transaction(
-        ids.map(
-          (listId: string) =>
-            sql`INSERT INTO lists_movements (id, movement_id, list_id)
-            VALUES (${crypto.randomUUID()}, ${movementId}, ${listId})`,
+        listIds.flatMap((listId: string) =>
+          movementIds.map(
+            (movementId: string) =>
+              sql`INSERT INTO lists_movements (id, movement_id, list_id)
+                  VALUES (${crypto.randomUUID()}, ${movementId}, ${listId})`,
+          ),
         ),
       );
     }

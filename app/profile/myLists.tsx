@@ -1,5 +1,5 @@
-import { PlusIcon } from "@heroicons/react/24/outline";
 import { Movement } from "../glossary/types";
+import CreateListModal from "./createListModal";
 
 export default async function MyLists() {
   const lists = await (
@@ -10,10 +10,7 @@ export default async function MyLists() {
     <>
       <div className="flex justify-between items-center">
         <h2>My Lists</h2>
-
-        <button className="flex items-center gap-2">
-          <PlusIcon className="size-4" /> Add List
-        </button>
+        <CreateListModal />
       </div>
       <ul className="flex flex-col gap-2">
         {lists.map(

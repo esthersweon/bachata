@@ -58,7 +58,7 @@ export default function MovementMenu(movement: Movement) {
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists/movements`, {
         method: "POST",
-        body: JSON.stringify({ movementId: movement.id, listIds: [listId] }),
+        body: JSON.stringify({ movementIds: [movement.id], listIds: [listId] }),
       })
     ).json();
     setError(response?.error ?? null);
