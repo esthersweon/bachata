@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Button,
   Field,
   Input,
   Label,
@@ -87,13 +88,13 @@ export default function AddMovementModal({
 
   return (
     <>
-      <button
-        className="flex items-center gap-1"
+      <Button
+        className="flex items-center gap-1 rounded-full!"
         onClick={() => setShowModal(true)}
+        title="Add Movement"
       >
         <PlusIcon className="size-4" />
-        <div>Add Movement</div>
-      </button>
+      </Button>
       {showModal && (
         <Modal
           title="Add Movement"

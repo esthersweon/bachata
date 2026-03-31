@@ -35,10 +35,7 @@ export default async function Glossary({
   return (
     <main>
       <div className="space-y-2">
-        <div className="flex flex-wrap justify-between items-center gap-2">
-          <h1>Glossary</h1>
-          <AddMovementModal categories={categories} levels={levels} />
-        </div>
+        <h1>Glossary</h1>
 
         <p>Search for a movement to get started! 💃</p>
 
@@ -55,8 +52,10 @@ export default async function Glossary({
               <div className="flex-1">
                 <SearchInput />
               </div>
+
               <StatusesMenu statuses={statuses} />
               <LevelsMenu levels={levels} />
+              <AddMovementModal categories={categories} levels={levels} />
             </div>
 
             <SearchResults

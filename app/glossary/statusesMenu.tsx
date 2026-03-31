@@ -16,7 +16,7 @@ export default function StasusesMenu({ statuses }: { statuses: Status[] }) {
       <MenuButton
         className={`flex items-center gap-1 ${statusId ? "font-bold bg-blue-900!" : "bg-gray-900!"}`}
       >
-        Status:{" "}
+        <span className="hidden md:block">Status: </span>
         {
           [{ id: "", name: "All" }, ...statuses].find(
             ({ id }) => id === statusId,

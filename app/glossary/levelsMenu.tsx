@@ -22,7 +22,8 @@ export default function LevelsMenu({ levels }: { levels: MovementLevel[] }) {
           backgroundColor: (currentLevel as MovementLevel)?.color ?? "",
         }}
       >
-        Level: {currentLevel?.name} <ChevronDownIcon className="size-4" />
+        <span className="hidden md:block">Level: </span>
+        {currentLevel?.name} <ChevronDownIcon className="size-4" />
       </MenuButton>
       <MenuItems
         transition

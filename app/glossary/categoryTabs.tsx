@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Button,
   Field,
   Input,
   Label,
@@ -55,7 +56,7 @@ export default function CategoryTabs({
         <TabGroup
           tabIndex={categories.findIndex(({ id }) => id === categoryId) ?? 0}
         >
-          <TabList className="flex flex-wrap gap-1 cursor-pointer">
+          <TabList className="flex flex-wrap gap-1 cursor-pointer items-center">
             {[{ id: "", name: "All" }, ...categories].map(({ id, name }) => {
               const Icon =
                 categoriesToIcons[name as keyof typeof categoriesToIcons] ??
@@ -77,12 +78,13 @@ export default function CategoryTabs({
               );
             })}
 
-            <button
-              className="flex items-center gap-2"
+            <Button
+              className="flex justify-center items-center gap-2 rounded-full!"
               onClick={() => setShowModal(true)}
+              title="Add Category"
             >
-              <PlusIcon className="size-4" /> Add Category
-            </button>
+              <PlusIcon className="size-4" />
+            </Button>
           </TabList>
         </TabGroup>
       </div>

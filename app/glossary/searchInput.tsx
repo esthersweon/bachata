@@ -25,7 +25,7 @@ export default function SearchInput() {
   };
 
   return (
-    <div className="w-full min-w-20">
+    <div className="w-full">
       <Input
         type="text"
         placeholder="Search movements"
