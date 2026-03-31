@@ -4,49 +4,17 @@ import {
   InboxIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import { formatDate } from "../helpers";
+import { Event } from "../types";
 import MyBadges from "./myBadges";
 import MyCombos from "./myCombos";
 import MyLists from "./myLists";
 
-const futureEvents = [
-  {
-    name: "Joliet",
-    image:
-      "https://danceruniversity.com/wp-content/uploads/2025/01/PHOTO-2026-03-22-21-03-17.jpg",
-    date: "Saturday, March 25th",
-    rsvp: "YES",
-    attendees: ["John", "Jane", "Mary"],
-  },
-  {
-    name: "Victorian",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRA2HQAQqfprQvLvdhp16l99UEuwhIOBTewGQ&s",
-    date: "Sunday, April 15th",
-    rsvp: "NO",
-    attendees: ["Mary"],
-  },
-];
-
-const pastEvents = [
-  {
-    name: "Crown",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6jVip330b1K30d_gO9oTKAuHPu3lXM-2a0A&s",
-    date: "Friday, May 15th",
-    rsvp: "UNDECIDED",
-    attendees: ["Mary"],
-  },
-  {
-    name: "The Continental",
-    image:
-      "https://images.momence.com/h/40391/session-template-banner/e1261ff9-c2c0-4a43-a095-1e5a781ad4b6.jpg",
-    date: "Monday, Jun 2nd",
-    rsvp: "YES",
-    attendees: ["Jane"],
-  },
-];
-
 export default async function Profile() {
+  const events: Event[] = await fetch(
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/events`,
+  ).then((response) => response.json());
+
   return (
     <main className="flex flex-col gap-8">
       <div className="flex justify-center items-center gap-4">
@@ -99,41 +67,45 @@ export default async function Profile() {
           <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
             <h2>Upcoming Events</h2>
             <ul className="flex flex-col gap-2">
-              {futureEvents.map(({ name, image, date }) => (
-                <li
-                  key={name}
-                  className="bg-black p-4 rounded-lg flex items-center gap-2"
-                >
-                  <img
-                    src={image}
-                    alt={name}
-                    className="size-10 object-cover"
-                  />
-                  <div>
-                    <h4>{name}</h4>
-                    <p>{date}</p>
-                  </div>
-                </li>
-              ))}
+              {events
+                .filter(({ date }) => new Date(date) >= new Date())
+                .map(({ name, image, date }) => (
+                  <li
+                    key={name}
+                    className="bg-black p-4 rounded-lg flex items-center gap-2"
+                  >
+                    <img
+                      src={image}
+                      alt={name}
+                      className="size-10 object-cover"
+                    />
+                    <div>
+                      <h4>{name}</h4>
+                      <p>{formatDate(date)}</p>
+                    </div>
+                  </li>
+                ))}
             </ul>
             <h2>Past Events</h2>
             <ul className="flex flex-col gap-2">
-              {pastEvents.map(({ name, image, date }) => (
-                <li
-                  key={name}
-                  className="bg-black p-4 rounded-lg flex items-center gap-2"
-                >
-                  <img
-                    src={image}
-                    alt={name}
-                    className="size-10 object-cover"
-                  />
-                  <div>
-                    <h4>{name}</h4>
-                    <p>{date}</p>
-                  </div>
-                </li>
-              ))}
+              {events
+                .filter(({ date }) => new Date(date) < new Date())
+                .map(({ name, image, date }) => (
+                  <li
+                    key={name}
+                    className="bg-black p-4 rounded-lg flex items-center gap-2"
+                  >
+                    <img
+                      src={image}
+                      alt={name}
+                      className="size-10 object-cover"
+                    />
+                    <div>
+                      <h4>{name}</h4>
+                      <p>{formatDate(date)}</p>
+                    </div>
+                  </li>
+                ))}
             </ul>
           </div>
 
