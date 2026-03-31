@@ -3,7 +3,7 @@ import { getLists } from "@/app/lib/lists";
 import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 import { formatDate } from "../helpers";
-import CreateListModal from "./createListModal";
+import AddListModal from "./addListModal";
 import MyBadges from "./myBadges";
 import MyProgress from "./myProgress";
 
@@ -113,7 +113,7 @@ export default async function Profile() {
             <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full">
               <div className="flex items-center gap-2 justify-between">
                 <h2>My Lists</h2>
-                <CreateListModal />
+                <AddListModal />
               </div>
               <div className="flex flex-wrap gap-2">
                 {lists.map(({ id, name, movements }) => (
@@ -121,7 +121,9 @@ export default async function Profile() {
                     key={id}
                     className="flex flex-col gap-2 bg-primary-bg p-4 rounded-lg basis-1/3"
                   >
-                    <h3 key={id}>{name}</h3>
+                    <h3 key={id} className="text-nowrap">
+                      {name}
+                    </h3>
                     <ul>
                       {movements.map(({ id: movementId, name }) => (
                         <li key={movementId}>{name}</li>
