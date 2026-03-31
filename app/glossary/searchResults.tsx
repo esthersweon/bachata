@@ -32,26 +32,26 @@ async function SearchResults({
         return (
           <li
             key={movement.id}
-            className="flex-1 grow-0 bg-gray-800 p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full group"
+            className="flex-1 md:grow-0 bg-gray-800 p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] max-w-full group"
           >
-            <div className="flex gap-4 items-center">
-              <div className="w-full flex justify-between items-center gap-4 cursor-pointer">
-                <div>
-                  <h4 className="text-nowrap">{movement.name}</h4>
-                  <p className="text-xs font-light">{movement.description}</p>
+            <div className="flex w-full justify-between items-center gap-4 cursor-pointer">
+              <div>
+                <h4 className="text-nowrap">{movement.name}</h4>
+                <p className="text-xs font-light">{movement.description}</p>
+              </div>
+              <div className="flex flex-1 justify-end gap-2 items-center">
+                <div className="text-xs bg-gray-700! px-2 py-1 rounded-full hidden md:block">
+                  {movement.statusName}
                 </div>
-                <div className="flex gap-2 items-center">
-                  <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: movement.levelColor ?? "none" }}
-                  />
 
-                  <button className="text-xs bg-gray-700! flex items-center">
-                    {Icon && <Icon className="size-4" />}
-                  </button>
-
-                  <MovementMenu {...movement} />
+                <div
+                  title={`${movement.category} (${movement.level})`}
+                  className="text-xs flex items-center p-1.5 rounded-full"
+                  style={{ backgroundColor: movement.levelColor }}
+                >
+                  {Icon && <Icon className="size-4" />}
                 </div>
+                <MovementMenu {...movement} />
               </div>
             </div>
           </li>

@@ -18,6 +18,7 @@ export type Movement = {
   level: string;
   levelColor: string;
   statusId: string;
+  statusName: string;
 };
 
 export type SearchControls = {

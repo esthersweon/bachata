@@ -33,10 +33,12 @@ export async function GET(request: NextRequest) {
         l.name AS level,
         l.color AS "levelColor",
         c.name AS category,
-        m.status_id AS "statusId"
+        m.status_id AS "statusId",
+        s.name AS "statusName"
       FROM movements m
       JOIN levels l ON m.level_id = l.id
       JOIN categories c ON m.category_id = c.id
+      JOIN statuses s ON m.status_id = s.id
       WHERE
         (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
         ${levelFilter}

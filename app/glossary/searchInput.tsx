@@ -25,10 +25,10 @@ export default function SearchInput() {
   };
 
   return (
-    <div className="w-full">
+    <div className="w-full min-w-20">
       <Input
         type="text"
-        placeholder="Search for a movement"
+        placeholder="Search movements"
         onChange={(e) => updateQuery("q", e.target.value)}
       />
     </div>

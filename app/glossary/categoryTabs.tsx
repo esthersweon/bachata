@@ -76,14 +76,15 @@ export default function CategoryTabs({
                 </Tab>
               );
             })}
+
+            <button
+              className="flex items-center gap-2"
+              onClick={() => setShowModal(true)}
+            >
+              <PlusIcon className="size-4" /> Add Category
+            </button>
           </TabList>
         </TabGroup>
-        <button
-          className="flex items-center gap-2"
-          onClick={() => setShowModal(true)}
-        >
-          <PlusIcon className="size-4" /> Add Category
-        </button>
       </div>
 
       {showModal && (

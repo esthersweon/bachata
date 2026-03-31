@@ -17,7 +17,8 @@ export async function GET(request: NextRequest) {
     const sql = neon(url);
     const categories =
       await sql`SELECT id, name FROM categories ORDER BY "order"`;
-    const levels = await sql`SELECT id, name, color FROM levels`;
+    const levels =
+      await sql`SELECT id, name, color FROM levels ORDER BY "order"`;
 
     return Response.json(
       { categories, levels },

@@ -11,29 +11,30 @@ export default function LevelsMenu({ levels }: { levels: MovementLevel[] }) {
   const searchParams = useSearchParams();
   const levelId = searchParams.get("level") ?? "";
 
+  const listOfLevels = [{ id: "", name: "All", color: "" }, ...levels];
+  const currentLevel = listOfLevels.find(({ id }) => id === levelId);
+
   return (
     <Menu>
       <MenuButton
-        className={`flex items-center gap-1 ${levelId ? "font-bold bg-blue-900!" : "bg-gray-900!"}`}
+        className={`flex items-center gap-1 ${levelId ? "font-bold" : "bg-gray-900!"}`}
+        style={{
+          backgroundColor: (currentLevel as MovementLevel)?.color ?? "",
+        }}
       >
-        Level:{" "}
-        {
-          [{ id: "", name: "All" }, ...levels].find(({ id }) => id === levelId)
-            ?.name
-        }{" "}
-        <ChevronDownIcon className="size-4" />
+        Level: {currentLevel?.name} <ChevronDownIcon className="size-4" />
       </MenuButton>
       <MenuItems
         transition
         anchor="bottom end"
-        className="z-10 border border-gray-700 bg-gray-800 rounded-lg"
+        className="z-10 bg-gray-800 rounded-lg"
       >
-        {[{ id: "", name: "All" }, ...levels].map(({ id, name }) => (
+        {listOfLevels.map(({ id, name, color }) => (
           <MenuItem
             key={id}
             as="button"
             type="button"
-            className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+            className="flex gap-2 items-center w-full cursor-pointer p-2 bg-gray-800! hover:bg-gray-700! text-left"
             onClick={() =>
               router.push(
                 `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
@@ -44,7 +45,11 @@ export default function LevelsMenu({ levels }: { levels: MovementLevel[] }) {
               )
             }
           >
-            {name}
+            <div
+              className="w-2 h-2 rounded-full"
+              style={{ backgroundColor: color }}
+            />
+            <div>{name}</div>
           </MenuItem>
         ))}
       </MenuItems>

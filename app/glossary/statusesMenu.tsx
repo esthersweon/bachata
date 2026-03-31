@@ -34,7 +34,7 @@ export default function StasusesMenu({ statuses }: { statuses: Status[] }) {
             key={id}
             as="button"
             type="button"
-            className="block w-full cursor-pointer p-2 bg-gray-800! text-left"
+            className="block w-full cursor-pointer p-2 bg-gray-800! hover:bg-gray-700! text-left"
             onClick={() =>
               router.push(
                 `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
