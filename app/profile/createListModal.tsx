@@ -23,17 +23,17 @@ export default function CreateListModal() {
       return;
     }
     const response = await (
-      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`, {
+      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists`, {
         method: "POST",
         body: JSON.stringify({ name: listName.trim() }),
       })
     ).json();
 
     const listMovementsResponse = await (
-      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses/movements`, {
+      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists/movements`, {
         method: "POST",
         body: JSON.stringify({
-          statusIds: [response.id],
+          listIds: [response.id],
           movementIds: selectedMovementIds,
         }),
       })
@@ -70,6 +70,22 @@ export default function CreateListModal() {
               placeholder="List Name"
               onChange={(e) => setListName(e.target.value)}
             />
+            <div className="flex items-center gap-2">
+              <div
+                className="cursor-pointer underline"
+                onClick={() =>
+                  setSelectedMovementIds(movements.map(({ id }) => id))
+                }
+              >
+                Select All
+              </div>
+              <div
+                className="cursor-pointer underline"
+                onClick={() => setSelectedMovementIds([])}
+              >
+                Deselect All
+              </div>
+            </div>
             <ul className="max-h-75 overflow-y-scroll">
               {movements.map((movement) => (
                 <li key={movement.id} className="flex items-center gap-2 p-1">
@@ -84,8 +100,8 @@ export default function CreateListModal() {
                           ),
                         );
                       } else {
-                        setSelectedMovementIds([
-                          ...selectedMovementIds,
+                        setSelectedMovementIds((prev) => [
+                          ...prev,
                           movement.id,
                         ]);
                       }

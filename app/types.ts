@@ -14,6 +14,12 @@ export type Status = {
   movements: Movement[];
 };
 
+export type List = {
+  id: string;
+  name: string;
+  movements: Movement[];
+};
+
 export type User = {
   id: string;
   email: string;

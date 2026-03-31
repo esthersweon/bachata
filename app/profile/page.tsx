@@ -1,4 +1,5 @@
 import { getEvents } from "@/app/lib/events";
+import { getLists } from "@/app/lib/lists";
 import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 import { formatDate } from "../helpers";
@@ -6,57 +7,58 @@ import MyBadges from "./myBadges";
 import MyProgress from "./myProgress";
 
 export default async function Profile() {
+  const lists = await getLists();
   const events = await getEvents();
 
   return (
     <main className="flex flex-col gap-8">
-      <div className="flex justify-center items-center gap-4">
-        <img
-          src="https://www.earwolf.com/wp-content/uploads/2019/12/Jane-Kim.png"
-          alt="Jane Kim"
-          className="size-30 rounded-full"
-        />
+      <Suspense fallback={<div>Loading profile...</div>}>
+        <div className="flex justify-center items-center gap-4">
+          <img
+            src="https://www.earwolf.com/wp-content/uploads/2019/12/Jane-Kim.png"
+            alt="Jane Kim"
+            className="size-30 rounded-full"
+          />
 
-        <div className="flex flex-col items-center gap-2">
-          <div className="flex items-center gap-2">
-            <h1>Jane Kim</h1>
-            <div className="text-xs bg-gray-800 px-2 py-1 rounded-full">
-              Follow
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2">
+              <h1>Jane Kim</h1>
+              <div className="text-xs bg-gray-800 px-2 py-1 rounded-full">
+                Follow
+              </div>
             </div>
-          </div>
 
-          <div className="flex gap-2">
-            <div>
-              <span className="cursor-pointer font-bold">87</span> Followers
+            <div className="flex gap-2">
+              <div>
+                <span className="cursor-pointer font-bold">87</span> Followers
+              </div>
+              <div>
+                <span className="cursor-pointer font-bold">124</span> Following
+              </div>
             </div>
-            <div>
-              <span className="cursor-pointer font-bold">124</span> Following
+
+            <div className="flex items-center gap-2 text-xs">
+              <CakeIcon className="size-3" />
+              <div>Dancing since Oct 2025</div>
             </div>
-          </div>
 
-          <div className="flex items-center gap-2 text-xs">
-            <CakeIcon className="size-3" />
-            <div>Dancing since Oct 2025</div>
-          </div>
-
-          <div className="flex gap-2 justify-center">
-            <button className="flex items-center gap-2">
-              <UserIcon className="size-4" />
-              <div>Follow</div>
-            </button>
-            <button className="flex items-center gap-2">
-              <InboxIcon className="size-4" />
-              <div>Message</div>
-            </button>
+            <div className="flex gap-2 justify-center">
+              <button className="flex items-center gap-2">
+                <UserIcon className="size-4" />
+                <div>Follow</div>
+              </button>
+              <button className="flex items-center gap-2">
+                <InboxIcon className="size-4" />
+                <div>Message</div>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="flex flex-col items-center gap-8">
-        <MyBadges />
+        <div className="flex flex-col items-center gap-8">
+          <MyBadges />
 
-        <div className="flex flex-wrap gap-2 w-full">
-          <Suspense fallback={<div>Loading events...</div>}>
+          <div className="flex flex-wrap gap-2 w-full">
             <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
               <h2>Upcoming Events</h2>
               <ul className="flex flex-col gap-2">
@@ -102,13 +104,32 @@ export default async function Profile() {
                   ))}
               </ul>
             </div>
-          </Suspense>
 
-          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(3/4*100%-0.5rem)] max-w-full">
-            <MyProgress />
+            <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 basis-[calc(3/4*100%-0.5rem)] max-w-full">
+              <MyProgress />
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg w-full">
+            <h2>My Lists</h2>
+            <div className="flex flex-wrap gap-2">
+              {lists.map(({ id, name, movements }) => (
+                <div
+                  key={id}
+                  className="flex flex-col gap-2 bg-black p-4 rounded-lg"
+                >
+                  <h3 key={id}>{name}</h3>
+                  <ul>
+                    {movements.map(({ id: movementId, name }) => (
+                      <li key={movementId}>{name}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
+      </Suspense>
     </main>
   );
 }
