@@ -39,7 +39,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const { movementId, listId } = await request.json();
+  const { name } = await request.json();
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -50,10 +50,11 @@ export async function POST(request: NextRequest) {
   }
   try {
     const sql = neon(url);
-    await sql`INSERT INTO lists (id, name) VALUES (${crypto.randomUUID()}, ${name})`;
+    const id = crypto.randomUUID();
+    await sql`INSERT INTO lists (id, name) VALUES (${id}, ${name})`;
 
     return Response.json(
-      { ok: true },
+      { ok: true, id },
       { status: 201, headers: { "Content-Type": "application/json" } },
     );
   } catch {

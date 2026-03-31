@@ -38,9 +38,7 @@ export default async function Glossary({
             <div className="flex-1">
               <SearchInput />
             </div>
-            <div>
-              <FiltersMenu levels={levels} />
-            </div>
+            <FiltersMenu levels={levels} />
           </div>
 
           <Suspense

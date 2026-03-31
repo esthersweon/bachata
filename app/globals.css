@@ -56,5 +56,5 @@ button {
 
 input,
 select {
-  @apply border-2 border-gray-300 rounded-xl p-2 w-full;
+  @apply border-2 border-gray-300 rounded-xl p-2 w-full focus:outline-none;
 }

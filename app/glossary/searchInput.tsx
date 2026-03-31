@@ -1,5 +1,6 @@
 "use client";
 
+import { Input } from "@headlessui/react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export default function SearchInput() {
@@ -25,9 +26,9 @@ export default function SearchInput() {
 
   return (
     <div className="w-full">
-      <input
+      <Input
         type="text"
-        placeholder="Search"
+        placeholder="Search for a movement"
         onChange={(e) => updateQuery("q", e.target.value)}
       />
     </div>
