@@ -1,9 +1,4 @@
-import {
-  CakeIcon,
-  CalendarIcon,
-  InboxIcon,
-  UserIcon,
-} from "@heroicons/react/24/outline";
+import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import { formatDate } from "../helpers";
 import { Event } from "../types";
 import MyBadges from "./myBadges";
@@ -25,9 +20,12 @@ export default async function Profile() {
         />
 
         <div className="flex flex-col items-center gap-2">
-          <h1>Jane Kim</h1>
-
-          <div className="text-xs bg-gray-800 p-2 rounded-full">Follow</div>
+          <div className="flex items-center gap-2">
+            <h1>Jane Kim</h1>
+            <div className="text-xs bg-gray-800 px-2 py-1 rounded-full">
+              Follow
+            </div>
+          </div>
 
           <div className="flex gap-2">
             <div>
@@ -38,15 +36,9 @@ export default async function Profile() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <div className="flex items-center gap-2">
-              <CakeIcon className="size-4" />
-              <div>Dance anniversary: October 2025</div>
-            </div>
-            <div className="flex items-center gap-2">
-              <CalendarIcon className="size-4" />
-              <div>Events attended: 22</div>
-            </div>
+          <div className="flex items-center gap-2 text-xs">
+            <CakeIcon className="size-3" />
+            <div>Dancing since Oct 2025</div>
           </div>
 
           <div className="flex gap-2 justify-center">
@@ -62,8 +54,10 @@ export default async function Profile() {
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <div className="flex flex-wrap gap-2">
+      <div className="flex flex-col items-center gap-8 px-10">
+        <MyBadges />
+
+        <div className="flex flex-wrap gap-2 w-full">
           <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
             <h2>Upcoming Events</h2>
             <ul className="flex flex-col gap-2">
@@ -116,10 +110,6 @@ export default async function Profile() {
           <div className="flex flex-col gap-2 bg-gray-800 p-4 rounded-lg flex-1 grow-0 basis-[calc(1/3*100%-0.5rem)] max-w-full">
             <MyCombos />
           </div>
-        </div>
-
-        <div className="flex flex-col flex-wrap gap-2 bg-gray-800 p-4 rounded-lg">
-          <MyBadges />
         </div>
       </div>
     </main>

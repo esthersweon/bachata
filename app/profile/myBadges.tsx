@@ -1,28 +1,29 @@
+import { StarIcon } from "@heroicons/react/24/outline";
+
 const badges = [
   {
     name: "Attended 10 events",
-    color: "green",
+    color: "goldenrod",
   },
   {
-    name: "Practiced 100 moves",
-    color: "blue",
+    name: "Mastered 3 moves",
+    color: "blueviolet",
   },
 ];
 
 export default function MyBadges() {
   return (
-    <>
-      <ul className="flex flex-wrap gap-2">
-        {badges.map(({ name, color }) => (
-          <li
-            key={name}
-            className="flex items-center size-20 rounded-full p-2"
-            style={{ backgroundColor: color }}
-          >
-            {name}
-          </li>
-        ))}
-      </ul>
-    </>
+    <ul className="flex flex-wrap gap-2 justify-center text-xs text-center">
+      {badges.map(({ name, color }) => (
+        <li
+          key={name}
+          className="flex gap-2 items-center rounded-full p-2 px-4"
+          style={{ backgroundColor: color }}
+        >
+          <StarIcon className="size-4" />
+          <div>{name}</div>
+        </li>
+      ))}
+    </ul>
   );
 }
