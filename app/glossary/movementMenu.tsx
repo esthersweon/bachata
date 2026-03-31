@@ -13,12 +13,15 @@ import {
   EllipsisVerticalIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Status } from "../types";
 import Modal from "../ui/modal";
 import { Movement } from "./types";
 
 export default function MovementMenu(movement: Movement) {
+  const router = useRouter();
+
   const [hasFetchedStatuses, setHasFetchedStatuses] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
@@ -47,7 +50,10 @@ export default function MovementMenu(movement: Movement) {
         body: JSON.stringify({ id: movement.id }),
       })
     ).json();
-    if (response.ok) setShowDeleteConfirmation(false);
+    if (response.ok) {
+      router.refresh();
+      setShowDeleteConfirmation(false);
+    }
 
     setError(response?.error ?? null);
   };

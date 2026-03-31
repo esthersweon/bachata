@@ -95,8 +95,10 @@ export async function POST(request: Request) {
 
   try {
     const sql = neon(url);
-    await sql`INSERT INTO movements (id, name, description, level_id, category_id)
-      VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${levelId}, ${categoryId})`;
+    const statusId =
+      await sql`SELECT id FROM statuses ORDER BY "order" LIMIT 1`;
+    await sql`INSERT INTO movements (id, name, description, level_id, category_id, status_id)
+      VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${levelId}, ${categoryId}, ${statusId[0].id})`;
 
     return Response.json(
       { ok: true },
@@ -123,12 +125,12 @@ export async function DELETE(request: NextRequest) {
 
   try {
     const sql = neon(url);
-    const result = await sql`DELETE FROM movements WHERE id = ${id}`;
+    await sql`DELETE FROM movements WHERE id = ${id}`;
 
-    return Response.json(result, {
-      status: 200,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json(
+      { ok: true },
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
   } catch (error: unknown) {
     return Response.json(
       { error: `Failed to delete movement: ${(error as Error).message}` },
