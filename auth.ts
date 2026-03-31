@@ -3,13 +3,22 @@ import bcrypt from "bcrypt";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
+import { User } from "./app/types";
 import { authConfig } from "./auth.config";
 
 const sql = neon(process.env.POSTGRES_URL!);
 
-async function getUser(email: string) {
+async function getUser(email: string): Promise<User | null> {
   try {
-    const user = await sql`SELECT * FROM users WHERE email=${email}`;
+    const user = (await sql`
+      SELECT
+        id,
+        email,
+        password,
+        first_name AS "firstName",
+        last_name AS "lastName"
+      FROM users
+      WHERE email=${email}`) as User[];
     return user[0];
   } catch (error) {
     console.error("Failed to fetch user:", error);

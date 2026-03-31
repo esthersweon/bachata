@@ -13,3 +13,11 @@ export type Status = {
   name: string;
   movements: Movement[];
 };
+
+export type User = {
+  id: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+};
