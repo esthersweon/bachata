@@ -38,7 +38,7 @@ export default function LevelsMenu({ levels }: { levels: MovementLevel[] }) {
             className="flex gap-2 items-center w-full cursor-pointer p-2 bg-secondary-bg! hover:bg-tertiary-bg! text-left"
             onClick={() =>
               router.push(
-                `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
+                `${process.env.NEXT_PUBLIC_DOMAIN}/movements${updateQuery({
                   searchParams,
                   name: "level",
                   value: levelId === id ? "" : id,

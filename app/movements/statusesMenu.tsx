@@ -37,7 +37,7 @@ export default function StasusesMenu({ statuses }: { statuses: Status[] }) {
             className="block w-full cursor-pointer p-2 bg-secondary-bg! hover:bg-tertiary-bg! text-left"
             onClick={() =>
               router.push(
-                `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({
+                `${process.env.NEXT_PUBLIC_DOMAIN}/movements${updateQuery({
                   searchParams,
                   name: "status",
                   value: statusId === id ? "" : id,

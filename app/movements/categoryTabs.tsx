@@ -67,7 +67,7 @@ export default function CategoryTabs({
                   key={id}
                   onClick={() =>
                     router.push(
-                      `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${updateQuery({ searchParams, name: "category", value: id })}`,
+                      `${process.env.NEXT_PUBLIC_DOMAIN}/movements${updateQuery({ searchParams, name: "category", value: id })}`,
                     )
                   }
                   className={`${categoryId === (id ?? "") ? "font-bold bg-selected!" : "bg-secondary-bg!"} rounded-full! flex items-center gap-2`}

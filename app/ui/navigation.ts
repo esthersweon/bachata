@@ -1,7 +1,8 @@
 import {
   BookOpenIcon,
   Cog6ToothIcon,
-  UserIcon,
+  HomeIcon,
+  PlusIcon,
 } from "@heroicons/react/24/outline";
 
 export const topNavigation: {
@@ -9,14 +10,11 @@ export const topNavigation: {
   href: string;
   icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
 }[] = [
-  // { name: "Home", href: "/", icon: HomeIcon },
-  { name: "Profile", href: "/profile", icon: UserIcon },
+  { name: "Dashboard", href: "/", icon: HomeIcon },
+  // { name: "Profile", href: "/profile", icon: UserIcon },
   // { name: "Inbox", href: "/inbox", icon: InboxIcon },
-  {
-    name: "Glossary",
-    href: "/glossary",
-    icon: BookOpenIcon,
-  },
+  { name: "Movements", href: "/movements", icon: BookOpenIcon },
+  { name: "Combos", href: "/combos", icon: PlusIcon },
 ];
 
 export const bottomNavigation: {

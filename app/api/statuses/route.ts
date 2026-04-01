@@ -12,13 +12,22 @@ export async function GET(request: NextRequest) {
 
   try {
     const sql = neon(url);
+    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+
     const statuses = await sql`SELECT id, name FROM statuses ORDER BY "order"`;
+    const defaultStatusId = String(statuses[0]?.id ?? "");
+
     const resultWithMovements = await Promise.all(
-      statuses.map(async (status: Record<string, any>) => {
-        const statusId = String(status.id);
-        const statusName = String(status.name);
-        const movements =
-          await sql`SELECT m.id, m.name FROM movements m WHERE m.status_id = ${statusId}`;
+      statuses.map(async ({ id, name }: Record<string, any>) => {
+        const statusId = String(id);
+        const statusName = String(name);
+        const movements = await sql`
+          SELECT m.id, m.name
+          FROM movements m
+          LEFT JOIN users_movements um
+            ON m.id = um.movement_id AND um.user_id = ${userId}
+          WHERE COALESCE(um.status_id, ${defaultStatusId}) = ${statusId}
+        `;
         return { id: statusId, name: statusName, movements };
       }),
     );

@@ -20,7 +20,7 @@ export default function SearchInput() {
 
     const search = currentParams.toString();
     router.push(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/glossary${search ? `?${search}` : ""}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/movements${search ? `?${search}` : ""}`,
     );
   };
 

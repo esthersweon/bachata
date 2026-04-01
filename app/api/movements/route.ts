@@ -19,26 +19,36 @@ export async function GET(request: NextRequest) {
 
   try {
     const sql = neon(url);
+    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
 
     const qPattern = `%${q}%`;
     const levelFilter = level ? sql`AND l.id = ${level}` : sql``;
     const categoryFilter = category ? sql`AND c.id = ${category}` : sql``;
-    const statusFilter = status ? sql`AND m.status_id = ${status}` : sql``;
+
+    const defaultStatusId = String(
+      (await sql`SELECT id, name FROM statuses ORDER BY "order" LIMIT 1`)[0].id,
+    );
+
+    const statusFilter = status
+      ? sql`AND COALESCE(um.status_id, ${defaultStatusId}) = ${status}`
+      : sql``;
 
     const results = await sql`
-      SELECT DISTINCT 
+      SELECT DISTINCT
         m.id,
         m.name,
         m.description,
         l.name AS level,
         l.color AS "levelColor",
         c.name AS category,
-        m.status_id AS "statusId",
+        COALESCE(um.status_id, ${defaultStatusId}) AS "statusId",
         s.name AS "statusName"
       FROM movements m
       JOIN levels l ON m.level_id = l.id
       JOIN categories c ON m.category_id = c.id
-      JOIN statuses s ON m.status_id = s.id
+      LEFT JOIN users_movements um
+        ON m.id = um.movement_id AND um.user_id = ${userId}
+      LEFT JOIN statuses s ON s.id = COALESCE(um.status_id, ${defaultStatusId})
       WHERE
         (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
         ${levelFilter}
@@ -58,7 +68,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function PATCH(request: Request) {
-  const { id, statusId } = await request.json();
+  const { id: movementId, statusId } = await request.json();
   const url = process.env.POSTGRES_URL;
   if (!url) {
     return Response.json([], {
@@ -69,7 +79,24 @@ export async function PATCH(request: Request) {
 
   try {
     const sql = neon(url);
-    await sql`UPDATE movements SET status_id = ${statusId} WHERE id = ${id}`;
+    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+    await sql`
+      WITH updated AS (
+        UPDATE users_movements
+        SET status_id = ${statusId}
+        WHERE movement_id = ${movementId} AND user_id = ${userId}
+        RETURNING id
+      )
+      INSERT INTO users_movements (id, movement_id, status_id, user_id)
+      SELECT ${crypto.randomUUID()}, ${movementId}, ${statusId}, ${userId}
+      WHERE NOT EXISTS (SELECT 1 FROM updated)`;
+
+    // TODO: Use clearer alternative below after adding unique constraint on (user_id, movement_id)
+    // INSERT INTO users_movements (id, movement_id, status_id, user_id)
+    // VALUES ($uuid, $movementId, $statusId, $userId)
+    // ON CONFLICT (user_id, movement_id)
+    // DO UPDATE SET status_id = EXCLUDED.status_id;
+
     return Response.json(
       { ok: true },
       { status: 200, headers: { "Content-Type": "application/json" } },
@@ -97,8 +124,17 @@ export async function POST(request: Request) {
     const sql = neon(url);
     const statusId =
       await sql`SELECT id FROM statuses ORDER BY "order" LIMIT 1`;
-    await sql`INSERT INTO movements (id, name, description, level_id, category_id, status_id)
-      VALUES (${crypto.randomUUID()}, ${name}, ${description}, ${levelId}, ${categoryId}, ${statusId[0].id})`;
+
+    const movementId = crypto.randomUUID();
+    const insertMovement = sql`INSERT INTO movements (id, name, description, level_id, category_id)
+      VALUES (${movementId}, ${name}, ${description}, ${levelId}, ${categoryId}`;
+
+    const userMovementId = crypto.randomUUID();
+    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+    const insertUserMovement = sql`INSERT INTO users_movements (id, movement_id, status_id, user_id)
+      VALUES (${userMovementId}, ${movementId}, ${statusId[0].id}, ${userId})`;
+
+    await sql.transaction([insertMovement, insertUserMovement]);
 
     return Response.json(
       { ok: true },

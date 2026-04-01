@@ -1,4 +1,4 @@
-import { Movement } from "./glossary/types";
+import { Movement } from "./movements/types";
 
 export type DanceEvent = {
   id: string;

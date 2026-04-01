@@ -4,7 +4,7 @@ import { Button, Field, Input, Label } from "@headlessui/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Movement } from "../glossary/types";
+import { Movement } from "../movements/types";
 import Checkbox from "../ui/checkbox";
 import Modal from "../ui/modal";
 
