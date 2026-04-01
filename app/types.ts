@@ -5,7 +5,7 @@ export type DanceEvent = {
   name: string;
   image: string;
   date: string;
-  rsvp: string;
+  rsvp: boolean | null;
 };
 
 export type Status = {

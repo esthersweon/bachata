@@ -1,18 +1,29 @@
 import { getEvents } from "@/app/lib/events";
 import { getLists } from "@/app/lib/lists";
-import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
+import {
+  CakeIcon,
+  CheckCircleIcon,
+  QuestionMarkCircleIcon,
+  XMarkIcon,
+} from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 import AddListModal from "./dashboard/addListModal";
 import MyBadges from "./dashboard/myBadges";
 import MyProgress from "./dashboard/myProgress";
 import { formatDate } from "./helpers";
 
-export default async function Profile() {
+const rsvpToLabel = {
+  true: { label: <CheckCircleIcon className="size-3" />, color: "green" },
+  false: { label: <XMarkIcon className="size-3" />, color: "red" },
+  null: { label: <QuestionMarkCircleIcon className="size-3" />, color: "gray" },
+};
+
+export default async function Dashboard() {
   const lists = await getLists();
   const events = await getEvents();
 
   return (
-    <main className="flex flex-col gap-8">
+    <main className="flex flex-col gap-4">
       <Suspense fallback={<div>Loading profile...</div>}>
         <div className="flex justify-center items-center gap-4">
           <img
@@ -29,21 +40,21 @@ export default async function Profile() {
               </div>
             </div>
 
-            <div className="flex gap-2">
+            {/* <div className="flex gap-2">
               <div>
                 <span className="cursor-pointer font-bold">87</span> Followers
               </div>
               <div>
                 <span className="cursor-pointer font-bold">124</span> Following
               </div>
-            </div>
+            </div> */}
 
             <div className="flex items-center gap-2 text-xs">
               <CakeIcon className="size-3" />
               <div>Dancing since Oct 2025</div>
             </div>
 
-            <div className="flex gap-2 justify-center">
+            {/* <div className="flex gap-2 justify-center">
               <button className="flex items-center gap-2">
                 <UserIcon className="size-4" />
                 <div>Follow</div>
@@ -52,7 +63,7 @@ export default async function Profile() {
                 <InboxIcon className="size-4" />
                 <div>Message</div>
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -61,11 +72,11 @@ export default async function Profile() {
 
           <div className="flex flex-wrap gap-2 w-full">
             <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
-              <h2>Upcoming Events</h2>
+              <h2>Upcoming events</h2>
               <ul className="flex flex-col gap-2">
                 {events
                   .filter(({ date }) => new Date(date) >= new Date())
-                  .map(({ name, image, date }) => (
+                  .map(({ name, image, date, rsvp }) => (
                     <li
                       key={name}
                       className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
@@ -75,19 +86,37 @@ export default async function Profile() {
                         alt={name}
                         className="size-10 object-cover"
                       />
-                      <div>
-                        <h4>{name}</h4>
+
+                      <div className="flex-1 flex flex-col gap-1">
+                        <div className="flex items-center gap-2 justify-between">
+                          <h4>{name}</h4>
+                          <div
+                            className="p-1 rounded-full text-nowrap"
+                            style={{
+                              backgroundColor:
+                                rsvpToLabel[
+                                  (rsvp ?? "null") as keyof typeof rsvpToLabel
+                                ].color,
+                            }}
+                          >
+                            {
+                              rsvpToLabel[
+                                (rsvp ?? "null") as keyof typeof rsvpToLabel
+                              ].label
+                            }
+                          </div>
+                        </div>
                         <p>{formatDate(date)}</p>
                       </div>
                     </li>
                   ))}
               </ul>
 
-              <h2>Past Events</h2>
+              <h2>Past events</h2>
               <ul className="flex flex-col gap-2">
                 {events
                   .filter(({ date }) => new Date(date) < new Date())
-                  .map(({ name, image, date }) => (
+                  .map(({ name, image, date, rsvp }) => (
                     <li
                       key={name}
                       className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
@@ -97,8 +126,25 @@ export default async function Profile() {
                         alt={name}
                         className="size-10 object-cover"
                       />
-                      <div>
-                        <h4>{name}</h4>
+                      <div className="flex-1 flex flex-col gap-1">
+                        <div className="flex items-center gap-2 justify-between">
+                          <h4>{name}</h4>
+                          <div
+                            className="p-1 rounded-full text-nowrap"
+                            style={{
+                              backgroundColor:
+                                rsvpToLabel[
+                                  (rsvp ?? "false") as keyof typeof rsvpToLabel
+                                ].color,
+                            }}
+                          >
+                            {
+                              rsvpToLabel[
+                                (rsvp ?? "false") as keyof typeof rsvpToLabel
+                              ].label
+                            }
+                          </div>
+                        </div>
                         <p>{formatDate(date)}</p>
                       </div>
                     </li>

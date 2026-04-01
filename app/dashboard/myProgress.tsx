@@ -85,7 +85,7 @@ export default function MyProgress() {
                   className="font-bold underline hover:cursor-pointer"
                   onClick={() =>
                     router.push(
-                      `${process.env.NEXT_PUBLIC_DOMAIN}/glossary?status=${id}`,
+                      `${process.env.NEXT_PUBLIC_DOMAIN}/movements?status=${id}`,
                     )
                   }
                 >

@@ -73,13 +73,14 @@ export default function AddMovementModal({
       body: JSON.stringify({ name, description, levelId, categoryId }),
     })
       .then((response: Response) => response.json())
-      .then(({ ok }) => {
+      .then(({ ok, error }) => {
         if (ok) {
           router.refresh();
           setShowModal(false);
-        } else {
-          setError("Failed to add movement. Please try again.");
         }
+        setError(
+          error?.message ? `Failed to add movement: ${error.message}` : null,
+        );
       })
       .catch((error: Error) =>
         setError(`Failed to add movement: ${error.message}`),

@@ -127,7 +127,7 @@ export async function POST(request: Request) {
 
     const movementId = crypto.randomUUID();
     const insertMovement = sql`INSERT INTO movements (id, name, description, level_id, category_id)
-      VALUES (${movementId}, ${name}, ${description}, ${levelId}, ${categoryId}`;
+      VALUES (${movementId}, ${name}, ${description}, ${levelId}, ${categoryId})`;
 
     const userMovementId = crypto.randomUUID();
     const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
@@ -142,7 +142,7 @@ export async function POST(request: Request) {
     );
   } catch (error: unknown) {
     return Response.json(
-      { error: `Failed to add movement: ${(error as Error).message}` },
+      { ok: false, error: (error as Error).message },
       { status: 500, headers: { "Content-Type": "application/json" } },
     );
   }
