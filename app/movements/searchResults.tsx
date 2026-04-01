@@ -1,20 +1,25 @@
+import { Status } from "../types";
 import { categoriesToIcons } from "./constants";
 import MovementMenu from "./movementMenu";
 import type { Movement } from "./types";
 
 export const dynamic = "force-dynamic";
 
-async function SearchResults({
-  q,
-  level,
-  category,
-  status,
-}: {
+export type SearchResultsProps = {
   q: string;
   level: string;
   category: string;
   status: string;
-}) {
+  statuses: Status[];
+};
+
+export default async function SearchResults({
+  q,
+  level,
+  category,
+  status,
+  statuses,
+}: SearchResultsProps) {
   const movements: Movement[] = await (
     await fetch(
       `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}&status=${status}`,
@@ -53,7 +58,7 @@ async function SearchResults({
                 >
                   {Icon && <Icon className="size-4" />}
                 </div>
-                <MovementMenu {...movement} />
+                <MovementMenu {...movement} statuses={statuses} />
               </div>
             </div>
           </li>
@@ -62,5 +67,3 @@ async function SearchResults({
     </ul>
   );
 }
-
-export default SearchResults;

@@ -63,6 +63,7 @@ export default async function Glossary({
               level={level}
               category={category}
               status={status}
+              statuses={statuses}
             />
           </div>
         </Suspense>

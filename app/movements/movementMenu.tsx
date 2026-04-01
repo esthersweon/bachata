@@ -15,18 +15,18 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Status } from "../types";
 import Modal from "../ui/modal";
 import { Movement } from "./types";
 
-export default function MovementMenu(movement: Movement) {
+export default function MovementMenu({
+  statuses,
+  ...movement
+}: Movement & { statuses: Status[] }) {
   const router = useRouter();
 
-  const [hasFetchedStatuses, setHasFetchedStatuses] = useState(false);
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-
-  const [statuses, setStatuses] = useState<Status[]>([]);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
   const [selectedStatusId, setSelectedStatusId] = useState<string | null>(
     movement.statusId,
   );
@@ -59,14 +59,6 @@ export default function MovementMenu(movement: Movement) {
 
     setError(response?.error ?? null);
   };
-
-  useEffect(() => {
-    if (hasFetchedStatuses) return;
-    setHasFetchedStatuses(true);
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`)
-      .then((response: Response) => response.json())
-      .then((data: Status[]) => setStatuses(data));
-  }, []);
 
   return (
     <>
