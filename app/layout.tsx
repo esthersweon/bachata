@@ -1,4 +1,5 @@
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import "./globals.css";
 import LogoutButton from "./ui/logoutButton";
@@ -22,6 +23,7 @@ export default function RootLayout({
         </SideNav>
         <div className="w-full p-4 overflow-y-scroll">{children}</div>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
