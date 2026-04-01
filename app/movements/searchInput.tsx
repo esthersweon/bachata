@@ -30,6 +30,7 @@ export default function SearchInput() {
         type="text"
         placeholder="Search movements"
         onChange={(e) => updateQuery("q", e.target.value)}
+        defaultValue={searchParams.get("q") ?? ""}
       />
     </div>
   );
