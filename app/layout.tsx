@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import "./globals.css";
 import LogoutButton from "./ui/logoutButton";
@@ -20,6 +21,7 @@ export default function RootLayout({
           <LogoutButton />
         </SideNav>
         <div className="w-full p-4 overflow-y-scroll">{children}</div>
+        <Analytics />
       </body>
     </html>
   );
