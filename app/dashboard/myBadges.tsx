@@ -5,7 +5,7 @@ import { Movement } from "../movements/types";
 export default async function MyBadges() {
   const events = await getEvents();
   const eventsAttended = events.filter(
-    ({ date, rsvp }) => new Date(date) >= new Date() && !!rsvp,
+    ({ date, rsvp }) => new Date() >= new Date(date) && !!rsvp,
   ).length;
 
   const movements = (await (

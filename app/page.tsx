@@ -1,5 +1,6 @@
 import { getEvents } from "@/app/lib/events";
 import { getLists } from "@/app/lib/lists";
+import { Menu, MenuButton, MenuItems } from "@headlessui/react";
 import {
   CakeIcon,
   CheckCircleIcon,
@@ -10,6 +11,7 @@ import { Suspense } from "react";
 import AddListModal from "./dashboard/addListModal";
 import MyBadges from "./dashboard/myBadges";
 import MyProgress from "./dashboard/myProgress";
+import RSVPButton from "./dashboard/rsvpButton";
 import { formatDate } from "./helpers";
 
 const rsvpToLabel = {
@@ -76,7 +78,7 @@ export default async function Dashboard() {
               <ul className="flex flex-col gap-2">
                 {events
                   .filter(({ date }) => new Date(date) >= new Date())
-                  .map(({ name, image, date, rsvp }) => (
+                  .map(({ id, name, image, date, rsvp }) => (
                     <li
                       key={name}
                       className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
@@ -88,23 +90,39 @@ export default async function Dashboard() {
                       />
 
                       <div className="flex-1 flex flex-col gap-1">
-                        <div className="flex items-center gap-2 justify-between">
+                        <div className="relative flex items-center gap-2 justify-between">
                           <h4>{name}</h4>
-                          <div
-                            className="p-1 rounded-full text-nowrap"
-                            style={{
-                              backgroundColor:
-                                rsvpToLabel[
-                                  (rsvp ?? "null") as keyof typeof rsvpToLabel
-                                ].color,
-                            }}
-                          >
-                            {
-                              rsvpToLabel[
-                                (rsvp ?? "null") as keyof typeof rsvpToLabel
-                              ].label
-                            }
-                          </div>
+                          <Menu>
+                            <div className="relative">
+                              <MenuButton
+                                as="div"
+                                className="p-1 rounded-full cursor-pointer hover:text-primary-text/50"
+                                style={{
+                                  backgroundColor:
+                                    rsvpToLabel[
+                                      (rsvp ??
+                                        "null") as keyof typeof rsvpToLabel
+                                    ].color,
+                                }}
+                              >
+                                {
+                                  rsvpToLabel[
+                                    (rsvp ?? "null") as keyof typeof rsvpToLabel
+                                  ].label
+                                }
+                              </MenuButton>
+                              <MenuItems className="flex flex-col absolute top-0 left-8 bg-secondary-bg! rounded-lg overflow-hidden border border-tertiary-bg outline-none z-10">
+                                {["Attending", "Not Attending"].map((label) => (
+                                  <RSVPButton
+                                    key={label}
+                                    eventId={id}
+                                    label={label}
+                                    rsvp={rsvp}
+                                  />
+                                ))}
+                              </MenuItems>
+                            </div>
+                          </Menu>
                         </div>
                         <p>{formatDate(date)}</p>
                       </div>
@@ -116,7 +134,7 @@ export default async function Dashboard() {
               <ul className="flex flex-col gap-2">
                 {events
                   .filter(({ date }) => new Date(date) < new Date())
-                  .map(({ name, image, date, rsvp }) => (
+                  .map(({ id, name, image, date, rsvp }) => (
                     <li
                       key={name}
                       className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
@@ -127,23 +145,39 @@ export default async function Dashboard() {
                         className="size-10 object-cover"
                       />
                       <div className="flex-1 flex flex-col gap-1">
-                        <div className="flex items-center gap-2 justify-between">
+                        <div className="relative flex items-center gap-2 justify-between">
                           <h4>{name}</h4>
-                          <div
-                            className="p-1 rounded-full text-nowrap"
-                            style={{
-                              backgroundColor:
-                                rsvpToLabel[
-                                  (rsvp ?? "false") as keyof typeof rsvpToLabel
-                                ].color,
-                            }}
-                          >
-                            {
-                              rsvpToLabel[
-                                (rsvp ?? "false") as keyof typeof rsvpToLabel
-                              ].label
-                            }
-                          </div>
+                          <Menu>
+                            <div className="relative">
+                              <MenuButton
+                                as="div"
+                                className="p-1 rounded-full cursor-pointer hover:text-primary-text/50"
+                                style={{
+                                  backgroundColor:
+                                    rsvpToLabel[
+                                      (rsvp ??
+                                        "null") as keyof typeof rsvpToLabel
+                                    ].color,
+                                }}
+                              >
+                                {
+                                  rsvpToLabel[
+                                    (rsvp ?? "null") as keyof typeof rsvpToLabel
+                                  ].label
+                                }
+                              </MenuButton>
+                              <MenuItems className="flex flex-col absolute top-0 left-8 bg-secondary-bg! rounded-lg overflow-hidden border border-tertiary-bg outline-none z-10">
+                                {["Attending", "Not Attending"].map((label) => (
+                                  <RSVPButton
+                                    key={label}
+                                    eventId={id}
+                                    label={label}
+                                    rsvp={rsvp}
+                                  />
+                                ))}
+                              </MenuItems>
+                            </div>
+                          </Menu>
                         </div>
                         <p>{formatDate(date)}</p>
                       </div>
