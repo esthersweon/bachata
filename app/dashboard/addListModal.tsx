@@ -47,13 +47,9 @@ export default function AddListModal() {
 
   return (
     <>
-      <button
-        className="flex items-center gap-1"
-        onClick={() => setShowModal(true)}
-      >
+      <Button className="rounded-full!" onClick={() => setShowModal(true)}>
         <PlusIcon className="size-4" />
-        <div>Add List</div>
-      </button>
+      </Button>
       {showModal && (
         <Modal title="Add List" onClose={() => setShowModal(false)}>
           <div className="flex flex-col gap-4">

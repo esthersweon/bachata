@@ -9,6 +9,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 import AddListModal from "./dashboard/addListModal";
+import List from "./dashboard/list";
 import MyBadges from "./dashboard/myBadges";
 import MyProgress from "./dashboard/myProgress";
 import RSVPButton from "./dashboard/rsvpButton";
@@ -197,19 +198,7 @@ export default async function Dashboard() {
               </div>
               <div className="flex flex-wrap gap-2">
                 {lists.map(({ id, name, movements }) => (
-                  <div
-                    key={id}
-                    className="flex-1 flex flex-col gap-2 bg-primary-bg p-4 rounded-lg basis-1/3"
-                  >
-                    <h3 key={id} className="text-nowrap">
-                      {name}
-                    </h3>
-                    <ul>
-                      {movements.map(({ id: movementId, name }) => (
-                        <li key={movementId}>{name}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  <List key={id} id={id} name={name} movements={movements} />
                 ))}
               </div>
             </div>

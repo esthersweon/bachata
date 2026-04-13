@@ -62,7 +62,7 @@ h6 {
 }
 
 button {
-  @apply rounded-lg p-2 bg-info text-primary-text text-nowrap outline-none border-none;
+  @apply rounded-lg p-2 bg-info text-primary-text text-nowrap outline-none border-none hover:cursor-pointer;
 }
 
 input,
