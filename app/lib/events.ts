@@ -12,7 +12,14 @@ export async function getEventsWithStatus(): Promise<{
 
   try {
     const sql = neon(url);
-    const rows = await sql`SELECT * FROM events ORDER BY date DESC`;
+    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+    const rows =
+      await sql`SELECT e.id, e.name, e.date, e.image, COALESCE(ue.rsvp, NULL) AS rsvp
+      FROM events e
+      LEFT JOIN users_events ue
+      ON e.id = ue.event_id
+      WHERE COALESCE(ue.user_id, ${userId}) = ${userId}
+      ORDER BY e.date DESC`;
     return { status: 200, events: rows as DanceEvent[] };
   } catch {
     return { status: 500, events: [] };
