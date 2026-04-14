@@ -13,7 +13,7 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ListMovement } from "../movements/types";
 import Checkbox from "../ui/checkbox";
 import Modal from "../ui/modal";
@@ -34,6 +34,13 @@ export default function List({
 
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
+
+  const percentCompleted = useMemo(() => {
+    return (
+      (movements.filter(({ checked }) => checked).length / movements.length) *
+      100
+    );
+  }, [movements]);
 
   const checkListMovement = async ({
     listId,
@@ -81,7 +88,8 @@ export default function List({
         <div className="flex flex-col">
           <h3 className="mb-0! text-nowrap">{name}</h3>
           <div className="text-xs text-primary-text/50">
-            ({movements.length} movements)
+            {movements.length} movements • {percentCompleted.toFixed(0)}%
+            completed
           </div>
         </div>
         <Menu>
