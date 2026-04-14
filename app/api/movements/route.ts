@@ -34,27 +34,38 @@ export async function GET(request: NextRequest) {
       : sql``;
 
     const results = await sql`
-      SELECT DISTINCT
-        m.id,
-        m.name,
-        m.description,
-        l.name AS level,
-        l.color AS "levelColor",
-        c.name AS category,
-        COALESCE(um.status_id, ${defaultStatusId}) AS "statusId",
-        s.name AS "statusName"
-      FROM movements m
-      JOIN levels l ON m.level_id = l.id
-      JOIN categories c ON m.category_id = c.id
-      LEFT JOIN users_movements um
-        ON m.id = um.movement_id AND um.user_id = ${userId}
-      LEFT JOIN statuses s ON s.id = COALESCE(um.status_id, ${defaultStatusId})
-      WHERE
-        (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
-        ${levelFilter}
-        ${categoryFilter}
-        ${statusFilter}
-      ORDER BY m.name`;
+      SELECT
+        id,
+        name,
+        description,
+        level,
+        "levelColor",
+        category,
+        "statusId",
+        "statusName"
+      FROM (
+        SELECT DISTINCT
+          m.id,
+          m.name,
+          m.description,
+          l.name AS level,
+          l.color AS "levelColor",
+          c.name AS category,
+          COALESCE(um.status_id, ${defaultStatusId}) AS "statusId",
+          s.name AS "statusName"
+        FROM movements m
+        JOIN levels l ON m.level_id = l.id
+        JOIN categories c ON m.category_id = c.id
+        LEFT JOIN users_movements um
+          ON m.id = um.movement_id AND um.user_id = ${userId}
+        LEFT JOIN statuses s ON s.id = COALESCE(um.status_id, ${defaultStatusId})
+        WHERE
+          (m.name ILIKE ${qPattern} OR m.description ILIKE ${qPattern})
+          ${levelFilter}
+          ${categoryFilter}
+          ${statusFilter}
+      ) AS movement_rows
+      ORDER BY LOWER(name)`;
 
     return Response.json(results ?? [], {
       headers: { "Content-Type": "application/json" },
