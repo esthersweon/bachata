@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Status } from "../types";
 import { categoriesToIcons } from "./constants";
 import MovementMenu from "./movementMenu";
@@ -35,37 +36,40 @@ export default async function SearchResults({
       {movements.map((movement) => {
         const Icon = categoriesToIcons[movement.category] ?? null;
         return (
-          <li
-            key={movement.id}
+          <Link
             className="flex-1 md:grow-0 bg-secondary-bg p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-50 max-w-full"
+            href={`${process.env.NEXT_PUBLIC_DOMAIN}/movements/${movement.id}`}
+            key={movement.id}
           >
-            <div
-              className={`flex flex-wrap justify-between items-center gap-3 cursor-pointer ${movement.statusName === "Mastered" ? "text-primary-text/40" : "text-primary-text"}`}
-            >
+            <li>
               <div
-                title={`${movement.category} (${movement.level})`}
-                className="text-xs flex items-center p-1.5 rounded-full"
-                style={{ backgroundColor: movement.levelColor }}
+                className={`flex flex-wrap justify-between items-center gap-3 cursor-pointer ${movement.statusName === "Mastered" ? "text-primary-text/40" : "text-primary-text"}`}
               >
-                {Icon && <Icon className="size-4" />}
-              </div>
-              <div>
-                <h4 className="text-nowrap flex items-center gap-2">
-                  <span>{movement.name}</span>
-                </h4>
-                <p className="text-xs font-light max-w-50">
-                  {movement.description}
-                </p>
-              </div>
-              <div className="flex flex-1 justify-end gap-2 items-center">
-                <div className="text-xs text-nowrap bg-tertiary-bg! px-2 py-1 rounded-full hidden md:block">
-                  {movement.statusName}
+                <div
+                  title={`${movement.category} (${movement.level})`}
+                  className="text-xs flex items-center p-1.5 rounded-full"
+                  style={{ backgroundColor: movement.levelColor }}
+                >
+                  {Icon && <Icon className="size-4" />}
                 </div>
+                <div>
+                  <h4 className="text-nowrap flex items-center gap-2">
+                    <span>{movement.name}</span>
+                  </h4>
+                  <p className="text-xs font-light max-w-50">
+                    {movement.description}
+                  </p>
+                </div>
+                <div className="flex flex-1 justify-end gap-2 items-center">
+                  <div className="text-xs text-nowrap bg-tertiary-bg! px-2 py-1 rounded-full hidden md:block">
+                    {movement.statusName}
+                  </div>
 
-                <MovementMenu {...movement} statuses={statuses} />
+                  <MovementMenu {...movement} statuses={statuses} />
+                </div>
               </div>
-            </div>
-          </li>
+            </li>
+          </Link>
         );
       })}
     </ul>

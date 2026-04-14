@@ -66,7 +66,10 @@ export default function MovementMenu({
   return (
     <>
       <Menu>
-        <MenuButton className="bg-secondary-bg! p-0! hover:text-gray-500!">
+        <MenuButton
+          className="bg-secondary-bg! p-0! hover:text-gray-500!"
+          onClick={(e) => e.preventDefault()}
+        >
           <EllipsisVerticalIcon className="size-4" />
         </MenuButton>
         <MenuItems
