@@ -1,7 +1,8 @@
 import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function PATCH(request: NextRequest) {
+  const { movementId, listId, checked } = await request.json();
   const url = process.env.POSTGRES_URL;
   if (!url) {
     return Response.json([], {
@@ -9,19 +10,20 @@ export async function GET(request: NextRequest) {
       headers: { "Content-Type": "application/json" },
     });
   }
-
   try {
     const sql = neon(url);
-    // const result = await sql`SELECT id, name FROM lists ORDER BY name`;
-
-    // return Response.json(result, {
-    //   headers: { "Content-Type": "application/json" },
-    // });
-  } catch {
-    // return Response.json([], {
-    //   status: 500,
-    //   headers: { "Content-Type": "application/json" },
-    // });
+    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+    await sql`UPDATE lists_movements SET checked = ${checked}
+    WHERE movement_id = ${movementId} AND list_id = ${listId} AND user_id = ${userId}`;
+    return Response.json(
+      { ok: true },
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
+  } catch (error: unknown) {
+    return Response.json(
+      { error: `Failed to update list movement: ${(error as Error).message}` },
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
   }
 }
 

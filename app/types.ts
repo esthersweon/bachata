@@ -1,4 +1,4 @@
-import { Movement } from "./movements/types";
+import { ListMovement, Movement } from "./movements/types";
 
 export type DanceEvent = {
   id: string;
@@ -17,7 +17,7 @@ export type Status = {
 export type List = {
   id: string;
   name: string;
-  movements: Movement[];
+  movements: ListMovement[];
 };
 
 export type User = {

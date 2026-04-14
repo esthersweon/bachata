@@ -1,5 +1,6 @@
 import { StarIcon } from "@heroicons/react/24/outline";
 import { getEvents } from "../lib/events";
+import { getLists } from "../lib/lists";
 import { Movement } from "../movements/types";
 
 export default async function MyBadges() {
@@ -13,6 +14,11 @@ export default async function MyBadges() {
   ).json()) as Movement[];
   const movementsMastered = movements.filter(
     ({ statusName }) => statusName === "Mastered",
+  ).length;
+
+  const listsCreated = (await getLists()).length;
+  const listsCompleted = (await getLists()).filter(({ movements }) =>
+    movements.every(({ checked }) => checked),
   ).length;
 
   return (
@@ -35,6 +41,18 @@ export default async function MyBadges() {
         <StarIcon className="size-4" />
         <div>Mastered {movementsMastered} moves</div>
       </li>
+      {listsCreated > 0 && (
+        <li
+          className="flex gap-2 items-center rounded-full p-2 px-4"
+          style={{ backgroundColor: "orange" }}
+        >
+          <StarIcon className="size-4" />
+          <div>
+            Created {listsCreated} lists{" "}
+            {listsCompleted > 0 && `(${listsCompleted} completed)`}
+          </div>
+        </li>
+      )}
     </ul>
   );
 }

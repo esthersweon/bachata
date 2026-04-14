@@ -21,6 +21,10 @@ export type Movement = {
   statusName: string;
 };
 
+export type ListMovement = Movement & {
+  checked: boolean;
+};
+
 export type SearchControls = {
   tabIndex: number;
   searchTerm: string;

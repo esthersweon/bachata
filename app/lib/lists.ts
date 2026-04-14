@@ -12,14 +12,16 @@ export async function getListsWithStatus(): Promise<{
 
   try {
     const sql = neon(url);
+    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
     const lists = await sql`SELECT id, name FROM lists ORDER BY name`;
     const resultWithMovements = await Promise.all(
       lists.map(async (list: Record<string, any>) => {
         const listId = String(list.id);
         const listName = String(list.name);
-        const movements = await sql`SELECT m.id, m.name FROM movements m
+        const movements =
+          await sql`SELECT m.id, m.name, lm.checked FROM movements m
           JOIN lists_movements lm ON m.id = lm.movement_id
-          WHERE lm.list_id = ${listId}`;
+          WHERE lm.list_id = ${listId} AND lm.user_id = ${userId}`;
         return { id: listId, name: listName, movements };
       }),
     );

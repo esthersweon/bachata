@@ -29,81 +29,77 @@ export default function MyProgress() {
 
   return (
     <div className="flex flex-col">
-      <h3>My Progress</h3>
-      <div className="flex flex-wrap gap-2">
-        <PieChart
-          style={{
-            flex: 1,
-            width: "100% !important",
-            minWidth: "200px",
-            maxWidth: "350px",
-            aspectRatio: 1,
+      <PieChart
+        style={{
+          flex: 1,
+          width: "100% !important",
+          minWidth: "200px",
+          aspectRatio: 1,
+        }}
+        responsive
+      >
+        <Pie
+          data={statuses.map(({ id, name, movements }) => ({
+            id,
+            name,
+            value: movements.length,
+          }))}
+          labelLine={false}
+          label={({
+            cx,
+            cy,
+            midAngle,
+            innerRadius,
+            outerRadius,
+            percent,
+            name,
+            id,
+          }: PieLabelRenderProps) => {
+            if (
+              !percent ||
+              cx == null ||
+              cy == null ||
+              innerRadius == null ||
+              outerRadius == null
+            )
+              return null;
+
+            const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+
+            const ncx = Number(cx);
+            const x = ncx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
+
+            const ncy = Number(cy);
+            const y = ncy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
+
+            return (
+              <text
+                x={x}
+                y={y}
+                fill="white"
+                textAnchor={x > ncx ? "start" : "end"}
+                dominantBaseline="central"
+                className="font-bold underline hover:cursor-pointer"
+                onClick={() =>
+                  router.push(
+                    `${process.env.NEXT_PUBLIC_DOMAIN}/movements?status=${id}`,
+                  )
+                }
+              >
+                {name}: {`${((percent ?? 1) * 100).toFixed(0)}%`}
+              </text>
+            );
           }}
-          responsive
-        >
-          <Pie
-            data={statuses.map(({ id, name, movements }) => ({
-              id,
-              name,
-              value: movements.length,
-            }))}
-            labelLine={false}
-            label={({
-              cx,
-              cy,
-              midAngle,
-              innerRadius,
-              outerRadius,
-              percent,
-              name,
-              id,
-            }: PieLabelRenderProps) => {
-              if (
-                !percent ||
-                cx == null ||
-                cy == null ||
-                innerRadius == null ||
-                outerRadius == null
-              )
-                return null;
-
-              const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
-
-              const ncx = Number(cx);
-              const x = ncx + radius * Math.cos(-(midAngle ?? 0) * RADIAN);
-
-              const ncy = Number(cy);
-              const y = ncy + radius * Math.sin(-(midAngle ?? 0) * RADIAN);
-
-              return (
-                <text
-                  x={x}
-                  y={y}
-                  fill="white"
-                  textAnchor={x > ncx ? "start" : "end"}
-                  dominantBaseline="central"
-                  className="font-bold underline hover:cursor-pointer"
-                  onClick={() =>
-                    router.push(
-                      `${process.env.NEXT_PUBLIC_DOMAIN}/movements?status=${id}`,
-                    )
-                  }
-                >
-                  {name}: {`${((percent ?? 1) * 100).toFixed(0)}%`}
-                </text>
-              );
-            }}
-            fill="#8884d8"
-            dataKey="value"
-            isAnimationActive={true}
-            shape={(props: PieSectorShapeProps) => {
-              return (
-                <Sector {...props} fill={COLORS[props.index % COLORS.length]} />
-              );
-            }}
-          />
-        </PieChart>
-      </div>
+          fill="#8884d8"
+          dataKey="value"
+          isAnimationActive={true}
+          shape={(props: PieSectorShapeProps) => {
+            return (
+              <Sector {...props} fill={COLORS[props.index % COLORS.length]} />
+            );
+          }}
+        />
+      </PieChart>
     </div>
   );
 }
