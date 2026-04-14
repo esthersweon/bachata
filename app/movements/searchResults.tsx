@@ -40,24 +40,28 @@ export default async function SearchResults({
             className="flex-1 md:grow-0 bg-secondary-bg p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-50 max-w-full"
           >
             <div
-              className={`flex flex-wrap justify-between items-center gap-2 cursor-pointer ${movement.statusName === "Mastered" ? "text-primary-text/40" : "text-primary-text"}`}
+              className={`flex flex-wrap justify-between items-center gap-3 cursor-pointer ${movement.statusName === "Mastered" ? "text-primary-text/40" : "text-primary-text"}`}
             >
+              <div
+                title={`${movement.category} (${movement.level})`}
+                className="text-xs flex items-center p-1.5 rounded-full"
+                style={{ backgroundColor: movement.levelColor }}
+              >
+                {Icon && <Icon className="size-4" />}
+              </div>
               <div>
-                <h4 className="text-nowrap">{movement.name}</h4>
-                <p className="text-xs font-light">{movement.description}</p>
+                <h4 className="text-nowrap flex items-center gap-2">
+                  <span>{movement.name}</span>
+                </h4>
+                <p className="text-xs font-light max-w-50">
+                  {movement.description}
+                </p>
               </div>
               <div className="flex flex-1 justify-end gap-2 items-center">
                 <div className="text-xs text-nowrap bg-tertiary-bg! px-2 py-1 rounded-full hidden md:block">
                   {movement.statusName}
                 </div>
 
-                <div
-                  title={`${movement.category} (${movement.level})`}
-                  className="text-xs flex items-center p-1.5 rounded-full"
-                  style={{ backgroundColor: movement.levelColor }}
-                >
-                  {Icon && <Icon className="size-4" />}
-                </div>
                 <MovementMenu {...movement} statuses={statuses} />
               </div>
             </div>
