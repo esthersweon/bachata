@@ -73,8 +73,24 @@ export default async function Dashboard() {
         <div className="flex flex-col items-center gap-4">
           <MyBadges />
 
-          <div className="flex flex-wrap gap-2 w-full">
-            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
+          <div className="flex flex-wrap gap-2 w-full items-start">
+            <div className="flex flex-col gap-2 flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
+              <MyProgress />
+            </div>
+
+            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
+              <div className="flex items-center gap-2 justify-between">
+                <h2>My Lists</h2>
+                <AddListModal />
+              </div>
+              <div className="flex flex-col gap-2">
+                {lists.map(({ id, name, movements }) => (
+                  <List key={id} id={id} name={name} movements={movements} />
+                ))}
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
               <h2>Upcoming events</h2>
               <ul className="flex flex-col gap-2">
                 {events
@@ -195,22 +211,6 @@ export default async function Dashboard() {
                     </li>
                   ))}
               </ul>
-            </div>
-
-            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/4*100%-0.5rem)] max-w-full">
-              <MyProgress />
-            </div>
-
-            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/2*100%-0.5rem)] max-w-full">
-              <div className="flex items-center gap-2 justify-between">
-                <h2>My Lists</h2>
-                <AddListModal />
-              </div>
-              <div className="flex flex-wrap gap-2">
-                {lists.map(({ id, name, movements }) => (
-                  <List key={id} id={id} name={name} movements={movements} />
-                ))}
-              </div>
             </div>
           </div>
         </div>
