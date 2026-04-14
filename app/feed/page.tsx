@@ -1,14 +1,9 @@
 import { getEvents } from "@/app/lib/events";
 import { Suspense } from "react";
 import { formatDate } from "../helpers";
+import { rsvpToLabel } from "../page";
 import ActivitiesFeed, { activities } from "./activitiesFeed";
 import UserRecommendations from "./userRecommendations";
-
-const rsvpToLabel = {
-  true: { label: "Attending", color: "green" },
-  false: { label: "Not attending", color: "red" },
-  null: { label: "Undecided", color: "gray" },
-};
 
 export default async function Home() {
   const events = await getEvents();
@@ -41,12 +36,12 @@ export default async function Home() {
                               (event.rsvp ?? "null") as keyof typeof rsvpToLabel
                             ].color,
                         }}
-                        className="px-2 py-1 rounded-full"
+                        className="p-1 rounded-full"
                       >
                         {
                           rsvpToLabel[
                             (event.rsvp ?? "null") as keyof typeof rsvpToLabel
-                          ].label
+                          ].icon
                         }
                       </div>
                     </div>

@@ -4,6 +4,12 @@ import { MenuItem } from "@headlessui/react";
 import { useRouter } from "next/navigation";
 import { updateRSVP } from "../lib/actions";
 
+const labelToRSVP: Record<string, boolean | null> = {
+  Attending: true,
+  "Not Attending": false,
+  Undecided: null,
+};
+
 export default function RSVPButton({
   eventId,
   label,
@@ -14,9 +20,10 @@ export default function RSVPButton({
   rsvp: boolean | null;
 }) {
   const router = useRouter();
+  const isSelected = rsvp === labelToRSVP[label];
 
   async function handleRSVP() {
-    await updateRSVP(eventId, label === "Attending");
+    await updateRSVP(eventId, labelToRSVP[label] as boolean | null);
     router.refresh();
   }
 
@@ -25,7 +32,7 @@ export default function RSVPButton({
       key={label}
       as="button"
       type="button"
-      className={`text-nowrap cursor-pointer p-2! rounded-none! ${(label === "Attending" && !!rsvp) || (label === "Not Attending" && rsvp === false) ? "bg-tertiary-bg!" : "bg-secondary-bg!"} hover:bg-tertiary-bg!`}
+      className={`text-nowrap cursor-pointer p-2! rounded-none! ${isSelected ? "bg-tertiary-bg!" : "bg-secondary-bg!"} hover:bg-tertiary-bg!`}
       onClick={handleRSVP}
     >
       {label}

@@ -25,7 +25,7 @@ export async function authenticate(
 
 export async function updateRSVP(
   eventId: string,
-  rsvp: boolean,
+  rsvp: boolean | null,
 ): Promise<{ status: 200 | 500; ok: boolean }> {
   const url = process.env.POSTGRES_URL;
   if (!url) return { status: 500, ok: false };
