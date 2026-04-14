@@ -12,6 +12,8 @@ import {
 import {
   CheckIcon,
   EllipsisVerticalIcon,
+  PencilIcon,
+  PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
@@ -26,7 +28,8 @@ export default function MovementMenu({
 }: Movement & { statuses: Status[] }) {
   const router = useRouter();
 
-  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState<boolean>(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] =
+    useState<boolean>(false);
   const [selectedStatusId, setSelectedStatusId] = useState<string | null>(
     movement.statusId,
   );
@@ -68,7 +71,7 @@ export default function MovementMenu({
         </MenuButton>
         <MenuItems
           anchor="bottom"
-          className="z-10 border border-tertiary-bg bg-secondary-bg rounded-sm cursor-pointer"
+          className="z-10 border border-tertiary-bg bg-secondary-bg rounded-sm cursor-pointer outline-none"
         >
           <MenuItem>
             <RadioGroup
@@ -94,6 +97,26 @@ export default function MovementMenu({
                 </Radio>
               ))}
             </RadioGroup>
+          </MenuItem>
+
+          <MenuItem>
+            <div
+              className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
+              onClick={() => {}}
+            >
+              <PlusIcon className="size-4" />
+              <div>Add to List</div>
+            </div>
+          </MenuItem>
+
+          <MenuItem>
+            <div
+              className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
+              onClick={() => {}}
+            >
+              <PencilIcon className="size-4" />
+              <div>Edit</div>
+            </div>
           </MenuItem>
           <MenuItem>
             <div
