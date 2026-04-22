@@ -1,20 +1,18 @@
 import { List } from "@/app/types";
 import { neon } from "@neondatabase/serverless";
 
-export async function getListsWithStatus(): Promise<{
+export async function getListsOfMovements(): Promise<{
   status: 200 | 503 | 500;
   lists: List[];
 }> {
   const url = process.env.POSTGRES_URL;
-  if (!url) {
-    return { status: 503, lists: [] };
-  }
+  if (!url) return { status: 503, lists: [] };
 
   try {
     const sql = neon(url);
     const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
-    const lists = await sql`SELECT id, name FROM lists ORDER BY name`;
-    const resultWithMovements = await Promise.all(
+    const lists = await sql`SELECT id, name FROM lists ORDER BY LOWER(name)`;
+    const listsWithMovements = await Promise.all(
       lists.map(async (list: Record<string, any>) => {
         const listId = String(list.id);
         const listName = String(list.name);
@@ -26,13 +24,13 @@ export async function getListsWithStatus(): Promise<{
       }),
     );
 
-    return { status: 200, lists: resultWithMovements as List[] };
+    return { status: 200, lists: listsWithMovements as List[] };
   } catch (error: unknown) {
     return { status: 500, lists: [] };
   }
 }
 
 export async function getLists(): Promise<List[]> {
-  const { lists } = await getListsWithStatus();
+  const { lists } = await getListsOfMovements();
   return lists;
 }

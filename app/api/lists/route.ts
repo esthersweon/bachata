@@ -1,9 +1,9 @@
-import { getListsWithStatus } from "@/app/lib/lists";
+import { getListsOfMovements } from "@/app/lib/lists";
 import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const { status, lists } = await getListsWithStatus();
+  const { status, lists } = await getListsOfMovements();
   return Response.json(lists, {
     status,
     headers: { "Content-Type": "application/json" },

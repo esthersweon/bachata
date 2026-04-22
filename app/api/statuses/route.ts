@@ -33,6 +33,7 @@ export async function GET(request: NextRequest) {
     );
 
     return Response.json(resultWithMovements, {
+      status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error: unknown) {
