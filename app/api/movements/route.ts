@@ -79,35 +79,58 @@ export async function GET(request: NextRequest) {
   }
 }
 
-export async function PATCH(request: Request) {
-  const { id: movementId, statusId } = await request.json();
+export async function PATCH(request: NextRequest) {
+  const { id: movementId, statusId, description, name } = await request.json();
   const url = process.env.POSTGRES_URL;
-  if (!url) {
+  if (!url)
     return Response.json([], {
       status: 503,
       headers: { "Content-Type": "application/json" },
     });
-  }
 
   try {
     const sql = neon(url);
     const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
-    await sql`
-      WITH updated AS (
-        UPDATE users_movements
-        SET status_id = ${statusId}
-        WHERE movement_id = ${movementId} AND user_id = ${userId}
-        RETURNING id
-      )
-      INSERT INTO users_movements (id, movement_id, status_id, user_id)
-      SELECT ${crypto.randomUUID()}, ${movementId}, ${statusId}, ${userId}
-      WHERE NOT EXISTS (SELECT 1 FROM updated)`;
 
-    // TODO: Use clearer alternative below after adding unique constraint on (user_id, movement_id)
-    // INSERT INTO users_movements (id, movement_id, status_id, user_id)
-    // VALUES ($uuid, $movementId, $statusId, $userId)
-    // ON CONFLICT (user_id, movement_id)
-    // DO UPDATE SET status_id = EXCLUDED.status_id;
+    const defaultStatusId = String(
+      (await sql`SELECT id FROM statuses ORDER BY "order" LIMIT 1`)[0].id,
+    );
+    const patchStatus = statusId != null;
+
+    const updateStatus = sql`
+      INSERT INTO users_movements (id, movement_id, status_id, user_id)
+      VALUES (
+        ${crypto.randomUUID()},
+        ${movementId},
+        ${patchStatus ? statusId : defaultStatusId},
+        ${userId}
+      )
+      ON CONFLICT (user_id, movement_id)
+      DO UPDATE SET
+        status_id = CASE
+          WHEN ${patchStatus} THEN EXCLUDED.status_id
+          ELSE users_movements.status_id
+        END;`;
+
+    const updateName = sql`
+      UPDATE movements
+      SET name = ${name}
+      WHERE id = ${movementId}
+    `;
+
+    const updateDescription = sql`
+      UPDATE movements
+      SET description = ${description}
+      WHERE id = ${movementId}
+    `;
+
+    await sql.transaction(
+      [
+        updateStatus,
+        description !== undefined ? updateDescription : null,
+        name !== undefined ? updateName : null,
+      ].filter((transaction) => transaction !== null),
+    );
 
     return Response.json(
       { ok: true },

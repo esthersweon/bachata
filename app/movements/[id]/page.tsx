@@ -12,6 +12,7 @@ import {
   MenuItems,
   Radio,
   RadioGroup,
+  Textarea,
 } from "@headlessui/react";
 import {
   ArrowLeftIcon,
@@ -52,9 +53,10 @@ export default function MovementPage({
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [lists, setLists] = useState<ListType[]>([]);
 
-  const [description, setDescription] = useState<string | null>(
-    movement?.description ?? null,
-  );
+  const [name, setName] = useState<string>("");
+  const [isEditingName, setIsEditingName] = useState<boolean>(false);
+
+  const [description, setDescription] = useState<string>("");
   const [isEditingDescription, setIsEditingDescription] =
     useState<boolean>(false);
 
@@ -81,6 +83,20 @@ export default function MovementPage({
     ).json();
     if (response.ok) router.refresh();
 
+    setError(response?.error ?? null);
+  };
+
+  const updateName = async (newName: string) => {
+    const response = await (
+      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
+        method: "PATCH",
+        body: JSON.stringify({ id, name: newName }),
+      })
+    ).json();
+    if (response.ok) {
+      setName(newName);
+      setMovement((prev) => (prev ? { ...prev, name: newName } : null));
+    }
     setError(response?.error ?? null);
   };
 
@@ -114,6 +130,7 @@ export default function MovementPage({
       .then((response) => response.json())
       .then((data) => {
         setMovement(data);
+        setName(data?.name ?? "");
         setDescription(data?.description ?? null);
       });
 
@@ -152,10 +169,25 @@ export default function MovementPage({
             </div>
 
             <div className="flex flex-col gap-2">
-              <div className="flex gap-2">
-                <h1 className="text-2xl font-bold wrap-break-word leading-tight">
-                  {movement.name}
-                </h1>
+              <div className="flex gap-2 min-w-0">
+                {isEditingName ? (
+                  <Input
+                    defaultValue={name}
+                    onChange={() => {}}
+                    onBlur={(e) => {
+                      updateName(e.target.value);
+                      setIsEditingName(false);
+                    }}
+                    className="text-2xl font-bold wrap-break-word leading-tight w-full min-w-0 rounded-lg border-none bg-primary-text/5 px-3 py-1.5 text-primary-text focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-primary-text/25"
+                  />
+                ) : (
+                  <h1
+                    className="text-2xl font-bold wrap-break-word leading-tight cursor-text"
+                    onClick={() => setIsEditingName(!isEditingName)}
+                  >
+                    {name}
+                  </h1>
+                )}
               </div>
 
               <div className="flex justify-between gap-2">
@@ -196,7 +228,7 @@ export default function MovementPage({
                   }}
                   className="border-b border-tertiary-bg"
                 >
-                  {statuses.map(({ id, name }) => (
+                  {statuses.map(({ id, name: statusName }) => (
                     <Radio
                       key={id}
                       value={id}
@@ -208,7 +240,7 @@ export default function MovementPage({
                       ) : (
                         <div className="size-3" />
                       )}
-                      <div>{name}</div>
+                      <div>{statusName}</div>
                     </Radio>
                   ))}
                 </RadioGroup>
@@ -230,7 +262,9 @@ export default function MovementPage({
         {description ? (
           <section className="border-t border-tertiary-bg pt-4 space-y-2">
             {isEditingDescription ? (
-              <Input
+              <Textarea
+                rows={2}
+                className="w-full resize-none rounded-lg border-none bg-primary-text/5 px-3 py-1.5 text-sm/6 text-primary-text focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-primary-text/25"
                 defaultValue={description}
                 onChange={() => {}}
                 onBlur={(e) => {
@@ -316,7 +350,7 @@ export default function MovementPage({
           icon={<TrashIcon className="size-4" />}
           className="flex flex-col gap-2"
         >
-          <p>Are you sure you want to delete &quot;{movement.name}&quot;?</p>
+          <p>Are you sure you want to delete &quot;{name}&quot;?</p>
           <Button className="bg-danger!" onClick={deleteMovement}>
             Delete
           </Button>
