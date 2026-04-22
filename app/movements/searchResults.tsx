@@ -43,11 +43,19 @@ export default async function SearchResults({
                 className={`flex flex-wrap justify-between items-center gap-3 cursor-pointer ${movement.statusName === "Mastered" ? "text-primary-text/40" : "text-primary-text"}`}
               >
                 <div
-                  title={`${movement.category} (${movement.level})`}
-                  className="text-xs flex items-center p-1.5 rounded-full"
+                  title={`${movement.categories.join(", ")} (${movement.level})`}
+                  className="text-xs flex gap-1 items-center p-1.5 rounded-full"
                   style={{ backgroundColor: movement.levelColor }}
                 >
-                  {Icon && <Icon className="size-4" />}
+                  {movement.categories.map((category) => {
+                    const Icon =
+                      categoriesToIcons[
+                        category as keyof typeof categoriesToIcons
+                      ] ?? null;
+                    return Icon ? (
+                      <Icon key={category} className="size-4" />
+                    ) : null;
+                  })}
                 </div>
                 <div>
                   <h4 className="text-nowrap flex items-center gap-2">
