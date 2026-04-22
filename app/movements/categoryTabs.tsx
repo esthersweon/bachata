@@ -70,7 +70,7 @@ export default function CategoryTabs({
                       `${process.env.NEXT_PUBLIC_DOMAIN}/movements${updateQuery({ searchParams, name: "category", value: id })}`,
                     )
                   }
-                  className={`${categoryId === (id ?? "") ? "font-bold bg-selected!" : "bg-secondary-bg!"} rounded-full! flex items-center gap-2`}
+                  className={`${categoryId === (id ?? "") ? "font-bold bg-selected!" : "bg-secondary-bg!"} rounded-full! flex items-center gap-1`}
                 >
                   {Icon && <Icon className="size-4" />}
                   <div>{name}</div>

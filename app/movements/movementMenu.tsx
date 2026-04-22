@@ -90,6 +90,7 @@ export default function MovementMenu({
                   key={id}
                   value={id}
                   className="flex items-center cursor-pointer gap-2 p-2 py-1.5 hover:bg-tertiary-bg"
+                  onClick={(e) => e.stopPropagation()}
                 >
                   {id === selectedStatusId ? (
                     <CheckIcon className="size-3" />
@@ -105,7 +106,7 @@ export default function MovementMenu({
           <MenuItem>
             <div
               className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
-              onClick={() => {}}
+              onClick={(e) => e.stopPropagation()}
             >
               <PlusIcon className="size-4" />
               <div>Add to List</div>
@@ -115,7 +116,7 @@ export default function MovementMenu({
           <MenuItem>
             <div
               className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
-              onClick={() => {}}
+              onClick={(e) => e.stopPropagation()}
             >
               <PencilIcon className="size-4" />
               <div>Edit</div>
@@ -124,7 +125,10 @@ export default function MovementMenu({
           <MenuItem>
             <div
               className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
-              onClick={() => setShowDeleteConfirmation(true)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setShowDeleteConfirmation(true);
+              }}
             >
               <TrashIcon className="size-4" />
               <div>Delete</div>

@@ -1,21 +1,21 @@
 import {
-  ArrowDownIcon,
+  ArrowDownCircleIcon,
   ArrowPathIcon,
   ArrowsRightLeftIcon,
   CheckCircleIcon,
   FireIcon,
+  RectangleStackIcon,
   SparklesIcon,
-  UsersIcon,
 } from "@heroicons/react/24/outline";
 
 export const categoriesToIcons: {
   [key: string]: React.ComponentType<{ className?: string }>;
 } = {
   All: CheckCircleIcon,
-  Frames: UsersIcon,
+  Frames: RectangleStackIcon,
   Footwork: SparklesIcon,
   "Turns and spins": ArrowPathIcon,
   Isolations: ArrowsRightLeftIcon,
   "Sensual moves": FireIcon,
-  Dips: ArrowDownIcon,
+  Dips: ArrowDownCircleIcon,
 };
