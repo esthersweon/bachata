@@ -277,7 +277,9 @@ export default function MovementPage({
             <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
           </div>
         </section>
+
         <hr className="border-tertiary-bg" />
+
         <section>
           <h2>My Uploads</h2>
           <div className="flex gap-2">
@@ -289,54 +291,7 @@ export default function MovementPage({
 
         <hr className="border-tertiary-bg" />
 
-        <section className="flex flex-col gap-2">
-          <div className="flex justify-between items-end">
-            <div>
-              {filteredLists.length > 0
-                ? `Appears in ${filteredLists.length} lists:`
-                : "Does not appear in any lists"}
-            </div>
-
-            <Menu>
-              <MenuButton className="flex items-center gap-1">
-                <PlusIcon className="size-4" />
-                <div>Add to List</div>
-              </MenuButton>
-              <MenuItems
-                anchor="bottom"
-                className="flex flex-col z-10 border border-tertiary-bg bg-secondary-bg rounded-sm cursor-pointer outline-none"
-              >
-                {lists.map(({ id, name }) => {
-                  const alreadyContainsMovement = filteredLists.some(
-                    ({ id: filteredListId }) => filteredListId === id,
-                  );
-                  return (
-                    <MenuItem
-                      key={id}
-                      as="button"
-                      type="button"
-                      className={`rounded-none! p-2 bg-secondary-bg! hover:bg-tertiary-bg! text-left ${
-                        alreadyContainsMovement
-                          ? "opacity-50 cursor-not-allowed!"
-                          : ""
-                      }`}
-                      disabled={alreadyContainsMovement}
-                    >
-                      {name}
-                    </MenuItem>
-                  );
-                })}
-              </MenuItems>
-            </Menu>
-          </div>
-
-          <ul className="flex flex-col gap-2">
-            {filteredLists.length > 0 &&
-              filteredLists.map(({ id, name, movements }) => (
-                <List key={id} id={id} name={name} movements={movements} />
-              ))}
-          </ul>
-        </section>
+        <RelatedListsSection movementId={id} lists={lists} />
 
         <hr className="border-tertiary-bg" />
 
@@ -354,7 +309,7 @@ export default function MovementPage({
           icon={<TrashIcon className="size-4" />}
           className="flex flex-col gap-2"
         >
-          <p>Are you sure you want to delete &quot;{name}&quot;?</p>
+          <p>Are you sure you want to delete &quot;{movement.name}&quot;?</p>
           <Button className="bg-danger!" onClick={deleteMovement}>
             Delete
           </Button>
