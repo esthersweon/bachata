@@ -146,16 +146,19 @@ export default function MovementPage({
       <article className="bg-secondary-bg rounded-lg p-4 flex flex-col gap-4">
         <PageHeader
           movement={movement}
-          details={{ name: details.name }}
           filterLevels={filterLevels}
           filterCategories={filterCategories}
           currentFilterLevel={currentFilterLevel}
-          selectedStatusId={selectedStatusId}
           statuses={statuses}
           onUpdateMovement={updateMovement}
           onLevelChange={updateLevel}
           onCategoryChange={updateCategories}
-          onStatusIdChange={setSelectedStatusId}
+          onStatusIdChange={(newStatusId) =>
+            setMovement((prev) => ({
+              ...(prev as Movement),
+              statusId: newStatusId,
+            }))
+          }
         />
 
             <div className="flex flex-col gap-2">

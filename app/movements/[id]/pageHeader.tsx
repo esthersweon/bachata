@@ -18,11 +18,9 @@ import { Movement, MovementLevel } from "../types";
 
 export default function PageHeader({
   movement,
-  details,
   filterLevels,
   filterCategories,
   currentFilterLevel,
-  selectedStatusId,
   statuses,
   onUpdateMovement,
   onLevelChange,
@@ -30,11 +28,9 @@ export default function PageHeader({
   onStatusIdChange,
 }: {
   movement: Movement;
-  details: { name: string };
   filterLevels: MovementLevel[];
   filterCategories: { id: string; name: string }[];
   currentFilterLevel: MovementLevel | undefined;
-  selectedStatusId: string | null;
   statuses: Status[];
   onUpdateMovement: (payload: {
     name?: string;
@@ -42,7 +38,7 @@ export default function PageHeader({
   }) => void | Promise<void>;
   onLevelChange: (newLevelId: string) => void | Promise<void>;
   onCategoryChange: (newCategoryIds: string[]) => void | Promise<void>;
-  onStatusIdChange: (id: string | null) => void;
+  onStatusIdChange: (id: string) => void;
 }) {
   return (
     <header className="flex flex-wrap items-start justify-between gap-3">
@@ -62,10 +58,10 @@ export default function PageHeader({
 
         <div className="flex flex-col gap-2">
           <Input
-            defaultValue={details.name}
+            defaultValue={movement.name}
             onChange={() => {}}
             onBlur={(e) => {
-              if (e.target.value.trim() !== details.name)
+              if (e.target.value.trim() !== movement.name)
                 onUpdateMovement({ name: e.target.value.trim() });
             }}
             className="text-2xl font-bold rounded-lg border-none bg-secondary-bg px-3 py-1.5"
@@ -145,9 +141,9 @@ export default function PageHeader({
         >
           <MenuItem>
             <RadioGroup
-              value={selectedStatusId}
+              value={movement.statusId}
               onChange={(value) => {
-                if (value !== selectedStatusId)
+                if (value !== movement.statusId)
                   onUpdateMovement({ statusId: value ?? undefined });
                 onStatusIdChange(value);
               }}
