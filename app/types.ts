@@ -26,4 +26,7 @@ export type User = {
   password: string;
   firstName: string;
   lastName: string;
+  admin: boolean;
+  profilePicture: string;
+  handle: string;
 };

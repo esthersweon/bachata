@@ -1,220 +1,74 @@
 import { getEvents } from "@/app/lib/events";
-import { getLists } from "@/app/lib/lists";
-import { Menu, MenuButton, MenuItems } from "@headlessui/react";
-import {
-  CakeIcon,
-  CheckCircleIcon,
-  QuestionMarkCircleIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
 import { Suspense } from "react";
-import AddListModal from "./dashboard/addListModal";
-import List from "./dashboard/list";
-import MyBadges from "./dashboard/myBadges";
-import MyProgress from "./dashboard/myProgress";
-import RSVPButton from "./dashboard/rsvpButton";
+import ActivitiesFeed, { activities } from "./feed/activitiesFeed";
+import UserRecommendations from "./feed/userRecommendations";
 import { formatDate } from "./helpers";
+import { rsvpToLabel } from "./profile/page";
 
-export const rsvpToLabel = {
-  true: { icon: <CheckCircleIcon className="size-3" />, color: "green" },
-  false: { icon: <XMarkIcon className="size-3" />, color: "red" },
-  null: { icon: <QuestionMarkCircleIcon className="size-3" />, color: "gray" },
-};
-
-export default async function Dashboard() {
-  const lists = await getLists();
+export default async function Home() {
   const events = await getEvents();
 
   return (
-    <main className="flex flex-col gap-4">
-      <Suspense fallback={<div>Loading profile...</div>}>
-        <div className="flex justify-center items-center gap-4">
-          <img
-            src="https://avatars.githubusercontent.com/u/6993359?v=4"
-            alt="Esther Weon"
-            className="size-30 rounded-full"
-          />
+    <main className="flex flex-col gap-2">
+      <div className="flex flex-wrap gap-2">
+        <div className="flex-3 max-w-full flex flex-col gap-4 bg-secondary-bg p-4 rounded-lg">
+          <div className="text-center uppercase font-bold">Upcoming events</div>
+          <Suspense fallback={<div>Loading events...</div>}>
+            <ul className="flex flex-wrap gap-2">
+              {events.map((event) => (
+                <li
+                  key={event.id}
+                  className=" max-w-full flex flex-col bg-primary-bg rounded-lg overflow-hidden"
+                >
+                  <img
+                    src={event.image}
+                    alt={event.name}
+                    className="h-40 object-cover"
+                  />
+                  <div className="flex flex-col gap-1 p-4">
+                    <div className="flex flex-wrap justify-between gap-1 items-center">
+                      <h3>{event.name}</h3>
 
-          <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2">
-              <h1>Esther Weon</h1>
-              <div className="text-xs bg-secondary-bg px-2 py-1 rounded-full">
-                Follow
-              </div>
-            </div>
-
-            {/* <div className="flex gap-2">
-              <div>
-                <span className="cursor-pointer font-bold">87</span> Followers
-              </div>
-              <div>
-                <span className="cursor-pointer font-bold">124</span> Following
-              </div>
-            </div> */}
-
-            <div className="flex items-center gap-2 text-xs">
-              <CakeIcon className="size-3" />
-              <div>Dancing since Oct 2025</div>
-            </div>
-
-            {/* <div className="flex gap-2 justify-center">
-              <button className="flex items-center gap-2">
-                <UserIcon className="size-4" />
-                <div>Follow</div>
-              </button>
-              <button className="flex items-center gap-2">
-                <InboxIcon className="size-4" />
-                <div>Message</div>
-              </button>
-            </div> */}
-          </div>
+                      <div
+                        style={{
+                          backgroundColor:
+                            rsvpToLabel[
+                              (event.rsvp ?? "null") as keyof typeof rsvpToLabel
+                            ].color,
+                        }}
+                        className="p-1 rounded-full"
+                      >
+                        {
+                          rsvpToLabel[
+                            (event.rsvp ?? "null") as keyof typeof rsvpToLabel
+                          ].icon
+                        }
+                      </div>
+                    </div>
+                    <p>{formatDate(event.date)}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </Suspense>
         </div>
 
-        <div className="flex flex-col items-center gap-4">
-          <MyBadges />
-
-          <div className="flex flex-wrap gap-2 w-full items-start">
-            <div className="flex flex-col gap-2 flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-              <MyProgress />
-            </div>
-
-            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-              <div className="flex items-center gap-2 justify-between">
-                <h2>My Lists</h2>
-                <AddListModal />
-              </div>
-              <div className="flex flex-col gap-2">
-                {lists.map(({ id, name, movements }) => (
-                  <List key={id} id={id} name={name} movements={movements} />
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-              <h2>Upcoming events</h2>
-              <ul className="flex flex-col gap-2">
-                {events
-                  .filter(({ date }) => new Date(date) >= new Date())
-                  .map(({ id, name, image, date, rsvp }) => (
-                    <li
-                      key={name}
-                      className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
-                    >
-                      <img
-                        src={image}
-                        alt={name}
-                        className="size-10 object-cover"
-                      />
-
-                      <div className="flex-1 flex flex-col gap-1">
-                        <div className="relative flex items-center gap-2 justify-between">
-                          <h4>{name}</h4>
-                          <Menu>
-                            <div className="relative">
-                              <MenuButton
-                                as="div"
-                                className="p-1 rounded-full cursor-pointer hover:text-primary-text/50"
-                                style={{
-                                  backgroundColor:
-                                    rsvpToLabel[
-                                      (rsvp ??
-                                        "null") as keyof typeof rsvpToLabel
-                                    ].color,
-                                }}
-                              >
-                                {
-                                  rsvpToLabel[
-                                    (rsvp ?? "null") as keyof typeof rsvpToLabel
-                                  ].icon
-                                }
-                              </MenuButton>
-                              <MenuItems className="flex flex-col absolute top-0 left-8 bg-secondary-bg! rounded-lg overflow-hidden border border-tertiary-bg outline-none z-10">
-                                {[
-                                  "Attending",
-                                  "Not Attending",
-                                  "Undecided",
-                                ].map((label) => {
-                                  return (
-                                    <RSVPButton
-                                      key={label}
-                                      eventId={id}
-                                      label={label}
-                                      rsvp={rsvp}
-                                    />
-                                  );
-                                })}
-                              </MenuItems>
-                            </div>
-                          </Menu>
-                        </div>
-                        <p>{formatDate(date)}</p>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-
-              <h2>Past events</h2>
-              <ul className="flex flex-col gap-2">
-                {events
-                  .filter(({ date }) => new Date(date) < new Date())
-                  .map(({ id, name, image, date, rsvp }) => (
-                    <li
-                      key={name}
-                      className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
-                    >
-                      <img
-                        src={image}
-                        alt={name}
-                        className="size-10 object-cover"
-                      />
-                      <div className="flex-1 flex flex-col gap-1">
-                        <div className="relative flex items-center gap-2 justify-between">
-                          <h4>{name}</h4>
-                          <Menu>
-                            <div className="relative">
-                              <MenuButton
-                                as="div"
-                                className="p-1 rounded-full cursor-pointer hover:text-primary-text/50"
-                                style={{
-                                  backgroundColor:
-                                    rsvpToLabel[
-                                      (rsvp ??
-                                        "null") as keyof typeof rsvpToLabel
-                                    ].color,
-                                }}
-                              >
-                                {
-                                  rsvpToLabel[
-                                    (rsvp ?? "null") as keyof typeof rsvpToLabel
-                                  ].icon
-                                }
-                              </MenuButton>
-                              <MenuItems className="flex flex-col absolute top-0 left-8 bg-secondary-bg! rounded-lg overflow-hidden border border-tertiary-bg outline-none z-10">
-                                {[
-                                  "Attending",
-                                  "Not Attending",
-                                  "Undecided",
-                                ].map((label) => (
-                                  <RSVPButton
-                                    key={label}
-                                    eventId={id}
-                                    label={label}
-                                    rsvp={rsvp}
-                                  />
-                                ))}
-                              </MenuItems>
-                            </div>
-                          </Menu>
-                        </div>
-                        <p>{formatDate(date)}</p>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-            </div>
-          </div>
+        <div className="flex-2 max-w-full flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg">
+          {/* <div className="text-center uppercase font-bold">
+            What's happening
+          </div> */}
+          <ActivitiesFeed />
         </div>
-      </Suspense>
+
+        {activities.length > 0 && (
+          <div className="flex-1 max-w-full flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg">
+            {/* <div className="text-center uppercase font-bold">
+              Users to follow
+            </div> */}
+            <UserRecommendations />
+          </div>
+        )}
+      </div>
     </main>
   );
 }

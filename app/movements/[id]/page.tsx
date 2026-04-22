@@ -209,11 +209,18 @@ export default function MovementPage({
         <hr className="border-tertiary-bg" />
 
         <section className="flex gap-4">
-          <div className="flex-1 flex flex-col gap-2">
-            <div className="text-center uppercase font-bold">My Notes</div>
-            <MyNotes notes={movement.notes} />
-            <div className="text-center uppercase font-bold">My Lists</div>
-            <RelatedListsSection movementId={id} lists={lists} />
+          <div className="flex-1 flex flex-col gap-4">
+            <div className="flex flex-col gap-2">
+              <div className="text-center uppercase font-bold">My Notes</div>
+              <MyNotes notes={movement.notes} />
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <div className="text-center uppercase font-bold">
+                My Related Lists
+              </div>
+              <RelatedListsSection movementId={id} lists={lists} />
+            </div>
           </div>
 
           <div className="flex flex-col gap-2 flex-1">
