@@ -18,6 +18,12 @@ import Modal from "../ui/modal";
 import { CategoryMultiSelectMenu } from "./categoryMultiSelectMenu";
 import { MovementCategory, MovementLevel } from "./types";
 
+const formatMissingFields = (fields: string[]): string => {
+  if (fields.length === 1) return fields[0];
+  if (fields.length === 2) return `${fields[0]} and ${fields[1]}`;
+  return fields.slice(0, -1).join(", ") + ", and " + fields[fields.length - 1];
+};
+
 export default function AddMovementModal({
   categories,
   levels,
@@ -27,72 +33,58 @@ export default function AddMovementModal({
 }) {
   const router = useRouter();
 
-  const [showModal, setShowModal] = useState(false);
-  const [levelId, setLevelId] = useState("");
-  const [categoryId, setCategoryId] = useState("");
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [levelId, setLevelId] = useState<string | null>(null);
+  const [categoryIds, setCategoryIds] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  const formatMissingFieldsError = (missingFields: string[]) => {
-    if (missingFields.length === 1) {
-      return missingFields[0];
-    } else if (missingFields.length === 2) {
-      return `${missingFields[0]} and ${missingFields[1]}`;
-    } else {
-      return (
-        missingFields.slice(0, -1).join(", ") +
-        ", and " +
-        missingFields[missingFields.length - 1]
-      );
-    }
-  };
-
-  const submitForm = (formData: FormData) => {
+  const submitForm = async (formData: FormData) => {
     const name = formData.get("name");
     const description = formData.get("description");
     const levelId = formData.get("levelId");
-    const categoryId = formData.get("categoryId");
+    const missingFieldNames = [
+      { name: "Name", value: name },
+      { name: "Description", value: description },
+      { name: "Level", value: levelId },
+      { name: "Category", value: categoryIds.length > 0 },
+    ]
+      .filter(({ value }) => !value)
+      .map(({ name }) => `"${name}"`);
 
-    if (!name || !description || !levelId || !categoryId) {
-      const missingFields = [
-        { name: "Name", value: name },
-        { name: "Description", value: description },
-        { name: "Level", value: levelId },
-        { name: "Category", value: categoryId },
-      ]
-        .filter(({ value }) => !value)
-        .map(({ name }) => `"${name}"`);
-
+    if (missingFieldNames.length > 0) {
       setError(
-        `Please fill in the ${formatMissingFieldsError(missingFields)} field${missingFields.length > 1 ? "s" : ""}.`,
+        `Please fill in the ${formatMissingFields(missingFieldNames)} field${missingFieldNames.length > 1 ? "s" : ""}.`,
       );
-
       return;
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
-      method: "POST",
-      body: JSON.stringify({ name, description, levelId, categoryId }),
-    })
-      .then((response: Response) => response.json())
-      .then(({ ok, error }) => {
-        if (ok) {
-          router.refresh();
-          setShowModal(false);
-        }
-        setError(
-          error?.message ? `Failed to add movement: ${error.message}` : null,
-        );
+    const response = await (
+      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
+        method: "POST",
+        body: JSON.stringify({ name, description, levelId, categoryIds }),
       })
-      .catch((error: Error) =>
-        setError(`Failed to add movement: ${error.message}`),
-      );
+    ).json();
+
+    if (response.ok) {
+      router.refresh();
+      setShowModal(false);
+      setCategoryIds([]);
+    }
+
+    setError(
+      response.error ? `Failed to add movement: ${response.error}` : null,
+    );
   };
 
   return (
     <>
       <Button
         className="flex items-center gap-1 rounded-full!"
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          setShowModal(true);
+          setError(null);
+          setCategoryIds([]);
+        }}
         title="Add Movement"
       >
         <PlusIcon className="size-4" />
@@ -101,7 +93,11 @@ export default function AddMovementModal({
         <Modal
           title="Add Movement"
           icon={<PlusIcon className="size-4" />}
-          onClose={() => setShowModal(false)}
+          onClose={() => {
+            setShowModal(false);
+            setCategoryIds([]);
+            setError(null);
+          }}
         >
           <form className="flex flex-col gap-4" action={submitForm}>
             <Field className="flex flex-col gap-2">
@@ -125,8 +121,7 @@ export default function AddMovementModal({
               />
             </Field>
 
-            <input type="hidden" name="levelId" value={levelId} />
-            <input type="hidden" name="categoryId" value={categoryId} />
+            <input type="hidden" name="levelId" value={levelId ?? ""} />
 
             <div className="flex gap-2">
               <Menu>
@@ -161,7 +156,7 @@ export default function AddMovementModal({
                 selectedIds={categoryIds}
                 onChange={setCategoryIds}
                 emptyLabel="Categories"
-                  anchor="bottom end"
+                anchor="bottom end"
                 menuTransition
               />
             </div>
