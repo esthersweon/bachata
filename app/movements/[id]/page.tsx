@@ -1,24 +1,16 @@
 "use client";
 
-import List from "@/app/dashboard/list";
 import type { List as ListType, Status } from "@/app/types";
 import Modal from "@/app/ui/modal";
-import {
-  Button,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuItems,
-  Textarea,
-} from "@headlessui/react";
-import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { pick } from "lodash-es";
+import { Button, Textarea } from "@headlessui/react";
+import { TrashIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
-import { use, useEffect, useMemo, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Movement, MovementLevel } from "../types";
 import MyNotes from "./myNotes";
 import PageHeader from "./pageHeader";
 import PageWrapper from "./pageWrapper";
+import { RelatedListsSection } from "./relatedListsSection";
 
 export const dynamic = "force-dynamic";
 
@@ -30,15 +22,11 @@ export default function MovementPage({
   const [movement, setMovement] = useState<Movement | null>(null);
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [lists, setLists] = useState<ListType[]>([]);
+  const [filterLevels, setFilterLevels] = useState<MovementLevel[]>([]);
+  const [filterCategories, setFilterCategories] = useState<
+    { id: string; name: string }[]
+  >([]);
 
-  const [name, setName] = useState<string>("");
-  const [isEditingName, setIsEditingName] = useState<boolean>(false);
-
-  const [description, setDescription] = useState<string>("");
-  const [isEditingDescription, setIsEditingDescription] =
-    useState<boolean>(false);
-
-  const [selectedStatusId, setSelectedStatusId] = useState<string | null>(null);
   const [showDeleteConfirmation, setShowDeleteConfirmation] =
     useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,46 +34,69 @@ export default function MovementPage({
   const { id } = use(params);
   const router = useRouter();
 
-  const filteredLists = useMemo(() => {
-    return (lists ?? []).filter(({ movements }) =>
-      movements.some(({ id: movementId }) => movementId === id),
-    );
-  }, [lists, id]);
-
-  const updateStatus = async (statusId: string | null) => {
+  const updateMovement = async (payload: Partial<Movement>) => {
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id, statusId }),
+        body: JSON.stringify({ id, ...payload }),
       })
     ).json();
-    if (response.ok) router.refresh();
+    if (response.ok)
+      setMovement((prev) => ({ ...(prev as Movement), ...payload }));
 
     setError(response?.error ?? null);
   };
 
-  const updateName = async (newName: string) => {
+  const updateLevel = async (newLevelId: string) => {
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id, name: newName }),
+        body: JSON.stringify({ id, levelId: newLevelId }),
       })
     ).json();
     if (response.ok) {
-      setName(newName);
-      setMovement((prev) => (prev ? { ...prev, name: newName } : null));
+      const lvl = filterLevels.find((l) => l.id === newLevelId);
+      if (lvl) {
+        setMovement((prev) =>
+          prev
+            ? {
+                ...prev,
+                levelId: newLevelId,
+                level: lvl.name,
+                levelColor: lvl.color,
+              }
+            : null,
+        );
+      }
+      router.refresh();
     }
     setError(response?.error ?? null);
   };
 
-  const updateDescription = async (newDescription: string) => {
+  const updateCategories = async (newCategoryIds: string[]) => {
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id, description: newDescription }),
+        body: JSON.stringify({ id, categoryIds: newCategoryIds }),
       })
     ).json();
-    if (response.ok) setDescription(newDescription);
+    if (response.ok) {
+      const names = newCategoryIds
+        .map((cid) => filterCategories.find((c) => c.id === cid)?.name)
+        .filter((n): n is string => Boolean(n));
+      if (names.length > 0) {
+        setMovement((prev) =>
+          prev
+            ? {
+                ...prev,
+                categoryIds: newCategoryIds,
+                categories: names,
+              }
+            : null,
+        );
+      }
+      router.refresh();
+    }
     setError(response?.error ?? null);
   };
 
@@ -111,22 +122,12 @@ export default function MovementPage({
       fetch(`${base}/api/lists`).then((r) => r.json()),
     ]).then(([movementData, filtersData, statusesData, listsData]) => {
       setMovement(movementData);
-      setDetails((prev) => ({
-        ...prev,
-        ...pick(movementData, [
-          "name",
-          "description",
-          "prep",
-          "notes",
-          "usage",
-        ]),
-      }));
-      setSelectedStatusId(movementData?.statusId ?? null);
+
       setFilterLevels(filtersData?.levels ?? []);
       setFilterCategories(filtersData?.categories ?? []);
       setStatuses(statusesData);
       setLists(listsData);
-      });
+    });
   }, [id]);
 
   if (!movement) {
@@ -139,7 +140,9 @@ export default function MovementPage({
     );
   }
 
-  const Icon = categoriesToIcons[movement.category] ?? null;
+  const currentFilterLevel = filterLevels.find(
+    (l) => l.id === movement.levelId,
+  );
 
   return (
     <PageWrapper>
@@ -160,119 +163,57 @@ export default function MovementPage({
             }))
           }
         />
+        <section className="border-t border-tertiary-bg pt-4 space-y-2 flex">
+          <div className="flex-3 p-4 flex flex-col gap-2">
+            <div className="uppercase font-bold">Description</div>
 
-            <div className="flex flex-col gap-2">
-              <div className="flex gap-2 min-w-0">
-                {isEditingName ? (
-                  <Input
-                    defaultValue={name}
-                    onChange={() => {}}
-                    onBlur={(e) => {
-                      updateName(e.target.value);
-                      setIsEditingName(false);
-                    }}
-                    className="text-2xl font-bold wrap-break-word leading-tight w-full min-w-0 rounded-lg border-none bg-primary-text/5 px-3 py-1.5 text-primary-text focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-primary-text/25"
-                  />
-                ) : (
-                  <h1
-                    className="text-2xl font-bold wrap-break-word leading-tight cursor-text"
-                    onClick={() => setIsEditingName(!isEditingName)}
-                  >
-                    {name}
-                  </h1>
-                )}
-              </div>
+            <Textarea
+              className="w-full resize-none rounded-lg border-none bg-tertiary-bg p-2"
+              style={{
+                minHeight: "4lh",
+                maxHeight: "10lh",
+                fieldSizing: "content",
+              }}
+              defaultValue={movement.description}
+              onChange={() => {}}
+              onBlur={(e) => {
+                if (e.target.value.trim() !== movement.description)
+                  updateMovement({ description: e.target.value.trim() });
+              }}
+            />
 
-              <div className="flex justify-between gap-2">
-                <div className="flex flex-wrap gap-2">
-                  <span
-                    className="text-xs bg-tertiary-bg px-2 py-1 rounded-full"
-                    style={{ backgroundColor: movement.levelColor }}
-                  >
-                    {movement.level}
-                  </span>
-                  <span className="text-xs bg-tertiary-bg px-2 py-1 rounded-full flex items-center gap-1">
-                    {Icon ? <Icon className="size-4" /> : null}{" "}
-                    {movement.category}
-                  </span>
-                </div>
-              </div>
-            </div>
+            <div className="uppercase font-bold">How to Prep</div>
+
+            <Textarea
+              className="w-full resize-none rounded-lg border-none bg-tertiary-bg p-2"
+              defaultValue={movement.prep}
+              onChange={({ target: { value } }) =>
+                setMovement((prev) => ({ ...(prev as Movement), prep: value }))
+              }
+              onBlur={({ target: { value } }) => {
+                if (value.trim() !== movement.prep)
+                  updateMovement({ prep: value.trim() });
+              }}
+            />
+
+            <div className="uppercase font-bold">When to use</div>
+
+            <Textarea
+              className="w-full resize-none rounded-lg border-none bg-tertiary-bg p-2"
+              defaultValue={movement.usage}
+              onChange={({ target: { value } }) =>
+                setMovement((prev) => ({ ...(prev as Movement), prep: value }))
+              }
+              onBlur={({ target: { value } }) => {
+                if (value.trim() !== movement.usage)
+                  updateMovement({ usage: value.trim() });
+              }}
+            />
           </div>
 
-          <Menu>
-            <MenuButton
-              className="flex items-center gap-1 bg-tertiary-bg! hover:text-gray-500!"
-              onClick={(e) => e.preventDefault()}
-            >
-              {movement.statusName}
-              <ChevronDownIcon className="size-4" />
-            </MenuButton>
-            <MenuItems
-              anchor="bottom"
-              className="z-10 border border-tertiary-bg bg-secondary-bg rounded-sm cursor-pointer outline-none"
-            >
-              <MenuItem>
-                <RadioGroup
-                  value={selectedStatusId}
-                  onChange={(value) => {
-                    setSelectedStatusId(value);
-                    updateStatus(value);
-                  }}
-                  className="border-b border-tertiary-bg"
-                >
-                  {statuses.map(({ id, name: statusName }) => (
-                    <Radio
-                      key={id}
-                      value={id}
-                      className="flex items-center cursor-pointer gap-2 p-2 py-1.5 hover:bg-tertiary-bg"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {id === movement.statusId ? (
-                        <CheckIcon className="size-3" />
-                      ) : (
-                        <div className="size-3" />
-                      )}
-                      <div>{statusName}</div>
-                    </Radio>
-                  ))}
-                </RadioGroup>
-              </MenuItem>
+          <MyNotes notes={movement.notes} />
+        </section>
 
-              {/* <MenuItem>
-                <div
-                  className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <PencilIcon className="size-4" />
-                  <div>Edit</div>
-                </div>
-                </MenuItem>  */}
-            </MenuItems>
-          </Menu>
-        </header>
-
-        {description ? (
-          <section className="border-t border-tertiary-bg pt-4 space-y-2">
-            {isEditingDescription ? (
-              <Textarea
-                rows={2}
-                className="w-full resize-none rounded-lg border-none bg-primary-text/5 px-3 py-1.5 text-sm/6 text-primary-text focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-primary-text/25"
-                defaultValue={description}
-                onChange={() => {}}
-                onBlur={(e) => {
-                  updateDescription(e.target.value);
-                  setIsEditingDescription(false);
-                }}
-              />
-            ) : (
-              <p
-                className="text-sm font-light leading-relaxed whitespace-pre-wrap"
-                onClick={() => setIsEditingDescription(!isEditingDescription)}
-              >
-                {description}
-              </p>
-            )}
         <section>
           <div className="flex gap-2">
             <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
@@ -290,7 +231,7 @@ export default function MovementPage({
             <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
             <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
           </div>
-          </section>
+        </section>
 
         <hr className="border-tertiary-bg" />
 

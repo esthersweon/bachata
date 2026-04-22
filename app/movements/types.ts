@@ -14,9 +14,14 @@ export type Movement = {
   id: string;
   name: string;
   description: string;
-  category: string;
-  level: string;
-  levelColor: string;
+  prep: string;
+  usage: string;
+  notes: string;
+  categories: string[];
+  categoryIds: string[];
+  level?: string;
+  levelId?: string;
+  levelColor?: string;
   statusId: string;
   statusName: string;
 };

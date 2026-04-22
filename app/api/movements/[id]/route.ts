@@ -24,33 +24,34 @@ export async function GET(
 
     const results = await sql`
         SELECT
-          id,
-          name,
-          description,
-          level,
-          "levelColor",
-          category,
-          "statusId",
-          "statusName"
-        FROM (
-          SELECT DISTINCT
-            m.id,
-            m.name,
-            m.description,
-            l.name AS level,
-            l.color AS "levelColor",
-            c.name AS category,
-            COALESCE(um.status_id, ${defaultStatusId}) AS "statusId",
-            s.name AS "statusName"
-          FROM movements m
-          JOIN levels l ON m.level_id = l.id
-          JOIN movements_categories mc ON m.id = mc.movement_id
-          JOIN categories c ON mc.category_id = c.id
-          LEFT JOIN users_movements um
-            ON m.id = um.movement_id AND um.user_id = ${userId}
-          LEFT JOIN statuses s ON s.id = COALESCE(um.status_id, ${defaultStatusId}) 
-          WHERE m.id = ${id}
-        ) AS movement_rows`;
+          m.id,
+          m.name,
+          m.description,
+          m.prep,
+          m.usage,
+          um.notes,
+          m.level_id AS "levelId",
+          l.name AS level,
+          l.color AS "levelColor",
+          COALESCE(cat.names, ARRAY[]::text[]) AS categories,
+          COALESCE(cat.ids, ARRAY[]::text[]) AS "categoryIds",
+          COALESCE(um.status_id, ${defaultStatusId}) AS "statusId",
+          s.name AS "statusName"
+        FROM movements m
+        JOIN levels l ON m.level_id = l.id
+        LEFT JOIN LATERAL (
+          SELECT
+            array_agg(c.name ORDER BY c.name) AS names,
+            array_agg(c.id::text ORDER BY c.name) AS ids
+          FROM movements_categories mc
+          JOIN categories c ON c.id = mc.category_id
+          WHERE mc.movement_id = m.id
+        ) cat ON true
+        LEFT JOIN users_movements um
+          ON m.id = um.movement_id AND um.user_id = ${userId}
+        LEFT JOIN statuses s ON s.id = COALESCE(um.status_id, ${defaultStatusId})
+        WHERE m.id = ${id}
+    `;
 
     return Response.json(results[0] ?? null, {
       headers: { "Content-Type": "application/json" },
