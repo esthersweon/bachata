@@ -6,21 +6,19 @@ import type { Movement } from "./types";
 
 export const dynamic = "force-dynamic";
 
-export type SearchResultsProps = {
-  q: string;
-  level: string;
-  category: string;
-  status: string;
-  statuses: Status[];
-};
-
 export default async function SearchResults({
   q,
   level,
   category,
   status,
   statuses,
-}: SearchResultsProps) {
+}: {
+  q: string;
+  level: string;
+  category: string;
+  status: string;
+  statuses: Status[];
+}) {
   const movements: Movement[] = await (
     await fetch(
       `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}&status=${status}`,
@@ -34,7 +32,6 @@ export default async function SearchResults({
   ) : (
     <ul className="flex flex-wrap gap-2">
       {movements.map((movement) => {
-        const Icon = categoriesToIcons[movement.category] ?? null;
         return (
           <Link
             className="flex-1 md:grow-0 bg-secondary-bg p-2 pl-4 rounded-lg basis-[calc(1/3*100%-0.5rem)] min-w-50 max-w-full"
@@ -56,9 +53,9 @@ export default async function SearchResults({
                   <h4 className="text-nowrap flex items-center gap-2">
                     <span>{movement.name}</span>
                   </h4>
-                  <p className="text-xs font-light max-w-50">
+                  <div className="text-xs font-light max-w-50 text-ellipsis text-nowrap overflow-hidden">
                     {movement.description}
-                  </p>
+                  </div>
                 </div>
                 <div className="flex flex-1 justify-end gap-2 items-center">
                   <div className="text-xs text-nowrap bg-tertiary-bg! px-2 py-1 rounded-full hidden md:block">

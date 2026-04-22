@@ -50,10 +50,10 @@ export default function MovementMenu({
 
   const deleteMovement = async () => {
     const response = await (
-      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
-        method: "DELETE",
-        body: JSON.stringify({ id: movement.id }),
-      })
+      await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements/${movement.id}`,
+        { method: "DELETE" },
+      )
     ).json();
     if (response.ok) {
       router.refresh();

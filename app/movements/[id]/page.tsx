@@ -5,44 +5,22 @@ import type { List as ListType, Status } from "@/app/types";
 import Modal from "@/app/ui/modal";
 import {
   Button,
-  Input,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
-  Radio,
-  RadioGroup,
   Textarea,
 } from "@headlessui/react";
-import {
-  ArrowLeftIcon,
-  CheckIcon,
-  ChevronDownIcon,
-  PlusIcon,
-  TrashIcon,
-} from "@heroicons/react/24/outline";
-import Link from "next/link";
+import { PlusIcon, TrashIcon } from "@heroicons/react/24/outline";
+import { pick } from "lodash-es";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useMemo, useState } from "react";
-import { categoriesToIcons } from "../constants";
-import { Movement } from "../types";
+import { Movement, MovementLevel } from "../types";
+import MyNotes from "./myNotes";
+import PageHeader from "./pageHeader";
+import PageWrapper from "./pageWrapper";
 
 export const dynamic = "force-dynamic";
-
-function MovementPageWrapper({ children }: { children: React.ReactNode }) {
-  return (
-    <main className="flex flex-col gap-4 max-w-2xl mx-auto w-full">
-      <Link
-        href="/movements"
-        className="inline-flex items-center gap-1.5 text-xs text-primary-text/60 hover:text-primary-text transition-colors w-fit"
-      >
-        <ArrowLeftIcon className="size-4 shrink-0" />
-        Back to movements
-      </Link>
-      {children}
-    </main>
-  );
-}
 
 export default function MovementPage({
   params,
@@ -113,9 +91,8 @@ export default function MovementPage({
 
   const deleteMovement = async () => {
     const response = await (
-      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
+      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements/${id}`, {
         method: "DELETE",
-        body: JSON.stringify({ id }),
       })
     ).json();
     setError(response?.error ?? null);
@@ -126,47 +103,60 @@ export default function MovementPage({
   };
 
   useEffect(() => {
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements/${id}`)
-      .then((response) => response.json())
-      .then((data) => {
-        setMovement(data);
-        setName(data?.name ?? "");
-        setDescription(data?.description ?? null);
+    const base = process.env.NEXT_PUBLIC_DOMAIN;
+    void Promise.all([
+      fetch(`${base}/api/movements/${id}`).then((r) => r.json()),
+      fetch(`${base}/api/filters`).then((r) => r.json()),
+      fetch(`${base}/api/statuses`).then((r) => r.json()),
+      fetch(`${base}/api/lists`).then((r) => r.json()),
+    ]).then(([movementData, filtersData, statusesData, listsData]) => {
+      setMovement(movementData);
+      setDetails((prev) => ({
+        ...prev,
+        ...pick(movementData, [
+          "name",
+          "description",
+          "prep",
+          "notes",
+          "usage",
+        ]),
+      }));
+      setSelectedStatusId(movementData?.statusId ?? null);
+      setFilterLevels(filtersData?.levels ?? []);
+      setFilterCategories(filtersData?.categories ?? []);
+      setStatuses(statusesData);
+      setLists(listsData);
       });
-
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`)
-      .then((response) => response.json())
-      .then((data) => setStatuses(data));
-
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists`)
-      .then((response) => response.json())
-      .then((data) => setLists(data));
   }, [id]);
 
   if (!movement) {
     return (
-      <MovementPageWrapper>
+      <PageWrapper>
         <div className="bg-secondary-bg rounded-lg p-8 text-center text-gray-300">
           Movement not found.
         </div>
-      </MovementPageWrapper>
+      </PageWrapper>
     );
   }
 
   const Icon = categoriesToIcons[movement.category] ?? null;
 
   return (
-    <MovementPageWrapper>
+    <PageWrapper>
       <article className="bg-secondary-bg rounded-lg p-4 flex flex-col gap-4">
-        <header className="flex flex-wrap items-start justify-between gap-3">
-          <div className="flex items-start gap-4 min-w-0">
-            <div
-              className="shrink-0 flex items-center justify-center p-2.5 rounded-full"
-              style={{ backgroundColor: movement.levelColor }}
-              title={`${movement.category} (${movement.level})`}
-            >
-              {Icon ? <Icon className="size-6" /> : null}
-            </div>
+        <PageHeader
+          movement={movement}
+          details={{ name: details.name }}
+          filterLevels={filterLevels}
+          filterCategories={filterCategories}
+          currentFilterLevel={currentFilterLevel}
+          selectedStatusId={selectedStatusId}
+          statuses={statuses}
+          onUpdateMovement={updateMovement}
+          onLevelChange={updateLevel}
+          onCategoryChange={updateCategories}
+          onStatusIdChange={setSelectedStatusId}
+        />
 
             <div className="flex flex-col gap-2">
               <div className="flex gap-2 min-w-0">
@@ -280,14 +270,28 @@ export default function MovementPage({
                 {description}
               </p>
             )}
+        <section>
+          <div className="flex gap-2">
+            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
+            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
+            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
+          </div>
+        </section>
+        <hr className="border-tertiary-bg" />
+        <section>
+          <h2>My Uploads</h2>
+          <div className="flex gap-2">
+            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
+            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
+            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
+          </div>
           </section>
-        ) : null}
 
         <hr className="border-tertiary-bg" />
 
         <section className="flex flex-col gap-2">
-          <div className="flex justify-between items-center">
-            <div className="bg-tertiary-bg px-2 py-1 rounded-full font-light">
+          <div className="flex justify-between items-end">
+            <div>
               {filteredLists.length > 0
                 ? `Appears in ${filteredLists.length} lists:`
                 : "Does not appear in any lists"}
@@ -357,6 +361,6 @@ export default function MovementPage({
           {error && <p className="text-danger">{error}</p>}
         </Modal>
       )}
-    </MovementPageWrapper>
+    </PageWrapper>
   );
 }
