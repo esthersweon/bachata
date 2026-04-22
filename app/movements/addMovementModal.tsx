@@ -15,6 +15,7 @@ import { ChevronDownIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Modal from "../ui/modal";
+import { CategoryMultiSelectMenu } from "./categoryMultiSelectMenu";
 import { MovementCategory, MovementLevel } from "./types";
 
 export default function AddMovementModal({
@@ -155,30 +156,14 @@ export default function AddMovementModal({
                   ))}
                 </MenuItems>
               </Menu>
-              <Menu>
-                <MenuButton className="flex items-center gap-1 bg-tertiary-bg!">
-                  {categories.find(({ id }) => id === categoryId)?.name ??
-                    "Category"}{" "}
-                  <ChevronDownIcon className="size-4" />
-                </MenuButton>
-                <MenuItems
-                  transition
+              <CategoryMultiSelectMenu
+                categories={categories}
+                selectedIds={categoryIds}
+                onChange={setCategoryIds}
+                emptyLabel="Categories"
                   anchor="bottom end"
-                  className="z-10 border border-tertiary-bg bg-secondary-bg rounded-lg"
-                >
-                  {categories.map(({ id, name }) => (
-                    <MenuItem
-                      key={id}
-                      as="button"
-                      type="button"
-                      className="block w-full cursor-pointer p-2 bg-secondary-bg! hover:bg-tertiary-bg! text-left"
-                      onClick={() => setCategoryId(id)}
-                    >
-                      {name}
-                    </MenuItem>
-                  ))}
-                </MenuItems>
-              </Menu>
+                menuTransition
+              />
             </div>
 
             <p className="text-xs text-danger">{error}</p>
