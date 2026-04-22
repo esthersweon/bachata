@@ -62,3 +62,45 @@ export async function GET(
     });
   }
 }
+
+export async function DELETE(
+  _request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
+  const { id } = await context.params;
+
+  const url = process.env.POSTGRES_URL;
+  if (!url) {
+    return Response.json([], {
+      status: 503,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  try {
+    const sql = neon(url);
+    const deleteMovement = sql`DELETE FROM movements WHERE id = ${id}`;
+    const deleteFromUsers = sql`DELETE FROM users_movements WHERE movement_id = ${id}`;
+    const deleteFromCategories = sql`DELETE FROM movements_categories WHERE movement_id = ${id}`;
+    const deleteFromLists = sql`DELETE FROM lists_movements WHERE movement_id = ${id}`;
+    const deleteFromCombos = sql`DELETE FROM combos_movements WHERE movement_id = ${id}`;
+
+    sql.transaction([
+      deleteMovement,
+      deleteFromUsers,
+      deleteFromCategories,
+      deleteFromLists,
+      deleteFromCombos,
+    ]);
+
+    return Response.json(
+      { ok: true },
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
+  } catch (error: unknown) {
+    return Response.json(
+      { error: `Failed to delete movement: ${(error as Error).message}` },
+      { status: 500, headers: { "Content-Type": "application/json" } },
+    );
+  }
+}
