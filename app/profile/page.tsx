@@ -1,25 +1,13 @@
 import { getEvents } from "@/app/lib/events";
 import { getLists } from "@/app/lib/lists";
-import { Menu, MenuButton, MenuItems } from "@headlessui/react";
-import {
-  CakeIcon,
-  CheckCircleIcon,
-  QuestionMarkCircleIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { CakeIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 import { formatDate } from "../helpers";
 import AddListModal from "./addListModal";
 import List from "./list";
 import MyBadges from "./myBadges";
 import MyProgress from "./myProgress";
-import RSVPButton from "./rsvpButton";
-
-export const rsvpToLabel = {
-  true: { icon: <CheckCircleIcon className="size-3" />, color: "green" },
-  false: { icon: <XMarkIcon className="size-3" />, color: "red" },
-  null: { icon: <QuestionMarkCircleIcon className="size-3" />, color: "gray" },
-};
+import RsvpStatusMenu from "./rsvpStatusMenu";
 
 export default async function Dashboard() {
   const lists = await getLists();
@@ -109,43 +97,7 @@ export default async function Dashboard() {
                       <div className="flex-1 flex flex-col gap-1">
                         <div className="relative flex items-center gap-2 justify-between">
                           <h4>{name}</h4>
-                          <Menu>
-                            <div className="relative">
-                              <MenuButton
-                                as="div"
-                                className="p-1 rounded-full cursor-pointer hover:text-primary-text/50"
-                                style={{
-                                  backgroundColor:
-                                    rsvpToLabel[
-                                      (rsvp ??
-                                        "null") as keyof typeof rsvpToLabel
-                                    ].color,
-                                }}
-                              >
-                                {
-                                  rsvpToLabel[
-                                    (rsvp ?? "null") as keyof typeof rsvpToLabel
-                                  ].icon
-                                }
-                              </MenuButton>
-                              <MenuItems className="flex flex-col absolute top-0 left-8 bg-secondary-bg! rounded-lg overflow-hidden border border-tertiary-bg outline-none z-10">
-                                {[
-                                  "Attending",
-                                  "Not Attending",
-                                  "Undecided",
-                                ].map((label) => {
-                                  return (
-                                    <RSVPButton
-                                      key={label}
-                                      eventId={id}
-                                      label={label}
-                                      rsvp={rsvp}
-                                    />
-                                  );
-                                })}
-                              </MenuItems>
-                            </div>
-                          </Menu>
+                          <RsvpStatusMenu eventId={id} rsvp={rsvp} />
                         </div>
                         <p>{formatDate(date)}</p>
                       </div>
@@ -170,41 +122,7 @@ export default async function Dashboard() {
                       <div className="flex-1 flex flex-col gap-1">
                         <div className="relative flex items-center gap-2 justify-between">
                           <h4>{name}</h4>
-                          <Menu>
-                            <div className="relative">
-                              <MenuButton
-                                as="div"
-                                className="p-1 rounded-full cursor-pointer hover:text-primary-text/50"
-                                style={{
-                                  backgroundColor:
-                                    rsvpToLabel[
-                                      (rsvp ??
-                                        "null") as keyof typeof rsvpToLabel
-                                    ].color,
-                                }}
-                              >
-                                {
-                                  rsvpToLabel[
-                                    (rsvp ?? "null") as keyof typeof rsvpToLabel
-                                  ].icon
-                                }
-                              </MenuButton>
-                              <MenuItems className="flex flex-col absolute top-0 left-8 bg-secondary-bg! rounded-lg overflow-hidden border border-tertiary-bg outline-none z-10">
-                                {[
-                                  "Attending",
-                                  "Not Attending",
-                                  "Undecided",
-                                ].map((label) => (
-                                  <RSVPButton
-                                    key={label}
-                                    eventId={id}
-                                    label={label}
-                                    rsvp={rsvp}
-                                  />
-                                ))}
-                              </MenuItems>
-                            </div>
-                          </Menu>
+                          <RsvpStatusMenu eventId={id} rsvp={rsvp} />
                         </div>
                         <p>{formatDate(date)}</p>
                       </div>

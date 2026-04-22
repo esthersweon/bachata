@@ -17,7 +17,8 @@ const COLORS = ["#bc1c0d", "#af6900", "#076554"];
 export default function MyProgress() {
   const router = useRouter();
   const [statuses, setStatuses] = useState<Status[]>([]);
-  const [hasFetchedStatuses, setHasFetchedStatuses] = useState(false);
+  const [hasFetchedStatuses, setHasFetchedStatuses] = useState<boolean>(false);
+  const [isMounted, setIsMounted] = useState<boolean>(false);
 
   useEffect(() => {
     if (hasFetchedStatuses) return;
@@ -26,6 +27,18 @@ export default function MyProgress() {
       .then((response) => response.json())
       .then((data) => setStatuses(data));
   }, []);
+
+  useEffect(() => setIsMounted(true), []);
+
+  if (!isMounted) {
+    return (
+      <div
+        aria-hidden
+        className="w-full"
+        style={{ minWidth: 200, aspectRatio: 1 }}
+      />
+    );
+  }
 
   return (
     <div className="flex flex-col">
@@ -92,7 +105,6 @@ export default function MyProgress() {
           }}
           fill="#8884d8"
           dataKey="value"
-          isAnimationActive={true}
           shape={(props: PieSectorShapeProps) => {
             return (
               <Sector {...props} fill={COLORS[props.index % COLORS.length]} />

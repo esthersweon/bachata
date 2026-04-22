@@ -1,9 +1,9 @@
 import { getEvents } from "@/app/lib/events";
+import { rsvpToLabel } from "@/app/lib/rsvpToLabel";
 import { Suspense } from "react";
 import ActivitiesFeed, { activities } from "./feed/activitiesFeed";
 import UserRecommendations from "./feed/userRecommendations";
 import { formatDate } from "./helpers";
-import { rsvpToLabel } from "./profile/page";
 
 export default async function Home() {
   const events = await getEvents();
