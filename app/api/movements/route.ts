@@ -55,7 +55,8 @@ export async function GET(request: NextRequest) {
           s.name AS "statusName"
         FROM movements m
         JOIN levels l ON m.level_id = l.id
-        JOIN categories c ON m.category_id = c.id
+        JOIN movements_categories mc ON m.id = mc.movement_id
+        JOIN categories c ON mc.category_id = c.id
         LEFT JOIN users_movements um
           ON m.id = um.movement_id AND um.user_id = ${userId}
         LEFT JOIN statuses s ON s.id = COALESCE(um.status_id, ${defaultStatusId})
@@ -137,15 +138,22 @@ export async function POST(request: Request) {
       await sql`SELECT id FROM statuses ORDER BY "order" LIMIT 1`;
 
     const movementId = crypto.randomUUID();
-    const insertMovement = sql`INSERT INTO movements (id, name, description, level_id, category_id)
-      VALUES (${movementId}, ${name}, ${description}, ${levelId}, ${categoryId})`;
+    const insertMovement = sql`INSERT INTO movements (id, name, description, level_id)
+      VALUES (${movementId}, ${name}, ${description}, ${levelId})`;
+
+    const insertMovementCategory = sql`INSERT INTO movements_categories (id, movement_id, category_id)
+      VALUES (${crypto.randomUUID()}, ${movementId}, ${categoryId})`;
 
     const userMovementId = crypto.randomUUID();
     const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
     const insertUserMovement = sql`INSERT INTO users_movements (id, movement_id, status_id, user_id)
       VALUES (${userMovementId}, ${movementId}, ${statusId[0].id}, ${userId})`;
 
-    await sql.transaction([insertMovement, insertUserMovement]);
+    await sql.transaction([
+      insertMovement,
+      insertMovementCategory,
+      insertUserMovement,
+    ]);
 
     return Response.json(
       { ok: true },

@@ -44,7 +44,8 @@ export async function GET(
             s.name AS "statusName"
           FROM movements m
           JOIN levels l ON m.level_id = l.id
-          JOIN categories c ON m.category_id = c.id
+          JOIN movements_categories mc ON m.id = mc.movement_id
+          JOIN categories c ON mc.category_id = c.id
           LEFT JOIN users_movements um
             ON m.id = um.movement_id AND um.user_id = ${userId}
           LEFT JOIN statuses s ON s.id = COALESCE(um.status_id, ${defaultStatusId}) 
