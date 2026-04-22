@@ -7,7 +7,7 @@ export default function PageWrapper({
   children: React.ReactNode;
 }) {
   return (
-    <main className="flex flex-col gap-4 max-w-2xl mx-auto w-full">
+    <main className="flex flex-col gap-4 max-w-4xl mx-auto w-full">
       <Link
         href="/movements"
         className="inline-flex items-center gap-1.5 text-xs text-primary-text/60 hover:text-primary-text transition-colors w-fit"

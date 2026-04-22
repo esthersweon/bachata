@@ -11,6 +11,7 @@ import MyNotes from "./myNotes";
 import PageHeader from "./pageHeader";
 import PageWrapper from "./pageWrapper";
 import { RelatedListsSection } from "./relatedListsSection";
+import VideosCarousel from "./videosCarousel";
 
 export const dynamic = "force-dynamic";
 
@@ -34,16 +35,13 @@ export default function MovementPage({
   const { id } = use(params);
   const router = useRouter();
 
-  const updateMovement = async (payload: Partial<Movement>) => {
+  const updateMovement = async () => {
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id, ...payload }),
+        body: JSON.stringify({ id, ...movement }),
       })
     ).json();
-    if (response.ok)
-      setMovement((prev) => ({ ...(prev as Movement), ...payload }));
-
     setError(response?.error ?? null);
   };
 
@@ -163,79 +161,66 @@ export default function MovementPage({
             }))
           }
         />
-        <section className="border-t border-tertiary-bg pt-4 space-y-2 flex">
-          <div className="flex-3 p-4 flex flex-col gap-2">
+
+        <section className="flex gap-4">
+          <VideosCarousel />
+          <div className="flex-1 flex flex-col gap-2">
             <div className="uppercase font-bold">Description</div>
 
             <Textarea
+              rows={5}
               className="w-full resize-none rounded-lg border-none bg-tertiary-bg p-2"
-              style={{
-                minHeight: "4lh",
-                maxHeight: "10lh",
-                fieldSizing: "content",
-              }}
               defaultValue={movement.description}
-              onChange={() => {}}
-              onBlur={(e) => {
-                if (e.target.value.trim() !== movement.description)
-                  updateMovement({ description: e.target.value.trim() });
-              }}
+              onChange={(e) =>
+                setMovement((prev) => ({
+                  ...(prev as Movement),
+                  description: e.target.value,
+                }))
+              }
+              onBlur={updateMovement}
             />
 
-            <div className="uppercase font-bold">How to Prep</div>
+            <div className="uppercase font-bold">How to Cue</div>
 
             <Textarea
+              rows={5}
               className="w-full resize-none rounded-lg border-none bg-tertiary-bg p-2"
               defaultValue={movement.prep}
               onChange={({ target: { value } }) =>
                 setMovement((prev) => ({ ...(prev as Movement), prep: value }))
               }
-              onBlur={({ target: { value } }) => {
-                if (value.trim() !== movement.prep)
-                  updateMovement({ prep: value.trim() });
-              }}
+              onBlur={updateMovement}
             />
 
             <div className="uppercase font-bold">When to use</div>
 
             <Textarea
+              rows={5}
               className="w-full resize-none rounded-lg border-none bg-tertiary-bg p-2"
               defaultValue={movement.usage}
               onChange={({ target: { value } }) =>
-                setMovement((prev) => ({ ...(prev as Movement), prep: value }))
+                setMovement((prev) => ({ ...(prev as Movement), usage: value }))
               }
-              onBlur={({ target: { value } }) => {
-                if (value.trim() !== movement.usage)
-                  updateMovement({ usage: value.trim() });
-              }}
+              onBlur={updateMovement}
             />
           </div>
-
-          <MyNotes notes={movement.notes} />
-        </section>
-
-        <section>
-          <div className="flex gap-2">
-            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
-            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
-            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
-          </div>
         </section>
 
         <hr className="border-tertiary-bg" />
 
-        <section>
-          <h2>My Uploads</h2>
-          <div className="flex gap-2">
-            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
-            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
-            <div className="w-50 h-50 bg-tertiary-bg rounded-sm"></div>
+        <section className="flex gap-4">
+          <div className="flex-1 flex flex-col gap-2">
+            <div className="text-center uppercase font-bold">My Notes</div>
+            <MyNotes notes={movement.notes} />
+            <div className="text-center uppercase font-bold">My Lists</div>
+            <RelatedListsSection movementId={id} lists={lists} />
+          </div>
+
+          <div className="flex flex-col gap-2 flex-1">
+            <div className="text-center uppercase font-bold">My Progress</div>
+            <VideosCarousel />
           </div>
         </section>
-
-        <hr className="border-tertiary-bg" />
-
-        <RelatedListsSection movementId={id} lists={lists} />
 
         <hr className="border-tertiary-bg" />
 
