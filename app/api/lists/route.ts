@@ -3,7 +3,8 @@ import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const { status, lists } = await getListsOfMovements();
+  const handle = request.nextUrl.searchParams.get("handle");
+  const { status, lists } = await getListsOfMovements(handle);
   return Response.json(lists, {
     status,
     headers: { "Content-Type": "application/json" },

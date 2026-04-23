@@ -1,7 +1,7 @@
 import { List } from "@/app/types";
 import { neon } from "@neondatabase/serverless";
 
-export async function getListsOfMovements(): Promise<{
+export async function getListsOfMovements(handle?: string): Promise<{
   status: 200 | 503 | 500;
   lists: List[];
 }> {
@@ -10,8 +10,16 @@ export async function getListsOfMovements(): Promise<{
 
   try {
     const sql = neon(url);
-    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
-    const lists = await sql`SELECT id, name FROM lists ORDER BY LOWER(name)`;
+    const userId = handle
+      ? (await sql`SELECT id FROM users WHERE handle = ${handle}`)[0].id
+      : "efbefbcd-e551-4e5c-9433-846d4b3a703f";
+
+    const lists = await sql`
+      SELECT l.id, l.name FROM lists l
+      JOIN lists_movements lm ON l.id = lm.list_id
+      WHERE lm.user_id = ${userId}
+      ORDER BY LOWER(l.name)`;
+
     const listsWithMovements = await Promise.all(
       lists.map(async (list: Record<string, any>) => {
         const listId = String(list.id);

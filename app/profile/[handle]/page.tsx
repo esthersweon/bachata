@@ -22,9 +22,9 @@ export default function ProfilePage() {
       fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/users/${handle}`).then(
         (r) => r.json() as Promise<{ user: User }>,
       ),
-      fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists`).then(
-        (r) => r.json() as Promise<ListType[]>,
-      ),
+      fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/lists?handle=${handle}`,
+      ).then((r) => r.json() as Promise<ListType[]>),
       fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/events`).then(
         (r) => r.json() as Promise<DanceEvent[]>,
       ),
