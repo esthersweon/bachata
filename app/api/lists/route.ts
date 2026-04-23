@@ -4,7 +4,7 @@ import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
   const handle = request.nextUrl.searchParams.get("handle");
-  const { status, lists } = await getListsOfMovements(handle);
+  const { status, lists } = await getListsOfMovements(handle ?? undefined);
   return Response.json(lists, {
     status,
     headers: { "Content-Type": "application/json" },
