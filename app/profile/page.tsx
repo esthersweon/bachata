@@ -2,12 +2,12 @@ import { getEvents } from "@/app/lib/events";
 import { getLists } from "@/app/lib/lists";
 import { CakeIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
-import { formatDate } from "../helpers";
+import VideosCarousel from "../movements/[id]/videosCarousel";
 import AddListModal from "./addListModal";
-import List from "./list";
 import MyBadges from "./myBadges";
 import MyProgress from "./myProgress";
-import RsvpStatusMenu from "./rsvpStatusMenu";
+import ProfileEventsSection from "./profileEventsSection";
+import ProfileListsSection from "./profileListsSection";
 
 export default async function Dashboard() {
   const lists = await getLists();
@@ -24,37 +24,21 @@ export default async function Dashboard() {
           />
 
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2">
-              <h1>Esther Weon</h1>
-              <div className="text-xs bg-secondary-bg px-2 py-1 rounded-full">
-                Follow
-              </div>
-            </div>
+            <h1>Esther Weon</h1>
 
-            {/* <div className="flex gap-2">
+            <div className="flex gap-2 text-sm">
               <div>
                 <span className="cursor-pointer font-bold">87</span> Followers
               </div>
               <div>
                 <span className="cursor-pointer font-bold">124</span> Following
               </div>
-            </div> */}
+            </div>
 
-            <div className="flex items-center gap-2 text-xs">
+            <div className="flex items-center gap-2 text-xs text-primary-text/80">
               <CakeIcon className="size-3" />
               <div>Dancing since Oct 2025</div>
             </div>
-
-            {/* <div className="flex gap-2 justify-center">
-              <button className="flex items-center gap-2">
-                <UserIcon className="size-4" />
-                <div>Follow</div>
-              </button>
-              <button className="flex items-center gap-2">
-                <InboxIcon className="size-4" />
-                <div>Message</div>
-              </button>
-            </div> */}
           </div>
         </div>
 
@@ -62,73 +46,26 @@ export default async function Dashboard() {
           <MyBadges />
 
           <div className="flex flex-wrap gap-2 w-full items-start">
-            <div className="flex flex-col gap-2 flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-              <MyProgress />
+            <div className="flex flex-col gap-2 basis-[calc(1/3*100%-0.5rem)] max-w-full">
+              <ProfileEventsSection events={events} />
+              <ProfileListsSection
+                lists={lists}
+                headerRight={<AddListModal />}
+              />
             </div>
 
-            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-              <div className="flex items-center gap-2 justify-between">
-                <h2>My Lists</h2>
-                <AddListModal />
+            <div className="flex flex-col gap-2 basis-[calc(2/3*100%-0.5rem)] bg-secondary-bg p-4 rounded-lg">
+              <div className="text-center text-sm uppercase font-bold">
+                My Progress
               </div>
-              <div className="flex flex-col gap-2">
-                {lists.map(({ id, name, movements }) => (
-                  <List key={id} id={id} name={name} movements={movements} />
-                ))}
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2 bg-secondary-bg p-4 rounded-lg flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-              <h2>Upcoming events</h2>
-              <ul className="flex flex-col gap-2">
-                {events
-                  .filter(({ date }) => new Date(date) >= new Date())
-                  .map(({ id, name, image, date, rsvp }) => (
-                    <li
-                      key={id}
-                      className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
-                    >
-                      <img
-                        src={image}
-                        alt={name}
-                        className="size-10 object-cover"
-                      />
-
-                      <div className="flex-1 flex flex-col gap-1">
-                        <div className="relative flex items-center gap-2 justify-between">
-                          <h4>{name}</h4>
-                          <RsvpStatusMenu eventId={id} rsvp={rsvp} />
-                        </div>
-                        <p>{formatDate(date)}</p>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
-
-              <h2>Past events</h2>
-              <ul className="flex flex-col gap-2">
-                {events
-                  .filter(({ date }) => new Date(date) < new Date())
-                  .map(({ id, name, image, date, rsvp }) => (
-                    <li
-                      key={id}
-                      className="bg-primary-bg p-4 rounded-lg flex items-center gap-2"
-                    >
-                      <img
-                        src={image}
-                        alt={name}
-                        className="size-10 object-cover"
-                      />
-                      <div className="flex-1 flex flex-col gap-1">
-                        <div className="relative flex items-center gap-2 justify-between">
-                          <h4>{name}</h4>
-                          <RsvpStatusMenu eventId={id} rsvp={rsvp} />
-                        </div>
-                        <p>{formatDate(date)}</p>
-                      </div>
-                    </li>
-                  ))}
-              </ul>
+              <section className="flex flex-wrap gap-2">
+                <div className="flex-1">
+                  <MyProgress />
+                </div>
+                <div className="flex-2">
+                  <VideosCarousel />
+                </div>
+              </section>
             </div>
           </div>
         </div>

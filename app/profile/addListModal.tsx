@@ -47,7 +47,7 @@ export default function AddListModal() {
 
   return (
     <>
-      <Button className="rounded-full!" onClick={() => setShowModal(true)}>
+      <Button className="rounded-full! p-1!" onClick={() => setShowModal(true)}>
         <PlusIcon className="size-4" />
       </Button>
       {showModal && (

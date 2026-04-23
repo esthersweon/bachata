@@ -29,7 +29,7 @@ export default async function MyBadges() {
           style={{ backgroundColor: "green" }}
         >
           <StarIcon className="size-4" />
-          <div>
+          <div className="uppercase font-bold">
             Attended {eventsAttended} event{eventsAttended === 1 ? "" : "s"}
           </div>
         </li>
@@ -39,7 +39,9 @@ export default async function MyBadges() {
         style={{ backgroundColor: "blueviolet" }}
       >
         <StarIcon className="size-4" />
-        <div>Mastered {movementsMastered} moves</div>
+        <div className="uppercase font-bold">
+          Mastered {movementsMastered} moves
+        </div>
       </li>
       {listsCreated > 0 && (
         <li
@@ -47,7 +49,7 @@ export default async function MyBadges() {
           style={{ backgroundColor: "orange" }}
         >
           <StarIcon className="size-4" />
-          <div>
+          <div className="uppercase font-bold">
             Created {listsCreated} lists{" "}
             {listsCompleted > 0 && `(${listsCompleted} completed)`}
           </div>

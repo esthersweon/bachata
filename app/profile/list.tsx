@@ -86,7 +86,7 @@ export default function List({
         onClick={() => setShowMovements(!showMovements)}
       >
         <div className="flex flex-col">
-          <h3 className="mb-0! text-nowrap">{name}</h3>
+          <div className="mb-0! text-nowrap font-bold uppercase">{name}</div>
           <div className="text-xs text-primary-text/50">
             {movements.length} movements • {percentCompleted.toFixed(0)}%
             completed

@@ -1,9 +1,9 @@
 import { getEvents } from "@/app/lib/events";
-import { rsvpToLabel } from "@/app/lib/rsvpToLabel";
 import { Suspense } from "react";
 import ActivitiesFeed, { activities } from "./feed/activitiesFeed";
 import UserRecommendations from "./feed/userRecommendations";
 import { formatDate } from "./helpers";
+import RsvpStatusMenu from "./profile/rsvpStatusMenu";
 
 export default async function Home() {
   const events = await getEvents();
@@ -26,24 +26,9 @@ export default async function Home() {
                     className="h-40 object-cover"
                   />
                   <div className="flex flex-col gap-1 p-4">
-                    <div className="flex flex-wrap justify-between gap-1 items-center">
+                    <div className="relative flex flex-wrap justify-between gap-1 items-center">
                       <h3>{event.name}</h3>
-
-                      <div
-                        style={{
-                          backgroundColor:
-                            rsvpToLabel[
-                              (event.rsvp ?? "null") as keyof typeof rsvpToLabel
-                            ].color,
-                        }}
-                        className="p-1 rounded-full"
-                      >
-                        {
-                          rsvpToLabel[
-                            (event.rsvp ?? "null") as keyof typeof rsvpToLabel
-                          ].icon
-                        }
-                      </div>
+                      <RsvpStatusMenu eventId={event.id} rsvp={event.rsvp} />
                     </div>
                     <p>{formatDate(event.date)}</p>
                   </div>
