@@ -42,7 +42,7 @@ export default function AddListModal() {
   useEffect(() => {
     fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`)
       .then((response) => response.json())
-      .then((data) => setMovements(data));
+      .then((data) => setMovements(data.movements));
   }, []);
 
   return (

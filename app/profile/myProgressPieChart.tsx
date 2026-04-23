@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Pie,
   PieChart,
@@ -14,21 +14,28 @@ import { Status } from "../types";
 const RADIAN = Math.PI / 180;
 const COLORS = ["#bc1c0d", "#af6900", "#076554"];
 
-export default function MyProgress() {
+export default function MyProgressPieChart({ userId }: { userId?: string }) {
   const router = useRouter();
   const [statuses, setStatuses] = useState<Status[]>([]);
-  const [hasFetchedStatuses, setHasFetchedStatuses] = useState<boolean>(false);
   const [isMounted, setIsMounted] = useState<boolean>(false);
+  const hasFetchedStatusesRef = useRef(false);
 
   useEffect(() => {
-    if (hasFetchedStatuses) return;
-    setHasFetchedStatuses(true);
-    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`)
+    if (hasFetchedStatusesRef.current) return;
+    hasFetchedStatusesRef.current = true;
+    fetch(
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses${userId ? `?userId=${userId}` : ""}`,
+    )
       .then((response) => response.json())
       .then((data) => setStatuses(data));
-  }, [hasFetchedStatuses]);
+  }, []);
 
-  useEffect(() => setIsMounted(true), []);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setIsMounted(true);
+    });
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   if (!isMounted) {
     return (

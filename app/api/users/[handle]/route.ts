@@ -14,13 +14,14 @@ export async function GET(
     const sql = neon(url);
     const user = await sql`
     SELECT
-        id,
-        first_name AS "firstName",
-        last_name AS "lastName",
-        email,
-        admin,
-        profile_picture AS "profilePicture",
-        handle
+      id,
+      first_name AS "firstName",
+      last_name AS "lastName",
+      email,
+      admin,
+      profile_picture AS "profilePicture",
+      handle,
+      dance_role AS "danceRole"
     FROM users
     WHERE handle = ${handle}`;
     return Response.json({ status: 200, user: user[0] });

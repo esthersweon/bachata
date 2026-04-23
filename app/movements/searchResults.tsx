@@ -19,7 +19,7 @@ export default async function SearchResults({
   status: string;
   statuses: Status[];
 }) {
-  const movements: Movement[] = await (
+  const { movements }: { movements: Movement[] } = await (
     await fetch(
       `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}&status=${status}`,
     )

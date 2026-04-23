@@ -1,7 +1,7 @@
 "use client";
 
 import { Menu, MenuButton, MenuItems } from "@headlessui/react";
-import { useLayoutEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { rsvpToLabel } from "@/app/lib/rsvpToLabel";
 import RSVPButton from "./rsvpButton";
@@ -17,8 +17,11 @@ export default function RsvpStatusMenu({
 }) {
   const [isMenuClient, setIsMenuClient] = useState<boolean>(false);
 
-  useLayoutEffect(() => {
-    setIsMenuClient(true);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => {
+      setIsMenuClient(true);
+    });
+    return () => cancelAnimationFrame(id);
   }, []);
 
   const key = (rsvp ?? "null") as keyof typeof rsvpToLabel;
@@ -27,7 +30,7 @@ export default function RsvpStatusMenu({
   if (!isMenuClient) {
     return (
       <div
-        className="p-1 rounded-full w-4 h-4 flex items-center justify-center cursor-default"
+        className="p-1 rounded-full size-4 flex items-center justify-center cursor-default"
         style={{ backgroundColor }}
         aria-hidden
       >

@@ -29,4 +29,5 @@ export type User = {
   admin: boolean;
   profilePicture: string;
   handle: string;
+  danceRole: "lead" | "follow";
 };

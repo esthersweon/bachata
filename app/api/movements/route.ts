@@ -8,6 +8,7 @@ export async function GET(request: NextRequest) {
   const level = searchParams.get("level") ?? "";
   const category = searchParams.get("category") ?? "";
   const status = searchParams.get("status") ?? "";
+  const userIdParam = searchParams.get("userId") ?? "";
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -19,7 +20,9 @@ export async function GET(request: NextRequest) {
 
   try {
     const sql = neon(url);
-    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+    const userId = userIdParam
+      ? userIdParam
+      : "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
 
     const qPattern = `%${q}%`;
     const levelFilter = level ? sql`AND l.id = ${level}` : sql``;

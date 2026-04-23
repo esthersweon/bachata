@@ -8,6 +8,7 @@ export async function getUsers() {
   try {
     const sql = neon(url);
     const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+
     const users = await sql`
       SELECT
         id,
@@ -15,7 +16,8 @@ export async function getUsers() {
         last_name AS "lastName",
         email, admin,
         profile_picture AS "profilePicture",
-        handle
+        handle,
+        dance_role AS "danceRole"
     FROM users
     WHERE id != ${userId}`;
     return { status: 200, users: users as User[] };

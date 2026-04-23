@@ -1,6 +1,5 @@
 import { getUsers } from "@/app/lib/users";
-import { InboxIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import { HeartIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default async function UserRecommendations() {
@@ -11,9 +10,9 @@ export default async function UserRecommendations() {
         {users.map(({ handle, firstName, lastName, profilePicture }) => (
           <li key={handle}>
             <Link href={`/profile/${handle}`}>
-              <div className="flex flex-col items-center gap-2 bg-primary-bg p-4 rounded-lg">
+              <div className="flex flex-col items-center gap-2 bg-tertiary-bg p-4 rounded-lg">
                 {profilePicture ? (
-                  <Image
+                  <img
                     src={profilePicture}
                     alt={handle}
                     className="size-10 rounded-full"
@@ -22,15 +21,15 @@ export default async function UserRecommendations() {
                   <UserIcon className="size-10" />
                 )}
 
-                <h3>
+                <div className="text-sm">
                   {firstName} {lastName}
-                </h3>
+                </div>
 
                 <div className="flex gap-2">
-                  <button className="flex items-center gap-2">
-                    <PlusIcon className="size-4" /> Follow
+                  <button className="flex items-center gap-1">
+                    <HeartIcon className="size-4" /> Friend
                   </button>
-                  <button className="flex items-center gap-2">
+                  <button className="flex items-center gap-1">
                     <InboxIcon className="size-4" /> Message
                   </button>
                 </div>
@@ -39,7 +38,6 @@ export default async function UserRecommendations() {
           </li>
         ))}
       </ul>
-      <div>Recommended follows/leads?</div>
     </>
   );
 }

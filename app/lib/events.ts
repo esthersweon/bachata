@@ -1,7 +1,7 @@
 import type { DanceEvent } from "@/app/types";
 import { neon } from "@neondatabase/serverless";
 
-export async function getEventsWithStatus(): Promise<{
+export async function getEventsWithStatus(handle?: string): Promise<{
   status: 200 | 503 | 500;
   events: DanceEvent[];
 }> {
@@ -12,7 +12,9 @@ export async function getEventsWithStatus(): Promise<{
 
   try {
     const sql = neon(url);
-    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
+    const userId = handle
+      ? (await sql`SELECT id FROM users WHERE handle = ${handle}`)[0].id
+      : "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
     const rows = await sql`SELECT e.id, e.name, e.date, e.image, ue.rsvp
       FROM events e
       LEFT JOIN users_events ue

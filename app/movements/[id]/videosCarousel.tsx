@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 const videos = [
   {
     id: 1,
@@ -25,13 +23,10 @@ const videos = [
 
 export default function VideosCarousel() {
   return (
-    <div className="flex flex-wrap gap-2 flex-1 justify-between">
+    <div className="flex flex-wrap gap-2 justify-between content-start">
       {videos.map((video) => (
-        <div
-          key={video.id}
-          className="flex-1 min-w-50 max-w-100 min-h-50 bg-tertiary-bg rounded-sm relative"
-        >
-          <Image
+        <div key={video.id} className="size-50 rounded-sm relative">
+          <img
             key={video.id}
             alt={video.label}
             src={video.url}

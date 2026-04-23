@@ -1,11 +1,12 @@
 "use client";
 
-import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
-import Image from "next/image";
+import { CakeIcon, HeartIcon, InboxIcon } from "@heroicons/react/24/outline";
 import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import VideosCarousel from "../../movements/[id]/videosCarousel";
 import { DanceEvent, List as ListType, User } from "../../types";
-import MyProgress from "../myProgress";
+import MyBadges from "../myBadges";
+import MyProgressPieChart from "../myProgressPieChart";
 import ProfileEventsSection from "../profileEventsSection";
 import ProfileListsSection from "../profileListsSection";
 
@@ -26,9 +27,9 @@ export default function ProfilePage() {
       fetch(
         `${process.env.NEXT_PUBLIC_DOMAIN}/api/lists?handle=${handle}`,
       ).then((r) => r.json() as Promise<ListType[]>),
-      fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/events`).then(
-        (r) => r.json() as Promise<DanceEvent[]>,
-      ),
+      fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/events?handle=${handle}`,
+      ).then((r) => r.json() as Promise<DanceEvent[]>),
     ]).then(([{ user: fetchedUser }, nextLists, nextEvents]) => {
       setUser(fetchedUser);
       setLists(nextLists);
@@ -42,7 +43,7 @@ export default function ProfilePage() {
     <main className="flex flex-col gap-4">
       <Suspense fallback={<div>Loading profile...</div>}>
         <div className="flex justify-center items-center gap-4">
-          <Image
+          <img
             src={user?.profilePicture ?? ""}
             alt={`${user?.firstName} ${user?.lastName}`}
             className="size-30 rounded-full"
@@ -51,8 +52,8 @@ export default function ProfilePage() {
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
               <h1>{`${user?.firstName} ${user?.lastName}`}</h1>
-              <div className="text-xs bg-secondary-bg px-2 py-1 rounded-full">
-                Follow
+              <div className="text-xs bg-secondary-bg px-2 py-1 rounded-full capitalize">
+                {user?.danceRole}
               </div>
             </div>
 
@@ -71,11 +72,11 @@ export default function ProfilePage() {
             </div>
 
             <div className="flex gap-2 justify-center">
-              <button className="flex items-center gap-2">
-                <UserIcon className="size-4" />
-                <div>Follow</div>
+              <button className="flex items-center gap-1">
+                <HeartIcon className="size-4" />
+                <div>Friend</div>
               </button>
-              <button className="flex items-center gap-2">
+              <button className="flex items-center gap-1">
                 <InboxIcon className="size-4" />
                 <div>Message</div>
               </button>
@@ -84,16 +85,29 @@ export default function ProfilePage() {
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          {/* <MyBadges /> */}
+          <MyBadges userId={user.id} />
 
-          <div className="flex flex-wrap gap-2 w-full items-start">
-            <div className="flex flex-col gap-2 flex-1 basis-[calc(1/3*100%-0.5rem)] max-w-full">
-              <MyProgress />
+          <div className="flex flex-wrap gap-2 w-full items-stretch">
+            <div className="flex flex-col gap-2 basis-[calc(1/3*100%-0.5rem)] max-w-full">
+              <div className="flex flex-col w-full bg-secondary-bg p-4 rounded-lg">
+                <div className="text-center text-sm uppercase font-bold">
+                  {user?.firstName}'s Progress
+                </div>
+                <MyProgressPieChart userId={user.id} />
+              </div>
+              <ProfileEventsSection events={events} />
+              <ProfileListsSection
+                title={`${user?.firstName}'s Lists`}
+                lists={lists}
+              />
             </div>
 
-            <ProfileListsSection lists={lists} />
-
-            <ProfileEventsSection events={events} />
+            <div className="flex flex-col gap-4 basis-[calc(2/3*100%-0.5rem)] bg-secondary-bg p-4 rounded-lg">
+              <div className="text-center uppercase font-bold text-sm">
+                {`${user?.firstName}'s Videos`}
+              </div>
+              <VideosCarousel />
+            </div>
           </div>
         </div>
       </Suspense>

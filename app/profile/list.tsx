@@ -23,10 +23,12 @@ export default function List({
   id,
   name,
   movements,
+  allowEditing,
 }: {
   id: string;
   name: string;
   movements: ListMovement[];
+  allowEditing?: boolean;
 }) {
   const [showMovements, setShowMovements] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -92,37 +94,39 @@ export default function List({
             completed
           </div>
         </div>
-        <Menu>
-          <MenuButton
-            className="bg-primary-bg! p-0! hover:text-primary-text/50!"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <EllipsisVerticalIcon className="size-4" />
-          </MenuButton>
-          <MenuItems
-            anchor="bottom"
-            className="z-10 border border-tertiary-bg bg-secondary-bg rounded-sm cursor-pointer outline-none"
-          >
-            <MenuItem>
-              <div
-                className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
-                onClick={() => setShowEditModal(true)}
-              >
-                <PencilIcon className="size-4" />
-                <div>Edit</div>
-              </div>
-            </MenuItem>
-            <MenuItem>
-              <div
-                className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
-                onClick={() => setShowDeleteConfirmation(true)}
-              >
-                <TrashIcon className="size-4" />
-                <div>Delete</div>
-              </div>
-            </MenuItem>
-          </MenuItems>
-        </Menu>
+        {allowEditing ? (
+          <Menu>
+            <MenuButton
+              className="bg-primary-bg! p-0! hover:text-primary-text/50!"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <EllipsisVerticalIcon className="size-4" />
+            </MenuButton>
+            <MenuItems
+              anchor="bottom"
+              className="z-10 border border-tertiary-bg bg-secondary-bg rounded-sm cursor-pointer outline-none"
+            >
+              <MenuItem>
+                <div
+                  className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
+                  onClick={() => setShowEditModal(true)}
+                >
+                  <PencilIcon className="size-4" />
+                  <div>Edit</div>
+                </div>
+              </MenuItem>
+              <MenuItem>
+                <div
+                  className="flex cursor-pointer gap-2 p-2 hover:bg-tertiary-bg"
+                  onClick={() => setShowDeleteConfirmation(true)}
+                >
+                  <TrashIcon className="size-4" />
+                  <div>Delete</div>
+                </div>
+              </MenuItem>
+            </MenuItems>
+          </Menu>
+        ) : null}
       </div>
 
       <ul

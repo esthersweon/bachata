@@ -17,8 +17,9 @@ export async function getListsOfMovements(handle?: string): Promise<{
 
     const lists = await sql`
       SELECT l.id, l.name FROM lists l
-      JOIN lists_movements lm ON l.id = lm.list_id
-      WHERE lm.user_id = ${userId}
+      WHERE l.id IN (
+        SELECT list_id FROM lists_movements WHERE user_id = ${userId}
+      )
       ORDER BY LOWER(l.name)`;
 
     const listsWithMovements = await Promise.all(
