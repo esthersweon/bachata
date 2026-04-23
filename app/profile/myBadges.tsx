@@ -9,9 +9,9 @@ export default async function MyBadges() {
     ({ date, rsvp }) => new Date() >= new Date(date) && !!rsvp,
   ).length;
 
-  const movements = (await (
+  const { movements } = (await (
     await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`)
-  ).json()) as Movement[];
+  ).json()) as { movements: Movement[] };
   const movementsMastered = movements.filter(
     ({ statusName }) => statusName === "Mastered",
   ).length;

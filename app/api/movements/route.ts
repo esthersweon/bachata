@@ -11,10 +11,10 @@ export async function GET(request: NextRequest) {
 
   const url = process.env.POSTGRES_URL;
   if (!url) {
-    return Response.json([], {
-      status: 503,
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json(
+      { movements: [] },
+      { status: 503, headers: { "Content-Type": "application/json" } },
+    );
   }
 
   try {
@@ -38,7 +38,7 @@ export async function GET(request: NextRequest) {
       ? sql`AND COALESCE(um.status_id, ${defaultStatusId}) = ${status}`
       : sql``;
 
-    const rows = await sql`
+    const movements = await sql`
       SELECT
         m.id,
         m.name,
@@ -71,12 +71,16 @@ export async function GET(request: NextRequest) {
       ORDER BY LOWER(m.name)
     `;
 
-    return Response.json(rows, {
-      headers: { "Content-Type": "application/json" },
-    });
+    return Response.json(
+      { movements },
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
   } catch (error: unknown) {
     return Response.json(
-      { error: `Failed to get movements: ${(error as Error).message}` },
+      {
+        movements: [],
+        error: `Failed to get movements: ${(error as Error).message}`,
+      },
       { status: 500, headers: { "Content-Type": "application/json" } },
     );
   }
