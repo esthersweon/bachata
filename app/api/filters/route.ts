@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const url = process.env.POSTGRES_URL;
   if (!url) {
     return Response.json(

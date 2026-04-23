@@ -26,7 +26,7 @@ export default function MyProgress() {
     fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/statuses`)
       .then((response) => response.json())
       .then((data) => setStatuses(data));
-  }, []);
+  }, [hasFetchedStatuses]);
 
   useEffect(() => setIsMounted(true), []);
 

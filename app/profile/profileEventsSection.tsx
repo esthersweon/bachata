@@ -1,17 +1,14 @@
 "use client";
 
 import type { DanceEvent } from "@/app/types";
+import Image from "next/image";
 import { formatDate } from "../helpers";
 import RsvpStatusMenu from "./rsvpStatusMenu";
 
 function EventRow({ id, name, image, date, rsvp }: DanceEvent) {
   return (
     <li className="bg-primary-bg p-4 rounded-lg flex items-center gap-2">
-      <img
-        src={image}
-        alt={name}
-        className="size-10 object-cover"
-      />
+      <Image src={image} alt={name} className="size-10 object-cover" />
       <div className="flex-1 flex flex-col">
         <div className="relative flex items-center gap-2 justify-between">
           <div className="font-bold">{name}</div>

@@ -9,7 +9,7 @@ export default function MyNotes({
   notes: string;
 }) {
   const [notes, setNotes] = useState(initialNotes);
-  const updateNotes = async (nextNotes: string) => {};
+  // const updateNotes = async (nextNotes: string) => {};
 
   return (
     <Textarea
@@ -20,7 +20,7 @@ export default function MyNotes({
         setNotes(e.target.value);
       }}
       onBlur={(e) => {
-        if (e.target.value.trim() !== notes) console.log("hi"); // updateNotes();
+        if (e.target.value.trim() !== notes) console.log("update notes"); // updateNotes();
       }}
     />
   );

@@ -1,5 +1,6 @@
 import { getUsers } from "@/app/lib/users";
 import { InboxIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function UserRecommendations() {
@@ -12,7 +13,7 @@ export default async function UserRecommendations() {
             <Link href={`/profile/${handle}`}>
               <div className="flex flex-col items-center gap-2 bg-primary-bg p-4 rounded-lg">
                 {profilePicture ? (
-                  <img
+                  <Image
                     src={profilePicture}
                     alt={handle}
                     className="size-10 rounded-full"

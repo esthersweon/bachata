@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 const videos = [
   {
     id: 1,
@@ -29,8 +31,9 @@ export default function VideosCarousel() {
           key={video.id}
           className="flex-1 min-w-50 max-w-100 min-h-50 bg-tertiary-bg rounded-sm relative"
         >
-          <img
+          <Image
             key={video.id}
+            alt={video.label}
             src={video.url}
             className="w-full h-full object-cover"
           />

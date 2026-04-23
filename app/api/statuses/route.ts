@@ -1,7 +1,7 @@
 import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   const url = process.env.POSTGRES_URL;
   if (!url) {
     return Response.json([], {
@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
     const defaultStatusId = String(statuses[0]?.id ?? "");
 
     const resultWithMovements = await Promise.all(
-      statuses.map(async ({ id, name }: Record<string, any>) => {
+      statuses.map(async ({ id, name }) => {
         const statusId = String(id);
         const statusName = String(name);
         const movements = await sql`

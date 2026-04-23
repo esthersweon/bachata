@@ -89,6 +89,8 @@ export default function CategoryTabs({
         </TabGroup>
       </div>
 
+      {error && <p className="text-danger">{error}</p>}
+
       {showModal && (
         <Modal
           title="Add Category"

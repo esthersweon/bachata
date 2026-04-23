@@ -1,6 +1,7 @@
 import { getEvents } from "@/app/lib/events";
 import { getLists } from "@/app/lib/lists";
 import { CakeIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import { Suspense } from "react";
 import VideosCarousel from "../movements/[id]/videosCarousel";
 import AddListModal from "./addListModal";
@@ -17,7 +18,7 @@ export default async function Dashboard() {
     <main className="flex flex-col gap-4">
       <Suspense fallback={<div>Loading profile...</div>}>
         <div className="flex justify-center items-center gap-4">
-          <img
+          <Image
             src="https://avatars.githubusercontent.com/u/6993359?v=4"
             alt="Esther Weon"
             className="size-30 rounded-full"

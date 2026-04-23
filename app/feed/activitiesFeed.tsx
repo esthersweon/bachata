@@ -1,4 +1,5 @@
 import { UserIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import UserRecommendations from "./userRecommendations";
 
 const activityTypesToColors = {
@@ -80,7 +81,7 @@ export default function ActivitiesFeed() {
         >
           <div className="flex items-center gap-2">
             {activity.userProfilePicture ? (
-              <img
+              <Image
                 src={activity.userProfilePicture}
                 alt={activity.user}
                 className="size-6 rounded-full"
@@ -103,9 +104,9 @@ export default function ActivitiesFeed() {
             >
               {activity.metadata?.action ? `${activity.metadata.action} ` : ""}
               {activity.type}
-            </div>{" "}
-            "{activity.value}"{" "}
-            {activity.metadata?.name ? `to ${activity.metadata.name}` : ""}{" "}
+            </div>
+            {activity.value}
+            {activity.metadata?.name ? `to ${activity.metadata.name}` : ""}
             {activity.metadata?.date ? `on ${activity.metadata.date}` : ""}
           </div>
         </li>

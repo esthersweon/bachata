@@ -1,6 +1,7 @@
 "use client";
 
 import { CakeIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { DanceEvent, List as ListType, User } from "../../types";
@@ -41,7 +42,7 @@ export default function ProfilePage() {
     <main className="flex flex-col gap-4">
       <Suspense fallback={<div>Loading profile...</div>}>
         <div className="flex justify-center items-center gap-4">
-          <img
+          <Image
             src={user?.profilePicture ?? ""}
             alt={`${user?.firstName} ${user?.lastName}`}
             className="size-30 rounded-full"

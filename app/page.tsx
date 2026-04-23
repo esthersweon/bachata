@@ -1,4 +1,5 @@
 import { getEvents } from "@/app/lib/events";
+import Image from "next/image";
 import { Suspense } from "react";
 import ActivitiesFeed, { activities } from "./feed/activitiesFeed";
 import UserRecommendations from "./feed/userRecommendations";
@@ -20,7 +21,7 @@ export default async function Home() {
                   key={event.id}
                   className=" max-w-full flex flex-col bg-primary-bg rounded-lg overflow-hidden"
                 >
-                  <img
+                  <Image
                     src={event.image}
                     alt={event.name}
                     className="h-40 object-cover"

@@ -4,6 +4,7 @@ import { neon } from "@neondatabase/serverless";
 export async function getListsOfMovements(handle?: string): Promise<{
   status: 200 | 503 | 500;
   lists: List[];
+  error?: string;
 }> {
   const url = process.env.POSTGRES_URL;
   if (!url) return { status: 503, lists: [] };
@@ -21,9 +22,9 @@ export async function getListsOfMovements(handle?: string): Promise<{
       ORDER BY LOWER(l.name)`;
 
     const listsWithMovements = await Promise.all(
-      lists.map(async (list: Record<string, any>) => {
-        const listId = String(list.id);
-        const listName = String(list.name);
+      lists.map(async ({ id, name }) => {
+        const listId = String(id);
+        const listName = String(name);
         const movements =
           await sql`SELECT m.id, m.name, lm.checked FROM movements m
           JOIN lists_movements lm ON m.id = lm.movement_id
@@ -33,8 +34,8 @@ export async function getListsOfMovements(handle?: string): Promise<{
     );
 
     return { status: 200, lists: listsWithMovements as List[] };
-  } catch (error: unknown) {
-    return { status: 500, lists: [] };
+  } catch (error) {
+    return { status: 500, lists: [], error: (error as Error).message };
   }
 }
 
