@@ -1,7 +1,7 @@
 import { List } from "@/app/types";
 import { neon } from "@neondatabase/serverless";
 
-export async function getListsOfMovements(handle?: string): Promise<{
+export async function getListsOfMovements(userId?: string): Promise<{
   status: 200 | 503 | 500;
   lists: List[];
   error?: string;
@@ -11,10 +11,6 @@ export async function getListsOfMovements(handle?: string): Promise<{
 
   try {
     const sql = neon(url);
-    const userId = handle
-      ? (await sql`SELECT id FROM users WHERE handle = ${handle}`)[0].id
-      : "efbefbcd-e551-4e5c-9433-846d4b3a703f";
-
     const lists = await sql`
       SELECT l.id, l.name FROM lists l
       WHERE l.id IN (
@@ -40,7 +36,7 @@ export async function getListsOfMovements(handle?: string): Promise<{
   }
 }
 
-export async function getLists(): Promise<List[]> {
-  const { lists } = await getListsOfMovements();
+export async function getLists(userId: string): Promise<List[]> {
+  const { lists } = await getListsOfMovements(userId);
   return lists;
 }

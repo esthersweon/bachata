@@ -2,6 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
 
 export async function PATCH(request: NextRequest) {
+  const userId = request.nextUrl.searchParams.get("userId");
   const { movementId, listId, checked } = await request.json();
   const url = process.env.POSTGRES_URL;
   if (!url) {
@@ -12,7 +13,6 @@ export async function PATCH(request: NextRequest) {
   }
   try {
     const sql = neon(url);
-    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
     await sql`UPDATE lists_movements SET checked = ${checked}
     WHERE movement_id = ${movementId} AND list_id = ${listId} AND user_id = ${userId}`;
     return Response.json(

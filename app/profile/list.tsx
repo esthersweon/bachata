@@ -12,6 +12,7 @@ import {
   PencilIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { ListMovement } from "../movements/types";
@@ -30,6 +31,9 @@ export default function List({
   movements: ListMovement[];
   allowEditing?: boolean;
 }) {
+  const session = useSession();
+  const userId = session?.data?.user?.id ?? "";
+
   const [showMovements, setShowMovements] = useState(false);
   const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -54,10 +58,13 @@ export default function List({
     checked: boolean;
   }) => {
     const response = await (
-      await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/lists/movements`, {
-        method: "PATCH",
-        body: JSON.stringify({ movementId, listId, checked }),
-      })
+      await fetch(
+        `${process.env.NEXT_PUBLIC_DOMAIN}/api/lists/movements?userId=${userId}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({ movementId, listId, checked }),
+        },
+      )
     ).json();
 
     if (response.ok) router.refresh(); // TODO: Update the list in the state instead of refreshing the page

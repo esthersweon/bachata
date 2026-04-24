@@ -1,32 +1,37 @@
+import { User } from "@/app/types";
 import { neon } from "@neondatabase/serverless";
 import bcrypt from "bcrypt";
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { z } from "zod";
-import { User } from "./app/types";
 import { authConfig } from "./auth.config";
 
 const sql = neon(process.env.POSTGRES_URL!);
 
 async function getUser(email: string): Promise<User | null> {
   try {
-    const user = (await sql`
+    const rows = (await sql`
       SELECT
         id,
         email,
         password,
         first_name AS "firstName",
-        last_name AS "lastName"
+        last_name AS "lastName",
+        profile_picture AS "profilePicture",
+        admin,
+        handle,
+        dance_role AS "danceRole"
       FROM users
-      WHERE email=${email}`) as User[];
-    return user[0];
+      WHERE email=${email}`) as unknown as User[];
+
+    return rows[0];
   } catch (error) {
     console.error("Failed to fetch user:", error);
     throw new Error("Failed to fetch user.");
   }
 }
 
-export const { auth, signIn, signOut } = NextAuth({
+export const { auth, signIn, signOut, handlers } = NextAuth({
   ...authConfig,
   providers: [
     Credentials({
@@ -40,7 +45,6 @@ export const { auth, signIn, signOut } = NextAuth({
           const user = await getUser(email);
           if (!user) return null;
           const passwordsMatch = await bcrypt.compare(password, user.password);
-
           if (passwordsMatch) return user;
         }
 

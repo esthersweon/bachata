@@ -1,9 +1,13 @@
-import { getUsers } from "@/app/lib/users";
+import { getOtherUsers } from "@/app/lib/users";
+import { auth } from "@/auth";
 import { HeartIcon, InboxIcon, UserIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default async function UserRecommendations() {
-  const { users } = await getUsers();
+  const session = await auth();
+  const userId = session?.user?.id ?? "";
+  const { users } = await getOtherUsers(userId);
+
   return (
     <>
       <ul className="flex flex-wrap gap-2 justify-center">

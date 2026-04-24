@@ -1,4 +1,5 @@
 import { getEvents } from "@/app/lib/events";
+import { auth } from "@/auth";
 import { Suspense } from "react";
 import { activities } from "./feed/activitiesFeed";
 import UserRecommendations from "./feed/userRecommendations";
@@ -6,7 +7,12 @@ import { formatDate } from "./helpers";
 import RsvpStatusMenu from "./profile/rsvpStatusMenu";
 
 export default async function Home() {
-  const events = await getEvents();
+  const session = await auth();
+  const userId = session?.user?.id;
+
+  const events = (await getEvents(userId ?? ""))?.filter(
+    (event) => new Date(event.date) >= new Date(),
+  );
 
   return (
     <main className="flex flex-col gap-2">
@@ -18,19 +24,21 @@ export default async function Home() {
               {events.map((event) => (
                 <li
                   key={event.id}
-                  className="flex-1 min-w-50 max-w-full flex flex-col bg-primary-bg rounded-lg overflow-hidden"
+                  className="flex-1 min-w-50 max-w-full flex flex-col bg-primary-bg rounded-lg"
                 >
                   <img
                     src={event.image}
                     alt={event.name}
                     className="h-50 object-cover"
                   />
-                  <div className="flex flex-col gap-1 p-4">
+                  <div className="flex flex-col p-4">
                     <div className="relative flex justify-between gap-4 items-center">
-                      <h3>{event.name}</h3>
+                      <div className="text-sm font-bold">{event.name}</div>
                       <RsvpStatusMenu eventId={event.id} rsvp={event.rsvp} />
                     </div>
-                    <p>{formatDate(event.date)}</p>
+                    <div className="text-xs text-primary-text/80">
+                      {formatDate(event.date)}
+                    </div>
                   </div>
                 </li>
               ))}

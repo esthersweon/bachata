@@ -20,24 +20,26 @@ export default function ProfilePage() {
   useEffect(() => {
     if (!handle) return;
 
-    void Promise.all([
-      fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/users/${handle}`).then(
-        (r) => r.json() as Promise<{ user: User }>,
-      ),
-      fetch(
-        `${process.env.NEXT_PUBLIC_DOMAIN}/api/lists?handle=${handle}`,
-      ).then((r) => r.json() as Promise<ListType[]>),
-      fetch(
-        `${process.env.NEXT_PUBLIC_DOMAIN}/api/events?handle=${handle}`,
-      ).then((r) => r.json() as Promise<DanceEvent[]>),
-    ]).then(([{ user: fetchedUser }, nextLists, nextEvents]) => {
-      setUser(fetchedUser);
-      setLists(nextLists);
-      setEvents(nextEvents);
-    });
+    fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/users/${handle}`)
+      .then((r) => r.json() as Promise<{ user: User }>)
+      .then((response) => {
+        setUser(response.user);
+
+        Promise.all([
+          fetch(
+            `${process.env.NEXT_PUBLIC_DOMAIN}/api/lists?userId=${response.user.id}`,
+          ).then((r) => r.json() as Promise<ListType[]>),
+          fetch(
+            `${process.env.NEXT_PUBLIC_DOMAIN}/api/events?userId=${response.user.id}`,
+          ).then((r) => r.json() as Promise<DanceEvent[]>),
+        ]).then(([nextLists, nextEvents]) => {
+          setLists(nextLists);
+          setEvents(nextEvents);
+        });
+      });
   }, [handle]);
 
-  if (!user || !handle) return <div>User not found</div>;
+  if (!user || !handle) return <div>Loading profile...</div>;
 
   return (
     <main className="flex flex-col gap-4">
@@ -102,10 +104,7 @@ export default function ProfilePage() {
               />
             </div>
 
-            <div className="flex flex-col gap-4 basis-[calc(2/3*100%-0.5rem)] bg-secondary-bg p-4 rounded-lg">
-              <div className="text-center uppercase font-bold text-sm">
-                {`${user?.firstName}'s Videos`}
-              </div>
+            <div className="flex basis-[calc(2/3*100%-0.5rem)] px-4">
               <VideosCarousel />
             </div>
           </div>

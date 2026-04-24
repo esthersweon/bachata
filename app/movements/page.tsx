@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { Suspense } from "react";
 import AddMovementModal from "./addMovementModal";
 import CategoryTabs from "./categoryTabs";
@@ -19,6 +20,9 @@ export default async function Glossary({
     status: string;
   }>;
 }) {
+  const session = await auth();
+  const userId = session?.user?.id ?? "";
+
   const { q = "", level = "", category = "", status = "" } = await searchParams;
 
   const {
@@ -64,6 +68,7 @@ export default async function Glossary({
               category={category}
               status={status}
               statuses={statuses}
+              userId={userId}
             />
           </div>
         </Suspense>

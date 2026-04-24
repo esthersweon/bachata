@@ -22,6 +22,23 @@ export const authConfig = {
       }
       return true;
     },
+    jwt({ token, user }) {
+      if (user) {
+        token.id = (user as { id: string }).id;
+      }
+      return token;
+    },
+    session({ session, token }) {
+      if (session.user) {
+        const id =
+          (typeof token.id === "string" && token.id) ||
+          (typeof token.sub === "string" && token.sub);
+        if (id) {
+          session.user.id = id;
+        }
+      }
+      return session;
+    },
   },
   providers: [],
 } satisfies NextAuthConfig;

@@ -4,6 +4,7 @@ import type { List as ListType, Status } from "@/app/types";
 import Modal from "@/app/ui/modal";
 import { Button, Textarea } from "@headlessui/react";
 import { TrashIcon } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { use, useEffect, useState } from "react";
 import { Movement, MovementLevel } from "../types";
@@ -20,6 +21,9 @@ export default function MovementPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const session = useSession();
+  const userId = session?.data?.user?.id ?? "";
+
   const [movement, setMovement] = useState<Movement | null>(null);
   const [statuses, setStatuses] = useState<Status[]>([]);
   const [lists, setLists] = useState<ListType[]>([]);
@@ -39,7 +43,7 @@ export default function MovementPage({
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id, ...movement }),
+        body: JSON.stringify({ id, ...movement, userId }),
       })
     ).json();
     setError(response?.error ?? null);
@@ -49,7 +53,7 @@ export default function MovementPage({
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id, levelId: newLevelId }),
+        body: JSON.stringify({ id, levelId: newLevelId, userId }),
       })
     ).json();
     if (response.ok) {
@@ -75,7 +79,7 @@ export default function MovementPage({
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id, categoryIds: newCategoryIds }),
+        body: JSON.stringify({ id, categoryIds: newCategoryIds, userId }),
       })
     ).json();
     if (response.ok) {
@@ -114,7 +118,9 @@ export default function MovementPage({
   useEffect(() => {
     const base = process.env.NEXT_PUBLIC_DOMAIN;
     void Promise.all([
-      fetch(`${base}/api/movements/${id}`).then((r) => r.json()),
+      fetch(`${base}/api/movements/${id}?userId=${userId}`).then((r) =>
+        r.json(),
+      ),
       fetch(`${base}/api/filters`).then((r) => r.json()),
       fetch(`${base}/api/statuses`).then((r) => r.json()),
       fetch(`${base}/api/lists`).then((r) => r.json()),

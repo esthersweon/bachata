@@ -16,6 +16,7 @@ import {
   PlusIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Status } from "../types";
@@ -27,6 +28,8 @@ export default function MovementMenu({
   ...movement
 }: Movement & { statuses: Status[] }) {
   const router = useRouter();
+  const session = useSession();
+  const userId = session?.data?.user?.id ?? "";
 
   const [showDeleteConfirmation, setShowDeleteConfirmation] =
     useState<boolean>(false);
@@ -40,7 +43,7 @@ export default function MovementMenu({
     const response = await (
       await fetch(`${process.env.NEXT_PUBLIC_DOMAIN}/api/movements`, {
         method: "PATCH",
-        body: JSON.stringify({ id: movement.id, statusId }),
+        body: JSON.stringify({ id: movement.id, statusId, userId }),
       })
     ).json();
     if (response.ok) router.refresh();

@@ -1,7 +1,9 @@
 import { getEvents } from "@/app/lib/events";
 import { getLists } from "@/app/lib/lists";
+import { auth } from "@/auth";
 import { CakeIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
+import { getUserById } from "../lib/users";
 import VideosCarousel from "../movements/[id]/videosCarousel";
 import MyBadges from "./myBadges";
 import MyProgressPieChart from "./myProgressPieChart";
@@ -9,22 +11,24 @@ import ProfileEventsSection from "./profileEventsSection";
 import ProfileListsSection from "./profileListsSection";
 
 export default async function Dashboard() {
-  const lists = await getLists();
-  const events = await getEvents();
+  const session = await auth();
+  const user = await getUserById(session?.user?.id ?? "");
+  const lists = await getLists(session?.user?.id ?? "");
+  const events = await getEvents(session?.user?.id ?? "");
 
   return (
     <main className="flex flex-col gap-4">
       <Suspense fallback={<div>Loading profile...</div>}>
         <div className="flex justify-center items-center gap-4">
           <img
-            src="https://avatars.githubusercontent.com/u/6993359?v=4"
-            alt="Esther Weon"
+            src={user?.profilePicture ?? ""}
+            alt={`${user?.firstName} ${user?.lastName}`}
             className="size-30 rounded-full"
           />
 
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center gap-2">
-              <h1>Esther Weon</h1>
+              <h1>{`${user?.firstName} ${user?.lastName}`}</h1>
               <div className="text-xs bg-secondary-bg px-2 py-1 rounded-full capitalize">
                 Follow
               </div>
@@ -47,7 +51,7 @@ export default async function Dashboard() {
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          <MyBadges />
+          <MyBadges userId={user?.id ?? ""} />
 
           <div className="flex flex-wrap gap-2 w-full items-stretch">
             <div className="flex flex-col gap-2 basis-[calc(1/3*100%-0.5rem)] max-w-full">
@@ -55,7 +59,7 @@ export default async function Dashboard() {
                 <div className="text-center text-sm uppercase font-bold">
                   My Progress
                 </div>
-                <MyProgressPieChart />
+                <MyProgressPieChart userId={user?.id ?? ""} />
               </div>
               <ProfileEventsSection events={events} allowEditing />
               <ProfileListsSection
@@ -65,10 +69,7 @@ export default async function Dashboard() {
               />
             </div>
 
-            <div className="flex flex-col gap-4 basis-[calc(2/3*100%-0.5rem)] bg-secondary-bg p-4 rounded-lg">
-              <div className="text-center uppercase font-bold text-sm">
-                My Videos
-              </div>
+            <div className="flex gap-4 basis-[calc(2/3*100%-0.5rem)] px-4">
               <VideosCarousel />
             </div>
           </div>

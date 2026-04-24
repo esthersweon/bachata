@@ -23,16 +23,20 @@ export async function authenticate(
   }
 }
 
-export async function updateRSVP(
-  eventId: string,
-  rsvp: boolean | null,
-): Promise<{ status: 200 | 500; ok: boolean }> {
+export async function updateRSVP({
+  eventId,
+  rsvp,
+  userId,
+}: {
+  eventId: string;
+  rsvp: boolean | null;
+  userId: string;
+}): Promise<{ status: 200 | 500; ok: boolean }> {
   const url = process.env.POSTGRES_URL;
   if (!url) return { status: 500, ok: false };
 
   try {
     const sql = neon(url);
-    const userId = "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
     await sql`INSERT INTO users_events (id, user_id, event_id, rsvp)
       VALUES (${crypto.randomUUID()}, ${userId}, ${eventId}, ${rsvp})
       ON CONFLICT (user_id, event_id)

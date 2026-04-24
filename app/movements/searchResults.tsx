@@ -12,16 +12,18 @@ export default async function SearchResults({
   category,
   status,
   statuses,
+  userId,
 }: {
   q: string;
   level: string;
   category: string;
   status: string;
   statuses: Status[];
+  userId: string;
 }) {
   const { movements }: { movements: Movement[] } = await (
     await fetch(
-      `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}&status=${status}`,
+      `${process.env.NEXT_PUBLIC_DOMAIN}/api/movements?q=${q}&level=${level}&category=${category}&status=${status}&userId=${userId}`,
     )
   ).json();
 

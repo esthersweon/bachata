@@ -2,7 +2,7 @@ import { neon } from "@neondatabase/serverless";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const userIdParam = request.nextUrl.searchParams.get("userId");
+  const userId = request.nextUrl.searchParams.get("userId");
   const url = process.env.POSTGRES_URL;
   if (!url) {
     return Response.json([], {
@@ -13,11 +13,7 @@ export async function GET(request: NextRequest) {
 
   try {
     const sql = neon(url);
-    const userId = userIdParam
-      ? userIdParam
-      : "efbefbcd-e551-4e5c-9433-846d4b3a703f"; // TODO: Get user id from session
 
-    console.log("userId", userId);
     const statuses = await sql`SELECT id, name FROM statuses ORDER BY "order"`;
     const defaultStatusId = String(statuses[0]?.id ?? "");
 

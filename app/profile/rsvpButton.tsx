@@ -1,6 +1,7 @@
 "use client";
 
 import { MenuItem } from "@headlessui/react";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { updateRSVP } from "../lib/actions";
 
@@ -19,13 +20,10 @@ export default function RSVPButton({
   label: string;
   rsvp: boolean | null;
 }) {
+  const userId = useSession()?.data?.user?.id ?? "";
+
   const router = useRouter();
   const isSelected = rsvp === labelToRSVP[label];
-
-  async function handleRSVP() {
-    await updateRSVP(eventId, labelToRSVP[label] as boolean | null);
-    router.refresh();
-  }
 
   return (
     <MenuItem
@@ -33,7 +31,14 @@ export default function RSVPButton({
       as="button"
       type="button"
       className={`text-nowrap cursor-pointer p-2! rounded-none! ${isSelected ? "bg-tertiary-bg!" : "bg-secondary-bg!"} hover:bg-tertiary-bg!`}
-      onClick={handleRSVP}
+      onClick={async () => {
+        await updateRSVP({
+          eventId,
+          rsvp: labelToRSVP[label] as boolean | null,
+          userId,
+        });
+        router.refresh();
+      }}
     >
       {label}
     </MenuItem>
